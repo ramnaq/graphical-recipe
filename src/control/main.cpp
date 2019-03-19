@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     gtk_init(&argc, &argv);
 
     builder = gtk_builder_new();
-    gtk_builder_add_from_file (builder, "windows.glade", NULL);
+    gtk_builder_add_from_file (builder, "src/view/windows.glade", NULL);
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
     gtk_builder_connect_signals(builder, NULL);
