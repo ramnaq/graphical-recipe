@@ -21,10 +21,10 @@ LDFLAGS=$(GTKLIB) -rdynamic
 OBJS=    main.o
 
 all: $(OBJS)
-	$(LD) -o $(TARGET) tmp/$(OBJS) $(LDFLAGS)
+	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 main.o: teste.cpp
-	$(CC) -c $(CCFLAGS) teste.cpp $(GTKLIB) -o tmp/main.o
+	$(CC) -c $(CCFLAGS) teste.cpp $(GTKLIB) -o main.o
 
 clean:
-	rm -f tmp/*.o $(TARGET)
+	rm -f *.o $(TARGET)
