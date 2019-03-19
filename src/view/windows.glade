@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="mainWindow">
@@ -7,6 +7,9 @@
     <property name="title" translatable="yes">INE5420 - Fabio &amp; Ramna - </property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="boxMainWindow">
         <property name="visible">True</property>
@@ -166,12 +169,11 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_baixo" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -180,12 +182,11 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_esq" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -194,12 +195,11 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_dir" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -208,12 +208,11 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_cima" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -272,6 +271,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_in" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
@@ -285,6 +285,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_out" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
@@ -478,6 +479,9 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Adicionar novo objeto</property>
     <property name="window_position">center</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>

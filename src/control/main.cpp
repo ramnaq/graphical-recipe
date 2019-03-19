@@ -156,7 +156,6 @@ int main(int argc, char *argv[])
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
     gtk_builder_connect_signals(builder, NULL);
-
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
@@ -164,22 +163,11 @@ int main(int argc, char *argv[])
     g_signal_connect(drawAreaViewPort, "configure-event", G_CALLBACK(create_surface), NULL);
 
     btnIn = GTK_WIDGET(gtk_builder_get_object(builder, "btnZooIn"));
-    g_signal_connect(btnIn, "clicked", G_CALLBACK(on_btn_clicked_in), NULL);
-
     btnOut = GTK_WIDGET(gtk_builder_get_object(builder, "btnZoomOut"));
-    g_signal_connect(btnOut, "clicked", G_CALLBACK(on_btn_clicked_out), NULL);
-
     btnDir = GTK_WIDGET(gtk_builder_get_object(builder, "btnDireita"));
-    g_signal_connect(btnDir, "clicked", G_CALLBACK(on_btn_clicked_dir), NULL);
-
     btnEsq = GTK_WIDGET(gtk_builder_get_object(builder, "btnEsquerda"));
-    g_signal_connect(btnEsq, "clicked", G_CALLBACK(on_btn_clicked_esq), NULL);
-
     btnCima = GTK_WIDGET(gtk_builder_get_object(builder, "btnBaixo"));
-    g_signal_connect(btnCima, "clicked", G_CALLBACK(on_btn_clicked_cima), NULL);
-
     btnBaixo = GTK_WIDGET(gtk_builder_get_object(builder, "btnCima"));
-    g_signal_connect(btnBaixo, "clicked", G_CALLBACK(on_btn_clicked_baixo), NULL);
 
     g_object_unref(G_OBJECT(builder));
 
