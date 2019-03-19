@@ -9,7 +9,7 @@ int x_fi = 200;
 int y_fi = 100;
 
 
-static void clear_surface () {
+void clear_surface () {
   cairo_t *cr;
 
   cr = cairo_create (surface);
@@ -20,13 +20,13 @@ static void clear_surface () {
   cairo_destroy (cr);
 }
 
-static gboolean draw(GtkWidget *widget, cairo_t *cr, gpointer data) {
+gboolean draw(GtkWidget *widget, cairo_t *cr, gpointer data) {
   cairo_set_source_surface(cr, surface, 0, 0);
   cairo_paint(cr);
   return FALSE;
 }
 
-static gboolean create_surface(GtkWidget *widget, GdkEventConfigure *event, gpointer data) {
+gboolean create_surface(GtkWidget *widget, GdkEventConfigure *event, gpointer data) {
   if (surface)
     cairo_surface_destroy(surface);
 
@@ -136,5 +136,4 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_baixo(){
 
   gtk_widget_queue_draw(drawAreaViewPort);
 }
-
 
