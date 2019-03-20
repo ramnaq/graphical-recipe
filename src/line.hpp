@@ -16,7 +16,7 @@ public:
     this->name = name;
   }
 
-	virtual ~Line() {
+	~Line() {
     delete this->a;
     delete this->b;
   }
@@ -31,6 +31,7 @@ public:
 
   Coordenada* getCoordenada() {}
   void setCoordenada(Coordenada *newCoordenada) {}
+  vector<Coordenada*> getPolygonPoints() {}
 };
 
 #endif

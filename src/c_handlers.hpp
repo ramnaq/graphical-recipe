@@ -14,6 +14,10 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_create_object() {
   controller->createObject();
 }
 
+extern "C" G_MODULE_EXPORT void on_btnAddCoordenada_addCoordenada() {
+  controller->addNewLineForPolygon();
+}
+
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
 
 }

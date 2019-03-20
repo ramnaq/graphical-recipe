@@ -25,8 +25,11 @@ private:
   GtkEntry *entryLineY;
   GtkEntry *entryLineX1;
   GtkEntry *entryLineY1;
+  GtkEntry *entryPolygonX;
+  GtkEntry *entryPolygonY;
 
   GtkListBox *listObjects;
+  GtkListBox *listCoordPolygon;
 
   Drawer* drawer;
 public:
@@ -51,8 +54,11 @@ public:
     entryLineY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY"));
     entryLineX1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaX1"));
     entryLineY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY1"));
+    entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX"));
+    entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY"));
 
     listObjects = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
+    listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -74,16 +80,6 @@ public:
     gtk_widget_show(newObjectWindow);
   }
 
-  void insertList(GraphicObject* obj) {
-    string name = "Teste";
-
-    GtkWidget* row = gtk_list_box_row_new();
-    GtkWidget* label = gtk_label_new(name.c_str());
-
-    gtk_container_add((GtkContainer*) listObjects, label);
-    gtk_widget_show_all((GtkWidget*) listObjects);
-  }
-
   void drawNewPoint(GraphicObject* obj) {
     drawer->drawPoint(obj->getCoordenada());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
@@ -94,8 +90,35 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void drawPoligon(GraphicObject* obj) {
-    drawer->drawPoligon()
+  void drawNewPolygon(GraphicObject* obj) {
+    vector<Coordenada*> polygonPoints = obj->getPolygonPoints();
+    vector<Coordenada*>::iterator it;
+    for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+        drawer->drawLine(*it , *(std::next(it,1)));
+    }
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
+  void insertList(GraphicObject* obj) {
+    string name = "Teste";
+
+    GtkWidget* row = gtk_list_box_row_new();
+    GtkWidget* label = gtk_label_new(name.c_str());
+
+    gtk_container_add((GtkContainer*) listObjects, label);
+    gtk_widget_show_all((GtkWidget*) listObjects);
+  }
+
+  void insertCoordPolygonList() {
+    string a = gtk_entry_get_text(entryPolygonX);
+    string b = gtk_entry_get_text(entryPolygonY);
+    string name = "Coordenada: (" + a + " , " + b + ")";
+
+    GtkWidget* row = gtk_list_box_row_new();
+    GtkWidget* label = gtk_label_new(name.c_str());
+
+    gtk_container_add((GtkContainer*) listCoordPolygon, label);
+    gtk_widget_show_all((GtkWidget*) listCoordPolygon);
   }
 
   // Gets
@@ -126,6 +149,15 @@ public:
   double getEntryLineY1() {
     return stod(gtk_entry_get_text(entryLineY1));
   }
+
+  double getEntryPolygonX() {
+    return stod(gtk_entry_get_text(entryPolygonX));
+  }
+
+  double getEntryPolygonY() {
+    return stod(gtk_entry_get_text(entryPolygonY));
+  }
+
 };
 
 #endif

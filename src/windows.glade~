@@ -1173,16 +1173,40 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="btnRemoverCoordenada">
-                        <property name="label" translatable="yes">Remover Coordenada</property>
+                      <object class="GtkBox" id="box11">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="btnAddCoordenada">
+                            <property name="label" translatable="yes">Adicionar Coordenada</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btnRemoverCoordenada">
+                            <property name="label" translatable="yes">Remover Coordenada</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -1237,11 +1261,10 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkButton" id="btnCancel">
-                <property name="label" translatable="yes">Cancelar</property>
+                <property name="label" translatable="yes">Limpar Campos</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="gtk_widget_show" object="windowInserirCoord" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1251,7 +1274,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnOk">
-                <property name="label" translatable="yes">Adicionar Coordenada</property>
+                <property name="label" translatable="yes">Adicionar Objeto</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

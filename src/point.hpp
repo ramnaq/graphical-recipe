@@ -11,7 +11,9 @@ public:
     this->name = name;
   }
 
-	virtual ~Point() {delete point;}
+	~Point() {
+    delete point;
+  }
 
   Coordenada* getCoordenada() {
     return point;
@@ -22,8 +24,9 @@ public:
     point->setY(newCoordenada->getY());
   }
 
-  Coordenada* getCoordenadaIn(){};
-  Coordenada* getCoordenadaFin(){};
+  Coordenada* getCoordenadaIn(){}
+  Coordenada* getCoordenadaFin(){}
+  vector<Coordenada*> getPolygonPoints(){}
 
 };
 
