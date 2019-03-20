@@ -9,8 +9,11 @@ public:
 
   }
 
+	// TODO RETORNAR VETOR DE COORDENADAS
 	virtual Coordenada* getCoordenada()=0;
 	virtual void setCoordenada(Coordenada *newCoordenada)=0;
+	virtual Coordenada* getCoordenadaIn()=0;
+	virtual Coordenada* getCoordenadaFin()=0;
 
 };
 

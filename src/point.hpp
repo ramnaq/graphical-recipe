@@ -22,6 +22,9 @@ public:
     point->setY(newCoordenada->getY());
   }
 
+  Coordenada* getCoordenadaIn(){};
+  Coordenada* getCoordenadaFin(){};
+
 };
 
 #endif

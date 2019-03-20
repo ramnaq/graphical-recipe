@@ -37,7 +37,7 @@ public:
 	  cairo_paint(cr);
   }
 
-	void drawObject(Coordenada* coord) {
+	void drawPoint(Coordenada* coord) {
 		cairo_t *c = cairo_create (surface);
 
 		cairo_move_to(c, coord->getX(), coord->getY());
@@ -45,6 +45,16 @@ public:
 		cairo_fill(c);
 
 		cairo_stroke(c);
+	}
+
+	void drawLine(Coordenada* coordIn, Coordenada* coordFin) {
+		cairo_t *cr = cairo_create (surface);
+		
+		cairo_move_to(cr, coordIn->getX(), coordIn->getY());
+	  cairo_line_to(cr, coordFin->getX(), coordFin->getY());
+	  cairo_stroke(cr);
+
+		cairo_stroke(cr);
 	}
 
 };

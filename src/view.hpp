@@ -21,6 +21,11 @@ private:
   GtkEntry *entryPontoY;
   GtkEntry *objectName;
 
+  GtkEntry *entryLineX;
+  GtkEntry *entryLineY;
+  GtkEntry *entryLineX1;
+  GtkEntry *entryLineY1;
+
   GtkListBox *listObjects;
 
   Drawer* drawer;
@@ -42,6 +47,10 @@ public:
     entryPontoX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoX"));
     entryPontoY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoY"));
     objectName = GTK_ENTRY(gtk_builder_get_object(builder, "entryNovoObjeto"));
+    entryLineX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaX"));
+    entryLineY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY"));
+    entryLineX1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaX1"));
+    entryLineY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY1"));
 
     listObjects = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
 
@@ -75,9 +84,18 @@ public:
     gtk_widget_show_all((GtkWidget*) listObjects);
   }
 
-  void drawNewObject(GraphicObject* obj) {
-    drawer->drawObject(obj->getCoordenada());
+  void drawNewPoint(GraphicObject* obj) {
+    drawer->drawPoint(obj->getCoordenada());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
+  void drawNewLine(GraphicObject* obj) {
+    drawer->drawLine(obj->getCoordenadaIn(), obj->getCoordenadaFin());
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
+  void drawPoligon(GraphicObject* obj) {
+    drawer->drawPoligon()
   }
 
   // Gets
@@ -91,6 +109,22 @@ public:
 
   string getObjectName() {
     return gtk_entry_get_text(objectName);
+  }
+
+  double getEntryLineX() {
+    return stod(gtk_entry_get_text(entryLineX));
+  }
+
+  double getEntryLineY() {
+    return stod(gtk_entry_get_text(entryLineY));
+  }
+
+  double getEntryLineX1() {
+    return stod(gtk_entry_get_text(entryLineX1));
+  }
+
+  double getEntryLineY1() {
+    return stod(gtk_entry_get_text(entryLineY1));
   }
 };
 
