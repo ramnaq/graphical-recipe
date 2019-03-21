@@ -748,7 +748,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Ponto</property>
-                <signal name="button-press-event" handler="on_labelPonto_button_press_event" swapped="no"/>
               </object>
               <packing>
                 <property name="tab_fill">False</property>

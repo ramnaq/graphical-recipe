@@ -22,6 +22,10 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   controller->removeFromList();
 }
 
+extern "C" G_MODULE_EXPORT void on_btnRemoverCoordenada_clicked() {
+  controller->removeFromCoordPolygonList();
+}
+
 extern "C" G_MODULE_EXPORT void on_btn_clicked_in(){
 }
 

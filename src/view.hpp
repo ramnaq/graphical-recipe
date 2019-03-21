@@ -131,8 +131,12 @@ public:
     gtk_widget_show_all((GtkWidget*) listCoordPolygon);
   }
 
-  void removeFromCoordPolygonList() {
+  int removeFromCoordPolygonList() {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
+    int index = gtk_list_box_row_get_index(row);
 
+    gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+    return index;
   }
 
   void clear_surface() {

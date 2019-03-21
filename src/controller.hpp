@@ -79,6 +79,11 @@ public:
     updateDrawScreen();
   }
 
+  void removeFromCoordPolygonList() {
+    int index = view->removeFromCoordPolygonList();
+    pointsForPolygon.erase(pointsForPolygon.begin() + index);
+  }
+
   void addNewLineForPolygon() {
     double x = view->getEntryPolygonX();
     double y = view->getEntryPolygonY();
@@ -122,9 +127,3 @@ public:
 };
 
 #endif
-
-// Coordenada* coordenada = new Coordenada(100, 5);
-// Coordenada* coordenada2 = new Coordenada(200, 5);
-// Coordenada* coordenada3 = new Coordenada(200, 100);
-// Coordenada* coordenada4 = new Coordenada(100, 100);
-// Coordenada* coordenada5 = new Coordenada(100, 5);
