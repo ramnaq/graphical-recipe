@@ -31,6 +31,8 @@ private:
   GtkListBox *listObjects;
   GtkListBox *listCoordPolygon;
 
+  GtkNotebook *notebookObjects;
+
   Drawer* drawer;
 public:
   View() {
@@ -59,6 +61,8 @@ public:
 
     listObjects = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
+
+    notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -99,11 +103,9 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void insertList(GraphicObject* obj) {
-    string name = "Teste";
-
+  void insertList(GraphicObject* obj, string tipo) {
     GtkWidget* row = gtk_list_box_row_new();
-    GtkWidget* label = gtk_label_new(name.c_str());
+    GtkWidget* label = gtk_label_new((obj->getObjectName() + " ( " + tipo + " )").c_str());
 
     gtk_container_add((GtkContainer*) listObjects, label);
     gtk_widget_show_all((GtkWidget*) listObjects);
@@ -119,6 +121,10 @@ public:
 
     gtk_container_add((GtkContainer*) listCoordPolygon, label);
     gtk_widget_show_all((GtkWidget*) listCoordPolygon);
+  }
+
+  int getCurrentPage () {
+    return gtk_notebook_get_current_page(notebookObjects);
   }
 
   // Gets

@@ -624,7 +624,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkNotebook" id="notebook1">
+          <object class="GtkNotebook" id="notebookObjects">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="margin_left">5</property>
@@ -748,6 +748,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Ponto</property>
+                <signal name="button-press-event" handler="on_labelPonto_button_press_event" swapped="no"/>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -1182,6 +1183,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_btnAddCoordenada_addCoordenada" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>

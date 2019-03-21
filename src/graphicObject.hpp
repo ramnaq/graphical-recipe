@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "coordenada.hpp"
+#include "objectType.hpp"
 
 using namespace std;
 
@@ -12,6 +13,9 @@ public:
 	GraphicObject() {
 
   }
+
+	virtual string getObjectName()=0;
+	virtual Type getType()=0;
 
 	// TODO RETORNAR VETOR DE COORDENADAS
 	virtual vector<Coordenada*> getPolygonPoints()=0;
