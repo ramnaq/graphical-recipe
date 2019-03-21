@@ -1,6 +1,9 @@
 #ifndef COORDENADA_HPP
 #define COORDENADA_HPP
 
+
+/*! The cartesian coordinate. The number of parameters in the constructor indicates the dimention */
+
 class Coordenada{
 private:
   double x;
