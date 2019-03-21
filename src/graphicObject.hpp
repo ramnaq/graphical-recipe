@@ -8,6 +8,8 @@
 
 using namespace std;
 
+/*! The generic type of an graphical object (point, line, polygon, etc) */
+
 class GraphicObject {
 public:
 	GraphicObject() {

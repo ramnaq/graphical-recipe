@@ -1,3 +1,11 @@
+/**
+ * The c_handlers functions connected to signals related to elements from the
+ * graphical interface (GTK). The link between signals and its functions are
+ * defined with Glade (@see windows.glade).
+ *
+ * @see g_signal_connect (GTK)
+ */
+
 extern "C" G_MODULE_EXPORT void draw(GtkWidget *widget, cairo_t *cr,  gpointer   data){
   controller->draw(cr);
 }

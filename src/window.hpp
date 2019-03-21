@@ -1,6 +1,12 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+//! Window is the visible area of a graphical world.
+/*!
+ * The graphical world moves (horizontally, vertically, diagonally) and the window
+ * shows a limited area of it.
+ */
+
 class Window {
   private:
     Coordenada *coordMin;

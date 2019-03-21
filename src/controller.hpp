@@ -9,6 +9,8 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+/*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
+
 class Controller {
 
 private:
