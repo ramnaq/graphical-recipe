@@ -27,11 +27,11 @@ extern "C" G_MODULE_EXPORT void on_btnRemoverCoordenada_clicked() {
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_in(){
-  controller->zoomIn();
+  controller->changeWindow(0);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
-  controller->zoomOut();
+  controller->changeWindow(1);
 }
 
 extern "C" G_MODULE_EXPORT void on_mainWindow_configure_event(){
@@ -39,33 +39,33 @@ extern "C" G_MODULE_EXPORT void on_mainWindow_configure_event(){
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
-  controller->goRight();
+  controller->changeWindow(2);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_esq(){
-  controller->goLeft();
+  controller->changeWindow(3);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_cima(){
-  controller->goUp();
+  controller->changeWindow(4);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_baixo(){
-  controller->goDown();
+  controller->changeWindow(5);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_supEsq(){
-  controller->goUpLeft();
+  controller->changeWindow(6);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_supDir(){
-  controller->goUpRight();
+  controller->changeWindow(7);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_infEsq(){
-  controller->goDownLeft();
+  controller->changeWindow(8);
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_infDir(){
-  controller->goDownRight();
+  controller->changeWindow(9);
 }

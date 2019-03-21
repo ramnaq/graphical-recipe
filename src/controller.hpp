@@ -108,66 +108,9 @@ public:
     view->initializeWindowViewPort();
   }
 
-  // TODO REFATORAR ESSE POVO TOD0, fazer um único método que recebe
-  // como parâmetro o tipo de modificação (zoomIn, goRight...) a partir dos callbacks
-  // Desde zoomIn até goDownRight
-  void zoomIn() {
+  void changeWindow(int option) {
     double passo = view->getPasso();
-    view->updateWindow(passo, 0);
-    updateDrawScreen();
-  }
-
-  void zoomOut() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 1);
-    updateDrawScreen();
-  }
-
-  void goRight() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 2);
-    updateDrawScreen();
-  }
-
-  void goLeft() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 3);
-    updateDrawScreen();
-  }
-
-  void goUp() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 4);
-    updateDrawScreen();
-  }
-
-  void goDown() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 5);
-    updateDrawScreen();
-  }
-
-  void goUpLeft() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 6);
-    updateDrawScreen();
-  }
-
-  void goUpRight() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 7);
-    updateDrawScreen();
-  }
-
-  void goDownLeft() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 8);
-    updateDrawScreen();
-  }
-
-  void goDownRight() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 9);
+    view->updateWindow(passo, option);
     updateDrawScreen();
   }
 
