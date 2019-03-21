@@ -49,7 +49,7 @@ public:
 
 	void drawLine(Coordenada* coordIn, Coordenada* coordFin) {
 		cairo_t *cr = cairo_create (surface);
-		
+
 		cairo_move_to(cr, coordIn->getX(), coordIn->getY());
 	  cairo_line_to(cr, coordFin->getX(), coordFin->getY());
 	  cairo_stroke(cr);

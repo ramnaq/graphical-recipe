@@ -72,6 +72,13 @@ public:
     }
   }
 
+  void removeFromList() {
+    int listPos = view->removeFromList();
+    display->deletarElemento(listPos);
+    view->clear_surface();
+    updateDrawScreen();
+  }
+
   void addNewLineForPolygon() {
     double x = view->getEntryPolygonX();
     double y = view->getEntryPolygonY();
@@ -90,6 +97,26 @@ public:
 
   void draw(cairo_t *cr) {
     view->draw(cr);
+  }
+
+  void updateDrawScreen() {
+    Elemento<GraphicObject*>* nextElement = display->getHead(); // primeiro elemento da display file
+    while (nextElement != NULL) {
+    	GraphicObject* element = nextElement->getInfo();
+    	switch (element->getType()) {
+    		case POINT: {
+    				view->drawNewPoint(element);
+            break;
+    		} case LINE: {
+    				view->drawNewLine(element);
+            break;
+    		} case POLYGON: {
+            view->drawNewPolygon(element);
+            break;
+        }
+      }
+      nextElement = nextElement->getProximo();
+    }
   }
 
 };

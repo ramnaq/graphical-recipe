@@ -19,7 +19,7 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoordenada_addCoordenada() {
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
-
+  controller->removeFromList();
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_in(){

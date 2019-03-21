@@ -111,6 +111,14 @@ public:
     gtk_widget_show_all((GtkWidget*) listObjects);
   }
 
+  int removeFromList() {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(listObjects);
+    int index = gtk_list_box_row_get_index(row);
+
+    gtk_container_remove((GtkContainer*) listObjects, (GtkWidget*) row);
+    return index;
+  }
+
   void insertCoordPolygonList() {
     string a = gtk_entry_get_text(entryPolygonX);
     string b = gtk_entry_get_text(entryPolygonY);
@@ -121,6 +129,15 @@ public:
 
     gtk_container_add((GtkContainer*) listCoordPolygon, label);
     gtk_widget_show_all((GtkWidget*) listCoordPolygon);
+  }
+
+  void removeFromCoordPolygonList() {
+
+  }
+
+  void clear_surface() {
+    drawer->clear_surface();
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   int getCurrentPage () {
