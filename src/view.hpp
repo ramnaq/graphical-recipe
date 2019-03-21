@@ -167,11 +167,40 @@ public:
     return stod(gtk_entry_get_text(entryPasso));
   }
 
-  void updateWindow(double passo, bool isZoomIn) {
-    if (isZoomIn)
-      this->OurWindow->zoomIn(passo);
-    else
-      this->OurWindow->zoomOut(passo);
+  void updateWindow(double passo, int isZoomIn) {
+    switch (isZoomIn) {
+      case 0: {
+        this->OurWindow->zoomIn(passo);
+        break;
+      } case 1: {
+        this->OurWindow->zoomOut(passo);
+        break;
+      } case 2: {
+        this->OurWindow->goRight(passo);
+        break;
+      } case 3: {
+        this->OurWindow->goLeft(passo);
+        break;
+      } case 4: {
+        this->OurWindow->goUp(passo);
+        break;
+      } case 5: {
+        this->OurWindow->goDown(passo);
+        break;
+      } case 6: {
+        this->OurWindow->goUpLeft(passo);
+        break;
+      } case 7: {
+        this->OurWindow->goUpRight(passo);
+        break;
+      } case 8: {
+        this->OurWindow->goDownLeft(passo);
+        break;
+      } case 9: {
+        this->OurWindow->goDownRight(passo);
+        break;
+      }
+    }
   }
 
   void transform(GraphicObject *object) {

@@ -34,6 +34,55 @@ class Window {
       coordMax->setX( coordMax->getX() + passo);
       coordMax->setY( coordMax->getY() + passo);
     }
+
+    void goRight(double passo) {
+      coordMin->setX( coordMin->getX() + passo);
+      coordMax->setX( coordMax->getX() + passo);
+    }
+
+    void goLeft(double passo) {
+      coordMin->setX( coordMin->getX() - passo);
+      coordMax->setX( coordMax->getX() - passo);
+    }
+
+    void goUp(double passo) {
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setY( coordMax->getY() + passo);
+    }
+
+    void goDown(double passo) {
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setY( coordMax->getY() - passo);
+    }
+
+
+    void goUpLeft(double passo) {
+      coordMin->setX( coordMin->getX() - passo);
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setX( coordMax->getX() - passo);
+      coordMax->setY( coordMax->getY() + passo);
+    }
+
+    void goUpRight(double passo) {
+      coordMin->setX( coordMin->getX() + passo);
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setX( coordMax->getX() + passo);
+      coordMax->setY( coordMax->getY() + passo);
+    }
+
+    void goDownLeft(double passo) {
+      coordMin->setX( coordMin->getX() - passo);
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setX( coordMax->getX() - passo);
+      coordMax->setY( coordMax->getY() - passo);
+    }
+
+    void goDownRight(double passo) {
+      coordMin->setX( coordMin->getX() + passo);
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setX( coordMax->getX() + passo);
+      coordMax->setY( coordMax->getY() - passo);
+    }
 };
 
 #endif

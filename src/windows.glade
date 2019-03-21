@@ -270,6 +270,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_supEsq" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -284,6 +285,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_supDir" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -298,6 +300,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_infEsq" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -312,6 +315,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_infDir" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
