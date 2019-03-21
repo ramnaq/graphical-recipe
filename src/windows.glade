@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">INE5420 - Fabio &amp; Ramna - </property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <signal name="configure-event" handler="on_mainWindow_configure_event" swapped="no"/>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkBox" id="boxMainWindow">

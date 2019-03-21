@@ -69,11 +69,6 @@ public:
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
 
-    double width = (double) gtk_widget_get_allocated_width(drawAreaViewPort) - 10;
-    double height = (double) gtk_widget_get_allocated_height(drawAreaViewPort) - 10;
-    OurWindow = new Window(1, 1, width, height);
-    viewPort = new ViewPort(width, height, OurWindow);
-
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
     gtk_widget_show(window);
@@ -81,6 +76,13 @@ public:
   }
 
   ~View() {}
+
+  void initializeWindowViewPort() {
+    double xMax = (double) gtk_widget_get_allocated_width(drawAreaViewPort);
+    double yMax = (double) gtk_widget_get_allocated_height(drawAreaViewPort);
+    OurWindow = new Window(1, 1, xMax, yMax);
+    viewPort = new ViewPort(xMax, yMax, OurWindow);
+  }
 
   void create_surface(GtkWidget *widget) {
     drawer->create_surface(widget);
@@ -95,11 +97,13 @@ public:
   }
 
   void drawNewPoint(GraphicObject* obj) {
+    transform(obj);
     drawer->drawPoint(obj->getCoordenada());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewLine(GraphicObject* obj) {
+    transform(obj);
     drawer->drawLine(obj->getCoordenadaIn(), obj->getCoordenadaFin());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
@@ -108,6 +112,7 @@ public:
     vector<Coordenada*> polygonPoints = obj->getPolygonPoints();
     vector<Coordenada*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+        //transform(*it); // TODO VER ISSO
         drawer->drawLine(*it , *(std::next(it,1)));
     }
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);

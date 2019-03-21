@@ -34,6 +34,10 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
   controller->zoomOut();
 }
 
+extern "C" G_MODULE_EXPORT void on_mainWindow_configure_event(){
+  controller->initializeWindowViewPort();
+}
+
 extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
 }
 

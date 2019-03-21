@@ -1,38 +1,38 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include <iostream>
+
 class Window {
   private:
     Coordenada *coordMin;
-    double width;
-    double height;
+    Coordenada *coordMax;
   public:
-  	Window(double xMin, double yMin, double width, double height) {
+  	Window(double xMin, double yMin, double xMax, double yMax) {
       coordMin = new Coordenada(xMin, yMin);
-      this->width = width;
-      this->height = height;
+      coordMax = new Coordenada(xMax, yMax);
     }
 
     Coordenada* getCoordMin() {
       return coordMin;
     }
 
-    double getWidth() {
-      return width;
-    }
-
-    double getHeight() {
-      return height;
+    Coordenada* getCoordMax() {
+      return coordMax;
     }
 
     void zoomIn(double passo) {
-      width = width - width*passo;
-      height = height - height*passo;
+      coordMin->setX( coordMin->getX() + passo);
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setX( coordMax->getX() - passo);
+      coordMax->setY( coordMax->getY() - passo);
     }
 
     void zoomOut(double passo) {
-      width = width + width*passo;
-      height = height + height*passo;
+      coordMin->setX( coordMin->getX() - passo);
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setX( coordMax->getX() + passo);
+      coordMax->setY( coordMax->getY() + passo);
     }
 };
 

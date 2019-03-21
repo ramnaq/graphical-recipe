@@ -40,8 +40,8 @@ public:
 	void drawPoint(Coordenada* coord) {
 		cairo_t *c = cairo_create (surface);
 
-		cairo_move_to(c, coord->getX(), coord->getY());
-		cairo_arc(c,coord->getX(), coord->getY(), 1.0, 0.0, 2*M_PI);
+		cairo_move_to(c, coord->getXvp(), coord->getYvp());
+		cairo_arc(c,coord->getXvp(), coord->getYvp(), 1.0, 0.0, 2*M_PI);
 		cairo_fill(c);
 
 		cairo_stroke(c);
@@ -50,8 +50,8 @@ public:
 	void drawLine(Coordenada* coordIn, Coordenada* coordFin) {
 		cairo_t *cr = cairo_create (surface);
 
-		cairo_move_to(cr, coordIn->getX(), coordIn->getY());
-	  cairo_line_to(cr, coordFin->getX(), coordFin->getY());
+		cairo_move_to(cr, coordIn->getXvp(), coordIn->getYvp());
+	  cairo_line_to(cr, coordFin->getXvp(), coordFin->getYvp());
 	  cairo_stroke(cr);
 
 		cairo_stroke(cr);
