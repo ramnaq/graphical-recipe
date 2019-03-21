@@ -109,10 +109,10 @@ public:
   }
 
   void drawNewPolygon(GraphicObject* obj) {
+    transform(obj);
     vector<Coordenada*> polygonPoints = obj->getPolygonPoints();
     vector<Coordenada*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-        //transform(*it); // TODO VER ISSO
         drawer->drawLine(*it , *(std::next(it,1)));
     }
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
@@ -188,7 +188,7 @@ public:
       case POLYGON: {
         vector<Coordenada*> polygonPoints = object->getPolygonPoints();
         vector<Coordenada*>::iterator it;
-        for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+        for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
             viewPort->transformation(*it);
         }
         break;
