@@ -1,18 +1,39 @@
-// #ifndef WINDOW_HPP
-// #define WINDOW_HPP
-//
-// class Window {
-//   public:
-// 	Window(Point origin, double weight, double height):
-// 		origin_(origin), weight_(weight), height_(height) {}
-//
-//   protected:
-// 	Point origin_ = DEFAULT_ORIGIN;
-// 	double weight_ = DEFAULT_SIZE;
-// 	double height_ = DEFAULT_SIZE;
-//
-//   private:
-// 	static const auto DEFAULT_ORIGIN = new Point(0, 0);
-// 	static const auto DEFAULT_SIZE = 10u;
-//
-// };
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
+
+class Window {
+  private:
+    Coordenada *coordMin;
+    double width;
+    double height;
+  public:
+  	Window(double xMin, double yMin, double width, double height) {
+      coordMin = new Coordenada(xMin, yMin);
+      this->width = width;
+      this->height = height;
+    }
+
+    Coordenada* getCoordMin() {
+      return coordMin;
+    }
+
+    double getWidth() {
+      return width;
+    }
+
+    double getHeight() {
+      return height;
+    }
+
+    void zoomIn(double passo) {
+      width = width - width*passo;
+      height = height - height*passo;
+    }
+
+    void zoomOut(double passo) {
+      width = width + width*passo;
+      height = height + height*passo;
+    }
+};
+
+#endif

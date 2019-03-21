@@ -18,13 +18,13 @@ GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 LD=g++
 LDFLAGS=$(GTKLIB) -rdynamic
 
-OBJS=main.o c_handlers.o
+OBJS=main.o
 
 all: $(OBJS)
 	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
-%.o: src/control/%.cpp
-	$(CC) -c $(CCFLAGS) $< $(GTKLIB) -o $@
+main.o: src/main.cpp
+	$(CC) -c $(CCFLAGS) $< $(GTKLIB) -o main.o
 
 clean:
 	rm -f *.o $(TARGET)

@@ -104,10 +104,24 @@ public:
     view->draw(cr);
   }
 
+  void zoomIn() {
+    double passo = view->getPasso() / 100;
+    view->updateWindow(passo, true);
+    updateDrawScreen();
+  }
+
+  void zoomOut() {
+    double passo = view->getPasso() / 100;
+    view->updateWindow(passo, false);
+    updateDrawScreen();
+  }
+
   void updateDrawScreen() {
     Elemento<GraphicObject*>* nextElement = display->getHead(); // primeiro elemento da display file
+    view->clear_surface();
     while (nextElement != NULL) {
     	GraphicObject* element = nextElement->getInfo();
+      view->transform(element);
     	switch (element->getType()) {
     		case POINT: {
     				view->drawNewPoint(element);

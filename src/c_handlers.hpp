@@ -27,10 +27,11 @@ extern "C" G_MODULE_EXPORT void on_btnRemoverCoordenada_clicked() {
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_in(){
+  controller->zoomIn();
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
-
+  controller->zoomOut();
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
