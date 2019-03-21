@@ -55,7 +55,6 @@ class Window {
       coordMax->setY( coordMax->getY() - passo);
     }
 
-
     void goUpLeft(double passo) {
       coordMin->setX( coordMin->getX() - passo);
       coordMin->setY( coordMin->getY() + passo);

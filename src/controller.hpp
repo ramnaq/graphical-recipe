@@ -15,14 +15,17 @@ private:
   View* view;
   DisplayFile *display;
   vector<Coordenada*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
-
+  // TODO Para todo o codigo, remover ponteiros.
 public:
   Controller() {
     view = new View();
     display = new DisplayFile();
   }
 
-  ~Controller() {}
+  ~Controller() {
+    delete view;
+    delete display;
+  }
 
   void run(int argc, char *argv[]) {
     view->initializeWindow(argc, argv);
@@ -72,26 +75,7 @@ public:
     }
   }
 
-  void removeFromList() {
-    int listPos = view->removeFromList();
-    display->deletarElemento(listPos);
-    view->clear_surface();
-    updateDrawScreen();
-  }
-
-  void removeFromCoordPolygonList() {
-    int index = view->removeFromCoordPolygonList();
-    pointsForPolygon.erase(pointsForPolygon.begin() + index);
-  }
-
-  void addNewLineForPolygon() {
-    double x = view->getEntryPolygonX();
-    double y = view->getEntryPolygonY();
-    Coordenada* coordenada = new Coordenada(x, y);
-    pointsForPolygon.push_back(coordenada);
-    view->insertCoordPolygonList();
-  }
-
+  // TODO Melhorar o nome desse método
   void openNewObjectWindow() {
     view->openNewObjectWindow();
   }
@@ -106,6 +90,25 @@ public:
 
   void initializeWindowViewPort() {
     view->initializeWindowViewPort();
+  }
+
+  void removeFromList() {
+    int listPos = view->removeFromList();
+    display->deletarElemento(listPos);
+    updateDrawScreen();
+  }
+
+  void removeFromCoordPolygonList() {
+    int index = view->removeFromCoordPolygonList();
+    pointsForPolygon.erase(pointsForPolygon.begin() + index);
+  }
+
+  void addNewLineForPolygon() {
+    double x = view->getEntryPolygonX();
+    double y = view->getEntryPolygonY();
+    Coordenada* coordenada = new Coordenada(x, y);
+    pointsForPolygon.push_back(coordenada);
+    view->insertCoordPolygonList();
   }
 
   void changeWindow(int option) {

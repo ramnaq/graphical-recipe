@@ -3,28 +3,26 @@
 
 class Point: public GraphicObject {
 private:
-  Coordenada *point;
+  vector<Coordenada*> pointCoordinate;
   string name;
   Type type;
 
 public:
+  // TODO Homogeinizar a passagem de parametros dos objetos (Ou passa x/y ou passa
+  // objeto coordenada (Prefiro esse))
 	Point(string name, double x, double y) {
-    point = new Coordenada(x, y);
+    Coordenada* point = new Coordenada(x, y);
+    pointCoordinate.push_back(point);
     this->name = name;
     this->type = POINT;
   }
 
 	~Point() {
-    delete point;
+    delete pointCoordinate.front();
   }
 
-  Coordenada* getCoordenada() {
-    return point;
-  }
-
-  void setCoordenada(Coordenada *newCoordenada) {
-    point->setX(newCoordenada->getX());
-    point->setY(newCoordenada->getY());
+  vector<Coordenada*> getCoordenadas() {
+    return pointCoordinate;
   }
 
   string getObjectName() {
@@ -34,11 +32,6 @@ public:
   Type getType() {
     return type;
   }
-
-  Coordenada* getCoordenadaIn(){}
-  Coordenada* getCoordenadaFin(){}
-  vector<Coordenada*> getPolygonPoints(){}
-
 };
 
 #endif

@@ -17,9 +17,13 @@ public:
   }
 
 	~Polygon() {
+    vector<Coordenada*>::iterator it;
+    for(it = points.begin(); it != points.end(); it++) {
+      delete *it;
+    }
   }
 
-  vector<Coordenada*> getPolygonPoints() {
+  vector<Coordenada*> getCoordenadas() {
     return points;
   }
 
@@ -30,11 +34,6 @@ public:
   Type getType() {
     return type;
   }
-
-  Coordenada* getCoordenadaIn() {}
-  Coordenada* getCoordenadaFin() {}
-  Coordenada* getCoordenada() {}
-  void setCoordenada(Coordenada *newCoordenada) {}
 };
 
 #endif

@@ -24,6 +24,14 @@ public:
     this->y = y;
   }
 
+  double getX() {
+    return this->x;
+  }
+
+  double getY() {
+    return this->y;
+  }
+
   void setXvp(double x) {
     this->xvp = x;
   }
@@ -38,14 +46,6 @@ public:
 
   double getYvp() {
     return this->yvp;
-  }
-
-  double getX() {
-    return this->x;
-  }
-
-  double getY() {
-    return this->y;
   }
 
 };

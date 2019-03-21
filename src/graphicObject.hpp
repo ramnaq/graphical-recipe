@@ -8,6 +8,7 @@
 
 using namespace std;
 
+// TODO Passar as variaveis nome, tipo e vetor de coordenadas para ca, remover dos outros
 class GraphicObject {
 public:
 	GraphicObject() {
@@ -16,14 +17,7 @@ public:
 
 	virtual string getObjectName()=0;
 	virtual Type getType()=0;
-
-	// TODO RETORNAR VETOR DE COORDENADAS
-	virtual vector<Coordenada*> getPolygonPoints()=0;
-	virtual Coordenada* getCoordenada()=0;
-	virtual void setCoordenada(Coordenada *newCoordenada)=0;
-	virtual Coordenada* getCoordenadaIn()=0;
-	virtual Coordenada* getCoordenadaFin()=0;
-
+	virtual vector<Coordenada*> getCoordenadas()=0;
 };
 
 #endif
