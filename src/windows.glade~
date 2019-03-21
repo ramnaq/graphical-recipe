@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">INE5420 - Fabio &amp; Ramna - </property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <signal name="configure-event" handler="on_mainWindow_configure_event" swapped="no"/>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkBox" id="boxMainWindow">
@@ -170,16 +171,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="labelPorcentagem">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">%</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                   <packing>
@@ -1214,9 +1206,9 @@
                     <child>
                       <object class="GtkCheckButton" id="checkPoligonoPreenchido">
                         <property name="label" translatable="yes">Polígono Preenchido</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="no_show_all">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>

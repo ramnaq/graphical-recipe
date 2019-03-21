@@ -8,6 +8,8 @@ class Coordenada{
 private:
   double x;
   double y;
+  double xvp;
+  double yvp;
 
 public:
 	Coordenada(double x, double y) {
@@ -25,12 +27,28 @@ public:
     this->y = y;
   }
 
+  void setXvp(double x) {
+    this->xvp = x;
+  }
+
+  void setYvp(double y) {
+    this->yvp = y;
+  }
+
+  double getXvp() {
+    return this->xvp;
+  }
+
+  double getYvp() {
+    return this->yvp;
+  }
+
   double getX() {
-    return x;
+    return this->x;
   }
 
   double getY() {
-    return y;
+    return this->y;
   }
 
 };

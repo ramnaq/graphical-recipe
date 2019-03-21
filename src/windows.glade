@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">INE5420 - Fabio &amp; Ramna - </property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <signal name="configure-event" handler="on_mainWindow_configure_event" swapped="no"/>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkBox" id="boxMainWindow">
@@ -170,16 +171,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="labelPorcentagem">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">%</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                   <packing>
@@ -278,6 +270,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_supEsq" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -292,6 +285,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_supDir" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -306,6 +300,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_infEsq" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -320,6 +315,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_infDir" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>

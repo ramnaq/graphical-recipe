@@ -42,14 +42,38 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
   controller->zoomOut();
 }
 
+extern "C" G_MODULE_EXPORT void on_mainWindow_configure_event(){
+  controller->initializeWindowViewPort();
+}
+
 extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
+  controller->goRight();
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_esq(){
+  controller->goLeft();
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_cima(){
+  controller->goUp();
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_baixo(){
+  controller->goDown();
+}
+
+extern "C" G_MODULE_EXPORT void on_btn_clicked_supEsq(){
+  controller->goUpLeft();
+}
+
+extern "C" G_MODULE_EXPORT void on_btn_clicked_supDir(){
+  controller->goUpRight();
+}
+
+extern "C" G_MODULE_EXPORT void on_btn_clicked_infEsq(){
+  controller->goDownLeft();
+}
+
+extern "C" G_MODULE_EXPORT void on_btn_clicked_infDir(){
+  controller->goDownRight();
 }

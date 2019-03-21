@@ -69,11 +69,6 @@ public:
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
 
-    double width = (double) gtk_widget_get_allocated_width(drawAreaViewPort) - 10;
-    double height = (double) gtk_widget_get_allocated_height(drawAreaViewPort) - 10;
-    OurWindow = new Window(1, 1, width, height);
-    viewPort = new ViewPort(width, height, OurWindow);
-
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
     gtk_widget_show(window);
@@ -81,6 +76,13 @@ public:
   }
 
   ~View() {}
+
+  void initializeWindowViewPort() {
+    double xMax = (double) gtk_widget_get_allocated_width(drawAreaViewPort);
+    double yMax = (double) gtk_widget_get_allocated_height(drawAreaViewPort);
+    OurWindow = new Window(1, 1, xMax, yMax);
+    viewPort = new ViewPort(xMax, yMax, OurWindow);
+  }
 
   void create_surface(GtkWidget *widget) {
     drawer->create_surface(widget);
@@ -95,16 +97,19 @@ public:
   }
 
   void drawNewPoint(GraphicObject* obj) {
+    transform(obj);
     drawer->drawPoint(obj->getCoordenada());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewLine(GraphicObject* obj) {
+    transform(obj);
     drawer->drawLine(obj->getCoordenadaIn(), obj->getCoordenadaFin());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewPolygon(GraphicObject* obj) {
+    transform(obj);
     vector<Coordenada*> polygonPoints = obj->getPolygonPoints();
     vector<Coordenada*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
@@ -162,11 +167,40 @@ public:
     return stod(gtk_entry_get_text(entryPasso));
   }
 
-  void updateWindow(double passo, bool isZoomIn) {
-    if (isZoomIn)
-      this->OurWindow->zoomIn(passo);
-    else
-      this->OurWindow->zoomOut(passo);
+  void updateWindow(double passo, int isZoomIn) {
+    switch (isZoomIn) {
+      case 0: {
+        this->OurWindow->zoomIn(passo);
+        break;
+      } case 1: {
+        this->OurWindow->zoomOut(passo);
+        break;
+      } case 2: {
+        this->OurWindow->goRight(passo);
+        break;
+      } case 3: {
+        this->OurWindow->goLeft(passo);
+        break;
+      } case 4: {
+        this->OurWindow->goUp(passo);
+        break;
+      } case 5: {
+        this->OurWindow->goDown(passo);
+        break;
+      } case 6: {
+        this->OurWindow->goUpLeft(passo);
+        break;
+      } case 7: {
+        this->OurWindow->goUpRight(passo);
+        break;
+      } case 8: {
+        this->OurWindow->goDownLeft(passo);
+        break;
+      } case 9: {
+        this->OurWindow->goDownRight(passo);
+        break;
+      }
+    }
   }
 
   void transform(GraphicObject *object) {
@@ -183,7 +217,7 @@ public:
       case POLYGON: {
         vector<Coordenada*> polygonPoints = object->getPolygonPoints();
         vector<Coordenada*>::iterator it;
-        for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+        for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
             viewPort->transformation(*it);
         }
         break;
