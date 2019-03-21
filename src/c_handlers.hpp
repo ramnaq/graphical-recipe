@@ -7,73 +7,145 @@
  */
 
 extern "C" G_MODULE_EXPORT void draw(GtkWidget *widget, cairo_t *cr,  gpointer   data){
-  controller->draw(cr);
+  try {
+    controller->draw(cr);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void create_surface(GtkWidget *widget){
-  controller->create_surface(widget);
+  try {
+    controller->create_surface(widget);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_open_window() {
-  controller->openNewObjectWindow();
+  try {
+    controller->openNewObjectWindow();
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_create_object() {
-  controller->createObject();
+  try {
+    controller->createObject();
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btnAddCoordenada_addCoordenada() {
-  controller->addNewLineForPolygon();
+  try {
+    controller->addNewLineForPolygon();
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
-  controller->removeFromList();
+  try {
+    controller->removeFromList();
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btnRemoverCoordenada_clicked() {
-  controller->removeFromCoordPolygonList();
-}
+  try {
+    controller->removeFromCoordPolygonList();
+  } catch (...) {
 
-extern "C" G_MODULE_EXPORT void on_btn_clicked_in(){
-  controller->zoomIn();
-}
-
-extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
-  controller->zoomOut();
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_mainWindow_configure_event(){
-  controller->initializeWindowViewPort();
+  try {
+    controller->initializeWindowViewPort();
+  } catch (...) {
+
+  }
+}
+
+extern "C" G_MODULE_EXPORT void on_btn_clicked_in(){
+  try {
+    controller->changeWindow(0);
+  } catch (...) {
+
+  }
+}
+
+extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
+  try {
+    controller->changeWindow(1);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
-  controller->goRight();
+  try {
+    controller->changeWindow(2);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_esq(){
-  controller->goLeft();
+  try {
+    controller->changeWindow(3);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_cima(){
-  controller->goUp();
+  try {
+    controller->changeWindow(4);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_baixo(){
-  controller->goDown();
+  try {
+    controller->changeWindow(5);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_supEsq(){
-  controller->goUpLeft();
+  try {
+    controller->changeWindow(6);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_supDir(){
-  controller->goUpRight();
+  try {
+    controller->changeWindow(7);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_infEsq(){
-  controller->goDownLeft();
+  try {
+    controller->changeWindow(8);
+  } catch (...) {
+
+  }
 }
 
 extern "C" G_MODULE_EXPORT void on_btn_clicked_infDir(){
-  controller->goDownRight();
+  try {
+    controller->changeWindow(9);
+  } catch (...) {
+
+  }
 }

@@ -8,30 +8,25 @@
 
 class Line: public GraphicObject {
 private:
-  Point *a;
-  Point *b;
   string name;
   Type type;
+  vector<Coordenada*> lineCoordinates;
 
 public:
 	Line(string name,  Coordenada *a, Coordenada *b) {
-    this->a = new Point("Point A", a->getX(), a->getY());
-    this->b = new Point("Point B", b->getX(), b->getY());
+    lineCoordinates.push_back(a);
+    lineCoordinates.push_back(b);
     this->name = name;
     this->type = LINE;
   }
 
 	~Line() {
-    delete this->a;
-    delete this->b;
+    delete this->lineCoordinates.front();
+    delete this->lineCoordinates.back();
   }
 
-  Coordenada* getCoordenadaIn() {
-    return a->getCoordenada();
-  }
-
-  Coordenada* getCoordenadaFin() {
-    return b->getCoordenada();
+  vector<Coordenada*> getCoordenadas() {
+    return lineCoordinates;
   }
 
   string getObjectName() {
@@ -41,10 +36,6 @@ public:
   Type getType() {
     return type;
   }
-
-  Coordenada* getCoordenada() {}
-  void setCoordenada(Coordenada *newCoordenada) {}
-  vector<Coordenada*> getPolygonPoints() {}
 };
 
 #endif

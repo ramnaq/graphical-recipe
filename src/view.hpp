@@ -47,7 +47,7 @@ public:
     gtk_init(&argc, &argv);
 
     builder = gtk_builder_new();
-    gtk_builder_add_from_file (builder, "windows.glade", NULL); // TODO ATUALIZAR LOCAL DIRETORIO
+    gtk_builder_add_from_file (builder, "windows.glade", NULL);
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
     newObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
@@ -84,6 +84,11 @@ public:
     viewPort = new ViewPort(xMax, yMax, OurWindow);
   }
 
+  void clear_surface() {
+    drawer->clear_surface();
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
   void create_surface(GtkWidget *widget) {
     drawer->create_surface(widget);
   }
@@ -98,19 +103,19 @@ public:
 
   void drawNewPoint(GraphicObject* obj) {
     transform(obj);
-    drawer->drawPoint(obj->getCoordenada());
+    drawer->drawPoint(obj->getCoordenadas().front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewLine(GraphicObject* obj) {
     transform(obj);
-    drawer->drawLine(obj->getCoordenadaIn(), obj->getCoordenadaFin());
+    drawer->drawLine(obj->getCoordenadas().front(), obj->getCoordenadas().back());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewPolygon(GraphicObject* obj) {
     transform(obj);
-    vector<Coordenada*> polygonPoints = obj->getPolygonPoints();
+    vector<Coordenada*> polygonPoints = obj->getCoordenadas();
     vector<Coordenada*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
         drawer->drawLine(*it , *(std::next(it,1)));
@@ -135,9 +140,9 @@ public:
   }
 
   void insertCoordPolygonList() {
-    string a = gtk_entry_get_text(entryPolygonX);
-    string b = gtk_entry_get_text(entryPolygonY);
-    string name = "Coordenada: (" + a + " , " + b + ")";
+    string coordX = gtk_entry_get_text(entryPolygonX);
+    string coordY = gtk_entry_get_text(entryPolygonY);
+    string name = "Coordenada: (" + coordX + " , " + coordY + ")";
 
     GtkWidget* row = gtk_list_box_row_new();
     GtkWidget* label = gtk_label_new(name.c_str());
@@ -152,19 +157,6 @@ public:
 
     gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
     return index;
-  }
-
-  void clear_surface() {
-    drawer->clear_surface();
-    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-  }
-
-  int getCurrentPage () {
-    return gtk_notebook_get_current_page(notebookObjects);
-  }
-
-  double getPasso() {
-    return stod(gtk_entry_get_text(entryPasso));
   }
 
   void updateWindow(double passo, int isZoomIn) {
@@ -206,16 +198,16 @@ public:
   void transform(GraphicObject *object) {
     switch (object->getType()) {
       case POINT: {
-        viewPort->transformation(object->getCoordenada());
+        viewPort->transformation(object->getCoordenadas().front());
         break;
       }
       case LINE: {
-        viewPort->transformation(object->getCoordenadaIn());
-        viewPort->transformation(object->getCoordenadaFin());
+        viewPort->transformation(object->getCoordenadas().front());
+        viewPort->transformation(object->getCoordenadas().back());
         break;
       }
       case POLYGON: {
-        vector<Coordenada*> polygonPoints = object->getPolygonPoints();
+        vector<Coordenada*> polygonPoints = object->getCoordenadas();
         vector<Coordenada*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
             viewPort->transformation(*it);
@@ -232,10 +224,6 @@ public:
 
   double getEntryPontoY() {
     return stod(gtk_entry_get_text(entryPontoY));
-  }
-
-  string getObjectName() {
-    return gtk_entry_get_text(objectName);
   }
 
   double getEntryLineX() {
@@ -260,6 +248,18 @@ public:
 
   double getEntryPolygonY() {
     return stod(gtk_entry_get_text(entryPolygonY));
+  }
+
+  double getPasso() {
+    return stod(gtk_entry_get_text(entryPasso));
+  }
+
+  string getObjectName() {
+    return gtk_entry_get_text(objectName);
+  }
+
+  int getCurrentPage () {
+    return gtk_notebook_get_current_page(notebookObjects);
   }
 
 };

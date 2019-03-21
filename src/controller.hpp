@@ -17,14 +17,17 @@ private:
   View* view;
   DisplayFile *display;
   vector<Coordenada*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
-
+  // TODO Para todo o codigo, remover ponteiros.
 public:
   Controller() {
     view = new View();
     display = new DisplayFile();
   }
 
-  ~Controller() {}
+  ~Controller() {
+    delete view;
+    delete display;
+  }
 
   void run(int argc, char *argv[]) {
     view->initializeWindow(argc, argv);
@@ -74,26 +77,7 @@ public:
     }
   }
 
-  void removeFromList() {
-    int listPos = view->removeFromList();
-    display->deletarElemento(listPos);
-    view->clear_surface();
-    updateDrawScreen();
-  }
-
-  void removeFromCoordPolygonList() {
-    int index = view->removeFromCoordPolygonList();
-    pointsForPolygon.erase(pointsForPolygon.begin() + index);
-  }
-
-  void addNewLineForPolygon() {
-    double x = view->getEntryPolygonX();
-    double y = view->getEntryPolygonY();
-    Coordenada* coordenada = new Coordenada(x, y);
-    pointsForPolygon.push_back(coordenada);
-    view->insertCoordPolygonList();
-  }
-
+  // TODO Melhorar o nome desse método
   void openNewObjectWindow() {
     view->openNewObjectWindow();
   }
@@ -110,66 +94,28 @@ public:
     view->initializeWindowViewPort();
   }
 
-  // TODO REFATORAR ESSE POVO TOD0, fazer um único método que recebe
-  // como parâmetro o tipo de modificação (zoomIn, goRight...) a partir dos callbacks
-  // Desde zoomIn até goDownRight
-  void zoomIn() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 0);
+  void removeFromList() {
+    int listPos = view->removeFromList();
+    display->deletarElemento(listPos);
     updateDrawScreen();
   }
 
-  void zoomOut() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 1);
-    updateDrawScreen();
+  void removeFromCoordPolygonList() {
+    int index = view->removeFromCoordPolygonList();
+    pointsForPolygon.erase(pointsForPolygon.begin() + index);
   }
 
-  void goRight() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 2);
-    updateDrawScreen();
+  void addNewLineForPolygon() {
+    double x = view->getEntryPolygonX();
+    double y = view->getEntryPolygonY();
+    Coordenada* coordenada = new Coordenada(x, y);
+    pointsForPolygon.push_back(coordenada);
+    view->insertCoordPolygonList();
   }
 
-  void goLeft() {
+  void changeWindow(int option) {
     double passo = view->getPasso();
-    view->updateWindow(passo, 3);
-    updateDrawScreen();
-  }
-
-  void goUp() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 4);
-    updateDrawScreen();
-  }
-
-  void goDown() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 5);
-    updateDrawScreen();
-  }
-
-  void goUpLeft() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 6);
-    updateDrawScreen();
-  }
-
-  void goUpRight() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 7);
-    updateDrawScreen();
-  }
-
-  void goDownLeft() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 8);
-    updateDrawScreen();
-  }
-
-  void goDownRight() {
-    double passo = view->getPasso();
-    view->updateWindow(passo, 9);
+    view->updateWindow(passo, option);
     updateDrawScreen();
   }
 

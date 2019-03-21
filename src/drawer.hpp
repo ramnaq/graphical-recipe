@@ -1,14 +1,13 @@
 #include <math.h>
-#include "graphicObject.hpp"
+#include "graphicObject.hpp" // TODO para todo o código. Verificar inclusoes, tem algumas redundantes
 
 #ifndef DRAWER_HPP
 #define DRAWER_HPP
 
 static cairo_surface_t *surface = NULL;
 
+// TODO Transformar em objeto statico?
 class Drawer {
-private:
-
 public:
 	Drawer() {}
 	~Drawer() {}
