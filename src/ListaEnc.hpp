@@ -1,7 +1,7 @@
 #ifndef LISTAENC_HPP
 #define LISTAENC_HPP
 
-#include "elemento.hpp"
+#include "Elemento.hpp"
 template<typename T>
 
 class ListaEnc {
