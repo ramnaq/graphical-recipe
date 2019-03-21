@@ -79,6 +79,11 @@ public:
     updateDrawScreen();
   }
 
+  void removeFromCoordPolygonList() {
+    int index = view->removeFromCoordPolygonList();
+    pointsForPolygon.erase(pointsForPolygon.begin() + index);
+  }
+
   void addNewLineForPolygon() {
     double x = view->getEntryPolygonX();
     double y = view->getEntryPolygonY();
@@ -99,10 +104,24 @@ public:
     view->draw(cr);
   }
 
+  void zoomIn() {
+    double passo = view->getPasso() / 100;
+    view->updateWindow(passo, true);
+    updateDrawScreen();
+  }
+
+  void zoomOut() {
+    double passo = view->getPasso() / 100;
+    view->updateWindow(passo, false);
+    updateDrawScreen();
+  }
+
   void updateDrawScreen() {
     Elemento<GraphicObject*>* nextElement = display->getHead(); // primeiro elemento da display file
+    view->clear_surface();
     while (nextElement != NULL) {
     	GraphicObject* element = nextElement->getInfo();
+      view->transform(element);
     	switch (element->getType()) {
     		case POINT: {
     				view->drawNewPoint(element);
@@ -122,9 +141,3 @@ public:
 };
 
 #endif
-
-// Coordenada* coordenada = new Coordenada(100, 5);
-// Coordenada* coordenada2 = new Coordenada(200, 5);
-// Coordenada* coordenada3 = new Coordenada(200, 100);
-// Coordenada* coordenada4 = new Coordenada(100, 100);
-// Coordenada* coordenada5 = new Coordenada(100, 5);

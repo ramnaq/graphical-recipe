@@ -2,6 +2,8 @@
 #include <string>
 
 #include "drawer.hpp"
+#include "viewport.hpp"
+#include "window.hpp"
 
 #ifndef VIEW_HPP
 #define VIEW_HPP
@@ -19,14 +21,14 @@ private:
 
   GtkEntry *entryPontoX;
   GtkEntry *entryPontoY;
-  GtkEntry *objectName;
-
   GtkEntry *entryLineX;
   GtkEntry *entryLineY;
   GtkEntry *entryLineX1;
   GtkEntry *entryLineY1;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
+  GtkEntry *objectName;
+  GtkEntry *entryPasso;
 
   GtkListBox *listObjects;
   GtkListBox *listCoordPolygon;
@@ -34,6 +36,8 @@ private:
   GtkNotebook *notebookObjects;
 
   Drawer* drawer;
+  Window* OurWindow;
+  ViewPort* viewPort;
 public:
   View() {
     drawer = new Drawer();
@@ -58,11 +62,17 @@ public:
     entryLineY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY1"));
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY"));
+    entryPasso = GTK_ENTRY(gtk_builder_get_object(builder, "inputPasso"));
 
     listObjects = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
+
+    double width = (double) gtk_widget_get_allocated_width(drawAreaViewPort) - 10;
+    double height = (double) gtk_widget_get_allocated_height(drawAreaViewPort) - 10;
+    OurWindow = new Window(1, 1, width, height);
+    viewPort = new ViewPort(width, height, OurWindow);
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -131,8 +141,12 @@ public:
     gtk_widget_show_all((GtkWidget*) listCoordPolygon);
   }
 
-  void removeFromCoordPolygonList() {
+  int removeFromCoordPolygonList() {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
+    int index = gtk_list_box_row_get_index(row);
 
+    gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+    return index;
   }
 
   void clear_surface() {
@@ -142,6 +156,39 @@ public:
 
   int getCurrentPage () {
     return gtk_notebook_get_current_page(notebookObjects);
+  }
+
+  double getPasso() {
+    return stod(gtk_entry_get_text(entryPasso));
+  }
+
+  void updateWindow(double passo, bool isZoomIn) {
+    if (isZoomIn)
+      this->OurWindow->zoomIn(passo);
+    else
+      this->OurWindow->zoomOut(passo);
+  }
+
+  void transform(GraphicObject *object) {
+    switch (object->getType()) {
+      case POINT: {
+        viewPort->transformation(object->getCoordenada());
+        break;
+      }
+      case LINE: {
+        viewPort->transformation(object->getCoordenadaIn());
+        viewPort->transformation(object->getCoordenadaFin());
+        break;
+      }
+      case POLYGON: {
+        vector<Coordenada*> polygonPoints = object->getPolygonPoints();
+        vector<Coordenada*>::iterator it;
+        for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+            viewPort->transformation(*it);
+        }
+        break;
+      }
+    }
   }
 
   // Gets
