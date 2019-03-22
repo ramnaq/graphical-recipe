@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">INE5420 - Fabio &amp; Ramna - </property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkBox" id="boxMainWindow">
         <property name="visible">True</property>
@@ -166,6 +167,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_baixo" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -180,6 +182,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_esq" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -194,6 +197,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_dir" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -208,6 +212,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_cima" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -272,6 +277,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_in" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
@@ -285,6 +291,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btn_clicked_out" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
@@ -392,6 +399,8 @@
                         <property name="height_request">400</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="configure-event" handler="create_surface" swapped="no"/>
+                        <signal name="draw" handler="draw" swapped="no"/>
                       </object>
                     </child>
                   </object>
