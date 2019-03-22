@@ -27,7 +27,7 @@ extern "C" G_MODULE_EXPORT void create_surface(GtkWidget *widget){
 //! Connected to signal "clicked" of element "btnAddObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_open_window() {
   try {
-    controller->openNewObjectWindow();
+    controller->openAddObjectWindow();
   } catch (...) {
 
   }
@@ -54,7 +54,7 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoordenada_addCoordenada() {
 //! Connected to signal "clicked" of element "btnRemoveObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   try {
-    controller->removeFromList();
+    controller->removeSelectedObject();
   } catch (...) {
 
   }
@@ -167,3 +167,4 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_infDir(){
 
   }
 }
+
