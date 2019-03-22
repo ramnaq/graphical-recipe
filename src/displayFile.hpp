@@ -19,12 +19,8 @@ public:
 		return displayFile->getHead();
 	}
 
-	void insereGraphicObject(GraphicObject* elemento) {
-		displayFile->adiciona(elemento);
-	}
-
-	void inserirNovoPonto(Point* p) {
-		displayFile->adiciona(p);
+	void insert(GraphicObject* x) {
+		displayFile->adiciona(x);
 	}
 
 	// void inserirNovaReta(Reta* r) {
@@ -35,7 +31,7 @@ public:
 	// 	displayFile->adiciona(pol);
 	// }
 
-	void deletarElemento(int index) {
+	void remove(int index) {
 		displayFile->retiraDaPosicao(index);
 	}
 

@@ -49,7 +49,7 @@ public:
         y1 = view->getEntryPontoY();
 
         Point* p = new Point(name, x1, y1);
-        display->insereGraphicObject(p);
+        display->insert(p);
         view->insertIntoListBox(p, "POINT");
         view->drawNewPoint(p);
 
@@ -66,7 +66,7 @@ public:
         Coordinate* b = new Coordinate(x2, y2);
 
         Line* line = new Line(name, a, b);
-        display->insereGraphicObject(line);
+        display->insert(line);
         view->insertIntoListBox(line, "LINE");
         view->drawNewLine(line);
 
@@ -74,7 +74,7 @@ public:
       }
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
-        display->insereGraphicObject(polygon);
+        display->insert(polygon);
         view->insertIntoListBox(polygon, "POLYGON");
         view->drawNewPolygon(polygon);
 
@@ -102,7 +102,7 @@ public:
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
   void removeSelectedObject() {
     int index = view->removeSelectedObject();
-    display->deletarElemento(index);
+    display->remove(index);
     updateDrawScreen();
   }
 
