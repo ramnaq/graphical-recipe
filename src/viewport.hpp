@@ -3,16 +3,17 @@
 
 #include "window.hpp"
 
+
 class ViewPort {
   private:
     Window *window;
-    Coordenada* coordMin;
-    Coordenada* coordMax;
+    Coordinate* coordMin;
+    Coordinate* coordMax;
 
   public:
     ViewPort (double x, double y, Window *window) {
-      this->coordMin = new Coordenada(1, 1);
-      this->coordMax = new Coordenada(x, y);
+      this->coordMin = new Coordinate(1, 1);
+      this->coordMax = new Coordinate(x, y);
       this->window = window;
     }
 
@@ -21,7 +22,7 @@ class ViewPort {
 	 * Transforms coord into a Coordinate referred to the viewport.
 	 * @param coord The window coordinate to be transformed into a viewport coordinate.
 	 */
-  	void transformation(Coordenada *coord) {
+  	void transformation(Coordinate *coord) {
       double xwMax = window->getCoordMax()->getX();
       double ywMax = window->getCoordMax()->getY();
       double xwMin = window->getCoordMin()->getX();

@@ -9,6 +9,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+
 /*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
 
 class Controller {
@@ -16,7 +17,7 @@ class Controller {
 private:
   View* view;
   DisplayFile *display;
-  vector<Coordenada*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
+  vector<Coordinate*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
   // TODO Para todo o codigo, remover ponteiros.
 public:
   Controller() {
@@ -61,8 +62,8 @@ public:
         x2 = view->getEntryLineX2();
         y2 = view->getEntryLineY2();
 
-        Coordenada* a = new Coordenada(x1, y1);
-        Coordenada* b = new Coordenada(x2, y2);
+        Coordinate* a = new Coordinate(x1, y1);
+        Coordinate* b = new Coordinate(x2, y2);
 
         Line* line = new Line(name, a, b);
         display->insereGraphicObject(line);
@@ -117,8 +118,8 @@ public:
   void addNewLineForPolygon() {
     double x = view->getEntryPolygonX();
     double y = view->getEntryPolygonY();
-    Coordenada* coordenada = new Coordenada(x, y);
-    pointsForPolygon.push_back(coordenada);
+    Coordinate* c = new Coordinate(x, y);
+    pointsForPolygon.push_back(c);
     view->insertCoordPolygonList();
   }
 

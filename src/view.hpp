@@ -110,20 +110,20 @@ public:
 
   void drawNewPoint(GraphicObject* obj) {
     transform(obj);
-    drawer->drawPoint(obj->getCoordenadas().front());
+    drawer->drawPoint(obj->getCoordinates().front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewLine(GraphicObject* obj) {
     transform(obj);
-    drawer->drawLine(obj->getCoordenadas().front(), obj->getCoordenadas().back());
+    drawer->drawLine(obj->getCoordinates().front(), obj->getCoordinates().back());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewPolygon(GraphicObject* obj) {
     transform(obj);
-    vector<Coordenada*> polygonPoints = obj->getCoordenadas();
-    vector<Coordenada*>::iterator it;
+    vector<Coordinate*> polygonPoints = obj->getCoordinates();
+    vector<Coordinate*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
         drawer->drawLine(*it , *(std::next(it,1)));
     }
@@ -214,17 +214,17 @@ public:
   void transform(GraphicObject *object) {
     switch (object->getType()) {
       case POINT: {
-        viewPort->transformation(object->getCoordenadas().front());
+        viewPort->transformation(object->getCoordinates().front());
         break;
       }
       case LINE: {
-        viewPort->transformation(object->getCoordenadas().front());
-        viewPort->transformation(object->getCoordenadas().back());
+        viewPort->transformation(object->getCoordinates().front());
+        viewPort->transformation(object->getCoordinates().back());
         break;
       }
       case POLYGON: {
-        vector<Coordenada*> polygonPoints = object->getCoordenadas();
-        vector<Coordenada*>::iterator it;
+        vector<Coordinate*> polygonPoints = object->getCoordinates();
+        vector<Coordinate*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
             viewPort->transformation(*it);
         }

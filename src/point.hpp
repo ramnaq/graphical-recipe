@@ -6,15 +6,15 @@
 
 class Point: public GraphicObject {
 private:
-  vector<Coordenada*> pointCoordinate;
+  vector<Coordinate*> pointCoordinate;
   string name;
   Type type;
 
 public:
   // TODO Homogeinizar a passagem de parametros dos objetos (Ou passa x/y ou passa
-  // objeto coordenada (Prefiro esse))
+  // objeto Coordinate (Prefiro esse))
 	Point(string name, double x, double y) {
-    Coordenada* point = new Coordenada(x, y);
+    Coordinate* point = new Coordinate(x, y);
     pointCoordinate.push_back(point);
     this->name = name;
     this->type = POINT;
@@ -24,7 +24,7 @@ public:
     delete pointCoordinate.front();
   }
 
-  vector<Coordenada*> getCoordenadas() {
+  vector<Coordinate*> getCoordinates() {
     return pointCoordinate;
   }
 
@@ -38,3 +38,4 @@ public:
 };
 
 #endif
+

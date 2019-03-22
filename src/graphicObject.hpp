@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "coordenada.hpp"
+#include "coordinate.hpp"
 #include "objectType.hpp"
 
 
@@ -20,7 +20,7 @@ public:
 
 	virtual string getObjectName()=0;
 	virtual Type getType()=0;
-	virtual vector<Coordenada*> getCoordenadas()=0;
+	virtual vector<Coordinate*> getCoordinates()=0;
 };
 
 #endif

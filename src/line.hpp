@@ -10,10 +10,10 @@ class Line: public GraphicObject {
 private:
   string name;
   Type type;
-  vector<Coordenada*> lineCoordinates;
+  vector<Coordinate*> lineCoordinates;
 
 public:
-	Line(string name,  Coordenada *a, Coordenada *b) {
+	Line(string name,  Coordinate* a, Coordinate* b) {
     lineCoordinates.push_back(a);
     lineCoordinates.push_back(b);
     this->name = name;
@@ -25,7 +25,7 @@ public:
     delete this->lineCoordinates.back();
   }
 
-  vector<Coordenada*> getCoordenadas() {
+  vector<Coordinate*> getCoordinates() {
     return lineCoordinates;
   }
 
@@ -39,3 +39,4 @@ public:
 };
 
 #endif
+
