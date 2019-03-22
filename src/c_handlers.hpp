@@ -42,8 +42,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_create_object() {
   }
 }
 
-//! Connected to signal "clicked" of element "btnAddCoordenada".
-extern "C" G_MODULE_EXPORT void on_btnAddCoordenada_addCoordenada() {
+//! Connected to signal "clicked" of element "btnAddCoordinate".
+extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_addCoordinate() {
   try {
     controller->addNewLineForPolygon();
   } catch (...) {
@@ -60,8 +60,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   }
 }
 
-//! Connected to signal "clicked" of element "btnRemoverCoordenada".
-extern "C" G_MODULE_EXPORT void on_btnRemoverCoordenada_clicked() {
+//! Connected to signal "clicked" of element "btnRemoveCoordinate".
+extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_clicked() {
   try {
     controller->removeFromCoordPolygonList();
   } catch (...) {
