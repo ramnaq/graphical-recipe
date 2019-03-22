@@ -96,8 +96,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_out(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnDireita".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
+//! Connected to signal "clicked" of element "btnRight".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_right(){
   try {
     controller->changeWindow(2);
   } catch (...) {
@@ -105,8 +105,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_dir(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnEsquerda".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_esq(){
+//! Connected to signal "clicked" of element "btnLeft".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_left(){
   try {
     controller->changeWindow(3);
   } catch (...) {
@@ -114,8 +114,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_esq(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnCime".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_cima(){
+//! Connected to signal "clicked" of element "btnUp".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_up(){
   try {
     controller->changeWindow(4);
   } catch (...) {
@@ -123,8 +123,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_cima(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnBaixo".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_baixo(){
+//! Connected to signal "clicked" of element "btnDown".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_down(){
   try {
     controller->changeWindow(5);
   } catch (...) {
@@ -132,8 +132,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_baixo(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnSupEsq".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_supEsq(){
+//! Connected to signal "clicked" of element "btnUpLeft".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_upLeft(){
   try {
     controller->changeWindow(6);
   } catch (...) {
@@ -141,8 +141,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_supEsq(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnSupDir".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_supDir(){
+//! Connected to signal "clicked" of element "btnUpRight".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_upRight(){
   try {
     controller->changeWindow(7);
   } catch (...) {
@@ -150,8 +150,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_supDir(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnInfEsq".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_infEsq(){
+//! Connected to signal "clicked" of element "btnDownLeft".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_downLeft(){
   try {
     controller->changeWindow(8);
   } catch (...) {
@@ -159,8 +159,8 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_infEsq(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnInfDir".
-extern "C" G_MODULE_EXPORT void on_btn_clicked_infDir(){
+//! Connected to signal "clicked" of element "btnDownRight".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_downRight(){
   try {
     controller->changeWindow(9);
   } catch (...) {
