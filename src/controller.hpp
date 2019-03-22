@@ -45,8 +45,8 @@ public:
     string name = view->getObjectName();;
     switch (currentPage) {
      case POINT: {
-        x1 = view->getEntryPontoX();
-        y1 = view->getEntryPontoY();
+        x1 = view->getEntryPointX();
+        y1 = view->getEntryPointY();
 
         Point* p = new Point(name, x1, y1);
         display->insert(p);
@@ -128,8 +128,8 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double passo = view->getPasso();
-    view->updateWindow(passo, op);
+    double step = view->getStep();
+    view->updateWindow(step, op);
     updateDrawScreen();
   }
 

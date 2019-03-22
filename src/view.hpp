@@ -20,8 +20,8 @@ private:
   GtkWidget *drawAreaViewPort;
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
-  GtkEntry *entryPontoX;
-  GtkEntry *entryPontoY;
+  GtkEntry *entryPointX;
+  GtkEntry *entryPointY;
   GtkEntry *entryLineX1;
   GtkEntry *entryLineY1;
   GtkEntry *entryLineX2;
@@ -29,7 +29,7 @@ private:
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
   GtkEntry *objectName;
-  GtkEntry *entryPasso;
+  GtkEntry *entryStep;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
@@ -39,6 +39,7 @@ private:
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+
 public:
   View() {
     drawer = new Drawer();
@@ -55,16 +56,16 @@ public:
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
 
-    entryPontoX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoX"));
-    entryPontoY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoY"));
+    entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
+    entryPointY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointY"));
     objectName = GTK_ENTRY(gtk_builder_get_object(builder, "entryNovoObjeto"));
-    entryLineX1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaX"));
-    entryLineY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY"));
-    entryLineX2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaX1"));
-    entryLineY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaY1"));
-    entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX"));
-    entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY"));
-    entryPasso = GTK_ENTRY(gtk_builder_get_object(builder, "inputPasso"));
+    entryLineX1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineX"));
+    entryLineY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY"));
+    entryLineX2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineX1"));
+    entryLineY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY1"));
+    entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
+    entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
+    entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
@@ -170,37 +171,37 @@ public:
     return index;
   }
 
-  void updateWindow(double passo, int isZoomIn) {
+  void updateWindow(double step, int isZoomIn) {
     switch (isZoomIn) {
       case 0: {
-        this->window->zoomIn(passo);
+        this->window->zoomIn(step);
         break;
       } case 1: {
-        this->window->zoomOut(passo);
+        this->window->zoomOut(step);
         break;
       } case 2: {
-        this->window->goRight(passo);
+        this->window->goRight(step);
         break;
       } case 3: {
-        this->window->goLeft(passo);
+        this->window->goLeft(step);
         break;
       } case 4: {
-        this->window->goUp(passo);
+        this->window->goUp(step);
         break;
       } case 5: {
-        this->window->goDown(passo);
+        this->window->goDown(step);
         break;
       } case 6: {
-        this->window->goUpLeft(passo);
+        this->window->goUpLeft(step);
         break;
       } case 7: {
-        this->window->goUpRight(passo);
+        this->window->goUpRight(step);
         break;
       } case 8: {
-        this->window->goDownLeft(passo);
+        this->window->goDownLeft(step);
         break;
       } case 9: {
-        this->window->goDownRight(passo);
+        this->window->goDownRight(step);
         break;
       }
     }
@@ -238,12 +239,12 @@ public:
   /// Get methods
   ///
 
-  double getEntryPontoX() {
-    return stod(gtk_entry_get_text(entryPontoX));
+  double getEntryPointX() {
+    return stod(gtk_entry_get_text(entryPointX));
   }
 
-  double getEntryPontoY() {
-    return stod(gtk_entry_get_text(entryPontoY));
+  double getEntryPointY() {
+    return stod(gtk_entry_get_text(entryPointY));
   }
 
   double getEntryLineX1() {
@@ -270,8 +271,8 @@ public:
     return stod(gtk_entry_get_text(entryPolygonY));
   }
 
-  double getPasso() {
-    return stod(gtk_entry_get_text(entryPasso));
+  double getStep() {
+    return stod(gtk_entry_get_text(entryStep));
   }
 
   string getObjectName() {
@@ -284,5 +285,5 @@ public:
 
 };
 
-#endif
+#endif  //!< VIEW_HPP
 
