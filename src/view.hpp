@@ -4,6 +4,7 @@
 #include "drawer.hpp"
 #include "viewport.hpp"
 #include "window.hpp"
+#include <stdio.h>
 
 #ifndef VIEW_HPP
 #define VIEW_HPP
@@ -117,7 +118,9 @@ public:
 
   void drawNewLine(GraphicObject* obj) {
     transform(obj);
-    drawer->drawLine(obj->getCoordinates().front(), obj->getCoordinates().back());
+	Coordinate* c1 = obj->getCoordinates().front();
+	Coordinate* c2 = obj->getCoordinates().back();
+    drawer->drawLine(c1, c2);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -125,16 +128,16 @@ public:
     transform(obj);
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
-    for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+	for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
         drawer->drawLine(*it, *(std::next(it,1)));
-    }
+	}
 	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void insertIntoListBox(GraphicObject* obj, string tipo) {
+  void insertIntoListBox(GraphicObject& obj, string tipo) {
     GtkWidget* row = gtk_list_box_row_new();
-    GtkWidget* label = gtk_label_new((obj->getObjectName() + " (" + tipo + ")").c_str());
+    GtkWidget* label = gtk_label_new((obj.getObjectName() + " (" + tipo + ")").c_str());
 
     gtk_container_add((GtkContainer*) objectsListBox, label);
     gtk_widget_show_all((GtkWidget*) objectsListBox);
@@ -226,10 +229,10 @@ public:
       }
       case POLYGON: {
         vector<Coordinate*> polygonPoints = object->getCoordinates();
-        vector<Coordinate*>::iterator it;
+		vector<Coordinate*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
             viewPort->transformation(*it);
-        }
+		}
         break;
       }
     }

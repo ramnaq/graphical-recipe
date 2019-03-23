@@ -13,17 +13,13 @@ private:
   Type type;
 
 public:
-	Polygon(string name, vector<Coordinate*> &points) {
+	Polygon(string name, vector<Coordinate*>& points) {
     this->points = points;
     this->name = name;
     this->type = POLYGON;
   }
 
 	~Polygon() {
-    vector<Coordinate*>::iterator it;
-    for(it = points.begin(); it != points.end(); it++) {
-      delete *it;
-    }
   }
 
   vector<Coordinate*> getCoordinates() {

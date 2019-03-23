@@ -2,6 +2,7 @@
 #define LINE_HPP
 
 #include "point.hpp"
+#include <stdio.h>
 
 
 /*! Structures a representation and behavior of a "line segment" */
@@ -13,16 +14,17 @@ private:
   vector<Coordinate*> lineCoordinates;
 
 public:
-	Line(string name,  Coordinate* a, Coordinate* b) {
-    lineCoordinates.push_back(a);
-    lineCoordinates.push_back(b);
+	Line(string name,  Coordinate& a, Coordinate& b) {
+    lineCoordinates.push_back(&a);
+    lineCoordinates.push_back(&b);
     this->name = name;
     this->type = LINE;
+	printf ("new reta: %s\n", name);
+	printf ("x y: %d %d\n", a.getX(), a.getY());
+
   }
 
 	~Line() {
-    delete this->lineCoordinates.front();
-    delete this->lineCoordinates.back();
   }
 
   vector<Coordinate*> getCoordinates() {

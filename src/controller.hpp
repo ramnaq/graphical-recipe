@@ -50,7 +50,7 @@ public:
 
         Point* p = new Point(name, x1, y1);
         display->insert(p);
-        view->insertIntoListBox(p, "POINT");
+        view->insertIntoListBox(*p, "POINT");
         view->drawNewPoint(p);
 
         break;
@@ -65,9 +65,9 @@ public:
         Coordinate* a = new Coordinate(x1, y1);
         Coordinate* b = new Coordinate(x2, y2);
 
-        Line* line = new Line(name, a, b);
+        Line* line = new Line(name, *a, *b);
         display->insert(line);
-        view->insertIntoListBox(line, "LINE");
+        view->insertIntoListBox(*line, "LINE");
         view->drawNewLine(line);
 
         break;
@@ -75,7 +75,7 @@ public:
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
         display->insert(polygon);
-        view->insertIntoListBox(polygon, "POLYGON");
+        view->insertIntoListBox(*polygon, "POLYGON");
         view->drawNewPolygon(polygon);
 
         break;
