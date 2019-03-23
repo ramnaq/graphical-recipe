@@ -8,25 +8,25 @@
 
 class Polygon: public GraphicObject {
 private:
-  vector<Coordenada*> points;
+  vector<Coordinate*> points;
   string name;
   Type type;
 
 public:
-	Polygon(string name, vector<Coordenada*> &points) {
+	Polygon(string name, vector<Coordinate*> &points) {
     this->points = points;
     this->name = name;
     this->type = POLYGON;
   }
 
 	~Polygon() {
-    vector<Coordenada*>::iterator it;
+    vector<Coordinate*>::iterator it;
     for(it = points.begin(); it != points.end(); it++) {
       delete *it;
     }
   }
 
-  vector<Coordenada*> getCoordenadas() {
+  vector<Coordinate*> getCoordinates() {
     return points;
   }
 

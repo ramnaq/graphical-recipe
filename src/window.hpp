@@ -12,19 +12,19 @@
 
 class Window {
   private:
-    Coordenada *coordMin;
-    Coordenada *coordMax;
+    Coordinate *coordMin;
+    Coordinate *coordMax;
   public:
   	Window(double xMin, double yMin, double xMax, double yMax) {
-      coordMin = new Coordenada(xMin, yMin);
-      coordMax = new Coordenada(xMax, yMax);
+      coordMin = new Coordinate(xMin, yMin);
+      coordMax = new Coordinate(xMax, yMax);
     }
 
-    Coordenada* getCoordMin() {
+    Coordinate* getCoordMin() {
       return coordMin;
     }
 
-    Coordenada* getCoordMax() {
+    Coordinate* getCoordMax() {
       return coordMax;
     }
 
