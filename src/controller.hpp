@@ -17,7 +17,7 @@ class Controller {
 private:
   View view;
   DisplayFile display;
-  vector<Coordinate*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
+  vector<Coordinate*> pointsForPolygon;
 
 public:
   Controller() {
