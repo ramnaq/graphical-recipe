@@ -3,6 +3,9 @@
 
 #include "point.hpp"
 
+
+/*! Structures a representation and behavior of a polygon */
+
 class Polygon: public GraphicObject {
 private:
   vector<Coordenada*> points;

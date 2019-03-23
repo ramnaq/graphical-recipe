@@ -2,6 +2,7 @@
 #define LISTAENC_HPP
 
 #include "Elemento.hpp"
+
 template<typename T>
 
 class ListaEnc {

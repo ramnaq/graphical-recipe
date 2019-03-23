@@ -9,6 +9,8 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+/*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
+
 class Controller {
 
 private:
@@ -28,38 +30,43 @@ public:
   }
 
   void run(int argc, char *argv[]) {
-    view->initializeWindow(argc, argv);
+    view->initializeGtkWindow(argc, argv);
   }
 
+  //! Creates an instance of a Graphical Object and asks 'view' to draw it.
+  /*!
+   * Uses information from 'view' to create Coordinates, instantiate a type of
+   * GraphicalObject and then sends this instance to 'view' to be drawn.
+   */
   void createObject() {
     int currentPage = view->getCurrentPage();
-    double x, y, x1, y1;
+    double x1, y1, x2, y2;
     string name = view->getObjectName();;
     switch (currentPage) {
      case POINT: {
-        x = view->getEntryPontoX();
-        y = view->getEntryPontoY();
+        x1 = view->getEntryPontoX();
+        y1 = view->getEntryPontoY();
 
-        Point* p = new Point(name, x, y);
+        Point* p = new Point(name, x1, y1);
         display->insereGraphicObject(p);
-        view->insertList(p, "POINT");
+        view->insertIntoListBox(p, "POINT");
         view->drawNewPoint(p);
 
         break;
      }
      case LINE: {
-        x = view->getEntryLineX();
-        y = view->getEntryLineY();
-
         x1 = view->getEntryLineX1();
         y1 = view->getEntryLineY1();
 
-        Coordenada* a = new Coordenada(x, y);
-        Coordenada* b = new Coordenada(x1, y1);
+        x2 = view->getEntryLineX2();
+        y2 = view->getEntryLineY2();
+
+        Coordenada* a = new Coordenada(x1, y1);
+        Coordenada* b = new Coordenada(x2, y2);
 
         Line* line = new Line(name, a, b);
         display->insereGraphicObject(line);
-        view->insertList(line, "LINE");
+        view->insertIntoListBox(line, "LINE");
         view->drawNewLine(line);
 
         break;
@@ -67,7 +74,7 @@ public:
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
         display->insereGraphicObject(polygon);
-        view->insertList(polygon, "POLYGON");
+        view->insertIntoListBox(polygon, "POLYGON");
         view->drawNewPolygon(polygon);
 
         break;
@@ -75,9 +82,8 @@ public:
     }
   }
 
-  // TODO Melhorar o nome desse método
-  void openNewObjectWindow() {
-    view->openNewObjectWindow();
+  void openAddObjectWindow() {
+    view->openAddObjectWindow();
   }
 
   void create_surface(GtkWidget *widget) {
@@ -92,9 +98,10 @@ public:
     view->initializeWindowViewPort();
   }
 
-  void removeFromList() {
-    int listPos = view->removeFromList();
-    display->deletarElemento(listPos);
+  //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
+  void removeSelectedObject() {
+    int index = view->removeSelectedObject();
+    display->deletarElemento(index);
     updateDrawScreen();
   }
 
@@ -103,6 +110,10 @@ public:
     pointsForPolygon.erase(pointsForPolygon.begin() + index);
   }
 
+  /*!
+   * Gets (x, y) from view to create a new Coordinate and then add a new line
+   * to a Polygon which is being created.
+   */
   void addNewLineForPolygon() {
     double x = view->getEntryPolygonX();
     double y = view->getEntryPolygonY();
@@ -111,14 +122,19 @@ public:
     view->insertCoordPolygonList();
   }
 
-  void changeWindow(int option) {
+  //! Changes the visualization window (of type Window) according the op code.
+  /*!
+   * @param op The operation to be done on the Window (@see View::updateWindow()).
+   */
+  void changeWindow(int op) {
     double passo = view->getPasso();
-    view->updateWindow(passo, option);
+    view->updateWindow(passo, op);
     updateDrawScreen();
   }
 
+  //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
-    Elemento<GraphicObject*>* nextElement = display->getHead(); // primeiro elemento da display file
+    Elemento<GraphicObject*>* nextElement = display->getHead();
     view->clear_surface();
     while (nextElement != NULL) {
     	GraphicObject* element = nextElement->getInfo();
@@ -141,3 +157,4 @@ public:
 };
 
 #endif
+

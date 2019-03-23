@@ -40,9 +40,10 @@ public:
 	}
 
 	GraphicObject* getElementoNoIndice(int index) {
-		displayFile->elementoNoIndice(index);
+		return displayFile->elementoNoIndice(index);
 	}
 
 };
 
 #endif
+
