@@ -15,23 +15,19 @@
 class Controller {
 
 private:
-  View* view;
-  DisplayFile *display;
+  View view;
+  DisplayFile display;
   vector<Coordinate*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
-  // TODO Para todo o codigo, remover ponteiros.
+
 public:
   Controller() {
-    view = new View();
-    display = new DisplayFile();
   }
 
   ~Controller() {
-    delete view;
-    delete display;
   }
 
-  void run(int argc, char *argv[]) {
-    view->initializeGtkWindow(argc, argv);
+  void run(int argc, char* argv[]) {
+    view.initializeGtkWindow(argc, argv);
   }
 
   //! Creates an instance of a Graphical Object and asks 'view' to draw it.
@@ -40,43 +36,43 @@ public:
    * GraphicalObject and then sends this instance to 'view' to be drawn.
    */
   void createObject() {
-    int currentPage = view->getCurrentPage();
+    int currentPage = view.getCurrentPage();
     double x1, y1, x2, y2;
-    string name = view->getObjectName();;
+    string name = view.getObjectName();;
     switch (currentPage) {
      case POINT: {
-        x1 = view->getEntryPointX();
-        y1 = view->getEntryPointY();
+        x1 = view.getEntryPointX();
+        y1 = view.getEntryPointY();
 
         Point* p = new Point(name, x1, y1);
-        display->insert(p);
-        view->insertIntoListBox(*p, "POINT");
-        view->drawNewPoint(p);
+        display.insert(p);
+        view.insertIntoListBox(*p, "POINT");
+        view.drawNewPoint(p);
 
         break;
      }
      case LINE: {
-        x1 = view->getEntryLineX1();
-        y1 = view->getEntryLineY1();
+        x1 = view.getEntryLineX1();
+        y1 = view.getEntryLineY1();
 
-        x2 = view->getEntryLineX2();
-        y2 = view->getEntryLineY2();
+        x2 = view.getEntryLineX2();
+        y2 = view.getEntryLineY2();
 
         Coordinate* a = new Coordinate(x1, y1);
         Coordinate* b = new Coordinate(x2, y2);
 
         Line* line = new Line(name, *a, *b);
-        display->insert(line);
-        view->insertIntoListBox(*line, "LINE");
-        view->drawNewLine(line);
+        display.insert(line);
+        view.insertIntoListBox(*line, "LINE");
+        view.drawNewLine(line);
 
         break;
       }
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
-        display->insert(polygon);
-        view->insertIntoListBox(*polygon, "POLYGON");
-        view->drawNewPolygon(polygon);
+        display.insert(polygon);
+        view.insertIntoListBox(*polygon, "POLYGON");
+        view.drawNewPolygon(polygon);
 
         break;
       }
@@ -84,30 +80,30 @@ public:
   }
 
   void openAddObjectWindow() {
-    view->openAddObjectWindow();
+    view.openAddObjectWindow();
   }
 
   void create_surface(GtkWidget *widget) {
-    view->create_surface(widget);
+    view.create_surface(widget);
   }
 
   void draw(cairo_t *cr) {
-    view->draw(cr);
+    view.draw(cr);
   }
 
   void initializeWindowViewPort() {
-    view->initializeWindowViewPort();
+    view.initializeWindowViewPort();
   }
 
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
   void removeSelectedObject() {
-    int index = view->removeSelectedObject();
-    display->remove(index);
+    int index = view.removeSelectedObject();
+    display.remove(index);
     updateDrawScreen();
   }
 
   void removeFromCoordPolygonList() {
-    int index = view->removeFromCoordPolygonList();
+    int index = view.removeFromCoordPolygonList();
     pointsForPolygon.erase(pointsForPolygon.begin() + index);
   }
 
@@ -116,11 +112,11 @@ public:
    * to a Polygon which is being created.
    */
   void addNewLineForPolygon() {
-    double x = view->getEntryPolygonX();
-    double y = view->getEntryPolygonY();
+    double x = view.getEntryPolygonX();
+    double y = view.getEntryPolygonY();
     Coordinate* c = new Coordinate(x, y);
     pointsForPolygon.push_back(c);
-    view->insertCoordPolygonList();
+    view.insertCoordPolygonList();
   }
 
   //! Changes the visualization window (of type Window) according the op code.
@@ -128,26 +124,26 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double step = view->getStep();
-    view->updateWindow(step, op);
+    double step = view.getStep();
+    view.updateWindow(step, op);
     updateDrawScreen();
   }
 
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
-    Elemento<GraphicObject*>* nextElement = display->getHead();
-    view->clear_surface();
+    Elemento<GraphicObject*>* nextElement = display.getHead();
+    view.clear_surface();
     while (nextElement != NULL) {
     	GraphicObject* element = nextElement->getInfo();
     	switch (element->getType()) {
     		case POINT: {
-    				view->drawNewPoint(element);
+    				view.drawNewPoint(element);
             break;
     		} case LINE: {
-    				view->drawNewLine(element);
+    				view.drawNewLine(element);
             break;
     		} case POLYGON: {
-            view->drawNewPolygon(element);
+            view.drawNewPolygon(element);
             break;
         }
       }
