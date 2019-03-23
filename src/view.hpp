@@ -126,8 +126,9 @@ public:
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-        drawer->drawLine(*it , *(std::next(it,1)));
+        drawer->drawLine(*it, *(std::next(it,1)));
     }
+	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
