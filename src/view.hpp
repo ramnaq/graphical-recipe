@@ -126,8 +126,9 @@ public:
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-        drawer->drawLine(*it , *(std::next(it,1)));
+        drawer->drawLine(*it, *(std::next(it,1)));
     }
+	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -207,12 +208,12 @@ public:
     }
   }
 
-  //! Calls ViewPort::transformation() depending on 'object's type
+  //! Calls ViewPort::transformation() for each point of 'object'
   /*!
    * @param object The GraphicObject that its coordinates will be transformed to
    * 	corresponding ViewPort coordinates.
    */
-  void transform(GraphicObject *object) {
+  void transform(GraphicObject* object) {
     switch (object->getType()) {
       case POINT: {
         viewPort->transformation(object->getCoordinates().front());
