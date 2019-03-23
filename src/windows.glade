@@ -141,14 +141,14 @@
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkBox" id="boxPasso">
+                                  <object class="GtkBox" id="boxStep">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <child>
-                                      <object class="GtkLabel" id="labelPasso">
+                                      <object class="GtkLabel" id="labelStep">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Passo:</property>
+                                        <property name="label" translatable="yes">Step:</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -157,7 +157,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkEntry" id="inputPasso">
+                                      <object class="GtkEntry" id="inputStep">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="width_chars">3</property>
@@ -205,12 +205,12 @@
                                                 <property name="margin_right">6</property>
                                                 <property name="margin_bottom">6</property>
                                                 <child>
-                                                  <object class="GtkButton" id="btnBaixo">
+                                                  <object class="GtkButton" id="btnDown">
                                                     <property name="label" translatable="yes">↓</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_baixo" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_down" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -220,12 +220,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnEsquerda">
+                                                  <object class="GtkButton" id="btnLeft">
                                                     <property name="label" translatable="yes">←</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_esq" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_left" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -235,12 +235,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnDireita">
+                                                  <object class="GtkButton" id="btnRight">
                                                     <property name="label" translatable="yes">→</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_dir" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_right" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -250,12 +250,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnCima">
+                                                  <object class="GtkButton" id="btnUp">
                                                     <property name="label" translatable="yes">↑</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_cima" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_up" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -265,12 +265,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnSupEsq">
+                                                  <object class="GtkButton" id="btnUpLeft">
                                                     <property name="label" translatable="yes">↖</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_supEsq" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_upLeft" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -280,12 +280,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnSupDir">
+                                                  <object class="GtkButton" id="btnUpRight">
                                                     <property name="label" translatable="yes">↗</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_supDir" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_upRight" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -295,12 +295,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnInfEsq">
+                                                  <object class="GtkButton" id="btnDownLeft">
                                                     <property name="label" translatable="yes">↙</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_infEsq" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_downLeft" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -310,12 +310,12 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnInfDir">
+                                                  <object class="GtkButton" id="btnDownRight">
                                                     <property name="label" translatable="yes">↘</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btn_clicked_infDir" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btn_clicked_downRight" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -654,7 +654,7 @@
                         <property name="margin_bottom">5</property>
                         <property name="baseline_position">top</property>
                         <child>
-                          <object class="GtkLabel" id="labelPontoX">
+                          <object class="GtkLabel" id="labelPointX">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">X:</property>
@@ -667,7 +667,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entryPontoX">
+                          <object class="GtkEntry" id="entryPointX">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </object>
@@ -679,7 +679,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="labelPontoY">
+                          <object class="GtkLabel" id="labelPointY">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Y:</property>
@@ -691,7 +691,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entryPontoY">
+                          <object class="GtkEntry" id="entryPointY">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </object>
@@ -703,7 +703,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="labelPontoZ">
+                          <object class="GtkLabel" id="labelPointZ">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="label" translatable="yes">Z:</property>
@@ -715,7 +715,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="entryPontoZ">
+                          <object class="GtkEntry" id="entryPointZ">
                             <property name="can_focus">True</property>
                             <property name="no_show_all">True</property>
                           </object>
@@ -734,13 +734,13 @@
                   <object class="GtkLabel" id="frameCoordPonto">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Coordenada</property>
+                    <property name="label" translatable="yes">Coordinate</property>
                   </object>
                 </child>
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="labelPonto">
+              <object class="GtkLabel" id="labelPoint">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Ponto</property>
@@ -755,7 +755,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkFrame" id="frameCoordReta">
+                  <object class="GtkFrame" id="frameCoordLine">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">5</property>
@@ -777,7 +777,7 @@
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
                             <child>
-                              <object class="GtkLabel" id="labelRetaX">
+                              <object class="GtkLabel" id="labelLineX">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">X:</property>
@@ -789,7 +789,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryRetaX">
+                              <object class="GtkEntry" id="entryLineX">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
@@ -801,7 +801,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelRetaY">
+                              <object class="GtkLabel" id="labelLineY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Y:</property>
@@ -813,7 +813,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryRetaY">
+                              <object class="GtkEntry" id="entryLineY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
@@ -825,7 +825,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelRetaZ">
+                              <object class="GtkLabel" id="labelLineZ">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes">Z:</property>
@@ -837,7 +837,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryRetaZ">
+                              <object class="GtkEntry" id="entryLineZ">
                                 <property name="can_focus">True</property>
                                 <property name="no_show_all">True</property>
                               </object>
@@ -853,7 +853,7 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="labelCoordRetaIn">
+                      <object class="GtkLabel" id="labelCoordLineIn">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Coordenada Inicial</property>
@@ -867,7 +867,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame" id="frameCoordReta1">
+                  <object class="GtkFrame" id="frameCoordLine1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">5</property>
@@ -889,7 +889,7 @@
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
                             <child>
-                              <object class="GtkLabel" id="labelRetaX1">
+                              <object class="GtkLabel" id="labelLineX1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">X:</property>
@@ -901,7 +901,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryRetaX1">
+                              <object class="GtkEntry" id="entryLineX1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
@@ -913,7 +913,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelRetaY1">
+                              <object class="GtkLabel" id="labelLineY1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Y:</property>
@@ -925,7 +925,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryRetaY1">
+                              <object class="GtkEntry" id="entryLineY1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
@@ -937,7 +937,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelRetaZ1">
+                              <object class="GtkLabel" id="labelLineZ1">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes">Z:</property>
@@ -949,7 +949,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryRetaZ1">
+                              <object class="GtkEntry" id="entryLineZ1">
                                 <property name="can_focus">True</property>
                                 <property name="no_show_all">True</property>
                               </object>
@@ -965,7 +965,7 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="labelCoordReta1">
+                      <object class="GtkLabel" id="labelCoordLine1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Coordenada Final</property>
@@ -984,7 +984,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="labelReta">
+              <object class="GtkLabel" id="labelLine">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Reta</property>
@@ -1000,7 +1000,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkFrame" id="frameCoordPoligono">
+                  <object class="GtkFrame" id="frameCoordPolygon">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">5</property>
@@ -1022,7 +1022,7 @@
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
                             <child>
-                              <object class="GtkLabel" id="labelPoligonoX">
+                              <object class="GtkLabel" id="labelPolygonX">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">X:</property>
@@ -1034,7 +1034,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryPoligonoX">
+                              <object class="GtkEntry" id="entryPolygonX">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
@@ -1046,7 +1046,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelPoligonoY">
+                              <object class="GtkLabel" id="labelPolygonY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Y:</property>
@@ -1058,7 +1058,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryPoligonoY">
+                              <object class="GtkEntry" id="entryPolygonY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
@@ -1070,7 +1070,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="labelPoligonoZ">
+                              <object class="GtkLabel" id="labelPolygonZ">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes">Z:</property>
@@ -1082,7 +1082,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryPoligonoZ">
+                              <object class="GtkEntry" id="entryPolygonZ">
                                 <property name="can_focus">True</property>
                                 <property name="no_show_all">True</property>
                               </object>
@@ -1098,7 +1098,7 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="labelCoordPoligono">
+                      <object class="GtkLabel" id="labelCoordPolygon">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Coordenada</property>
@@ -1112,7 +1112,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFrame" id="listaCoordPoligono">
+                  <object class="GtkFrame" id="listaCoordPolygon">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
@@ -1150,7 +1150,7 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="labelListaPoligono">
+                      <object class="GtkLabel" id="labelListaPolygon">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Lista de Coordenadas</property>
@@ -1173,12 +1173,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkButton" id="btnAddCoordenada">
+                          <object class="GtkButton" id="btnAddCoordinate">
                             <property name="label" translatable="yes">Adicionar Coordenada</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="on_btnAddCoordenada_addCoordenada" swapped="no"/>
+                            <signal name="clicked" handler="on_btnAddCoordinate_addCoordinate" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1187,12 +1187,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="btnRemoverCoordenada">
+                          <object class="GtkButton" id="btnRemoveCoordinate">
                             <property name="label" translatable="yes">Remover Coordenada</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="on_btnRemoverCoordenada_clicked" swapped="no"/>
+                            <signal name="clicked" handler="on_btnRemoveCoordinate_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -1208,7 +1208,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="checkPoligonoPreenchido">
+                      <object class="GtkCheckButton" id="checkPolygonPreenchido">
                         <property name="label" translatable="yes">Polígono Preenchido</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -1236,7 +1236,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="labelPoligono">
+              <object class="GtkLabel" id="labelPolygon">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Poligono</property>

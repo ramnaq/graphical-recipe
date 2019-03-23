@@ -9,6 +9,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+
 /*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
 
 class Controller {
@@ -16,7 +17,7 @@ class Controller {
 private:
   View* view;
   DisplayFile *display;
-  vector<Coordenada*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
+  vector<Coordinate*> pointsForPolygon; // TODO Remover na refatoracao, serve para o poligono
   // TODO Para todo o codigo, remover ponteiros.
 public:
   Controller() {
@@ -44,11 +45,11 @@ public:
     string name = view->getObjectName();;
     switch (currentPage) {
      case POINT: {
-        x1 = view->getEntryPontoX();
-        y1 = view->getEntryPontoY();
+        x1 = view->getEntryPointX();
+        y1 = view->getEntryPointY();
 
         Point* p = new Point(name, x1, y1);
-        display->insereGraphicObject(p);
+        display->insert(p);
         view->insertIntoListBox(p, "POINT");
         view->drawNewPoint(p);
 
@@ -61,11 +62,11 @@ public:
         x2 = view->getEntryLineX2();
         y2 = view->getEntryLineY2();
 
-        Coordenada* a = new Coordenada(x1, y1);
-        Coordenada* b = new Coordenada(x2, y2);
+        Coordinate* a = new Coordinate(x1, y1);
+        Coordinate* b = new Coordinate(x2, y2);
 
         Line* line = new Line(name, a, b);
-        display->insereGraphicObject(line);
+        display->insert(line);
         view->insertIntoListBox(line, "LINE");
         view->drawNewLine(line);
 
@@ -73,7 +74,7 @@ public:
       }
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
-        display->insereGraphicObject(polygon);
+        display->insert(polygon);
         view->insertIntoListBox(polygon, "POLYGON");
         view->drawNewPolygon(polygon);
 
@@ -101,7 +102,7 @@ public:
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
   void removeSelectedObject() {
     int index = view->removeSelectedObject();
-    display->deletarElemento(index);
+    display->remove(index);
     updateDrawScreen();
   }
 
@@ -117,8 +118,8 @@ public:
   void addNewLineForPolygon() {
     double x = view->getEntryPolygonX();
     double y = view->getEntryPolygonY();
-    Coordenada* coordenada = new Coordenada(x, y);
-    pointsForPolygon.push_back(coordenada);
+    Coordinate* c = new Coordinate(x, y);
+    pointsForPolygon.push_back(c);
     view->insertCoordPolygonList();
   }
 
@@ -127,8 +128,8 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double passo = view->getPasso();
-    view->updateWindow(passo, op);
+    double step = view->getStep();
+    view->updateWindow(step, op);
     updateDrawScreen();
   }
 
