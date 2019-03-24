@@ -168,3 +168,47 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_downRight(){
   }
 }
 
+//! Connected to signal "clicked" of element "btnEditObject".
+extern "C" G_MODULE_EXPORT void on_btnEditObject_clicked(){
+  try {
+    controller->openEditObjectWindow();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnConfirmEditObject".
+extern "C" G_MODULE_EXPORT void on_btnConfirmEditObject_clicked(){
+  try {
+    controller->executeObjectTransformation();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "radiobtnOrigin".
+extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
+  try {
+    controller->executeObjectTransformation();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "radiobtnCenter".
+extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
+  try {
+    controller->executeObjectTransformation();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "radiobtnPoint".
+extern "C" G_MODULE_EXPORT void on_radiobtnPoint_clicked(){
+  try {
+    controller->executeObjectTransformation();
+  } catch (...) {
+
+  }
+}

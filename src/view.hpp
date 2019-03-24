@@ -17,6 +17,7 @@ private:
 
   GtkWidget *gtkWindow;
   GtkWidget *addObjectWindow;
+  GtkWidget *editObjectWindow;
   GtkWidget *drawAreaViewPort;
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
@@ -28,6 +29,10 @@ private:
   GtkEntry *entryLineY2;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
+  GtkEntry *entryTranslationX;
+  GtkEntry *entryTranslationY;
+  GtkEntry *entryScalingX;
+  GtkEntry *entryScalingY;
   GtkEntry *objectName;
   GtkEntry *entryStep;
 
@@ -35,6 +40,7 @@ private:
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
 
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
+  GtkNotebook *notebookObjectOperations;
 
   Drawer* drawer;
   Window* window;
@@ -54,6 +60,7 @@ public:
 
     gtkWindow = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
+    editObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowEditObject"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
@@ -66,11 +73,16 @@ public:
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
+    entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
+    entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
+    entryScalingX = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingX"));
+    entryScalingY = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingY"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
+    notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -107,6 +119,10 @@ public:
 
   void openAddObjectWindow() {
     gtk_widget_show(addObjectWindow);
+  }
+
+  void openEditObjectWindow() {
+    gtk_widget_show(editObjectWindow);
   }
 
   void drawNewPoint(GraphicObject* obj) {
@@ -164,6 +180,7 @@ public:
     gtk_widget_show_all((GtkWidget*) listCoordPolygon);
   }
 
+  // TODO Agora tem o metodo getCurrentObjectIndex() que faz a mesma coisa que as duas primeiras linhas
   int removeFromCoordPolygonList() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
     int index = gtk_list_box_row_get_index(row);
@@ -272,6 +289,22 @@ public:
     return stod(gtk_entry_get_text(entryPolygonY));
   }
 
+  double getEntryTranslationX() {
+    return stod(gtk_entry_get_text(entryTranslationX));
+  }
+
+  double getEntryTranslationY() {
+    return stod(gtk_entry_get_text(entryTranslationY));
+  }
+
+  double getEntryScalingX() {
+    return stod(gtk_entry_get_text(entryScalingX));
+  }
+
+  double getEntryScalingY() {
+    return stod(gtk_entry_get_text(entryScalingY));
+  }
+
   double getStep() {
     return stod(gtk_entry_get_text(entryStep));
   }
@@ -284,7 +317,15 @@ public:
     return gtk_notebook_get_current_page(notebookObjects);
   }
 
+  int getCurrentPageTransformation () {
+    return gtk_notebook_get_current_page(notebookObjectOperations);
+  }
+
+  int getCurrentObjectIndex() {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
+    return gtk_list_box_row_get_index(row);
+  }
+
 };
 
 #endif  //!< VIEW_HPP
-

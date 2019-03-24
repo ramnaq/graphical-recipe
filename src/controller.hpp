@@ -5,6 +5,7 @@
 #include "polygon.hpp"
 #include "displayFile.hpp"
 #include "objectType.hpp"
+#include "ObjectTransformation.hpp"
 
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
@@ -83,8 +84,37 @@ public:
     }
   }
 
+  void executeObjectTransformation() {
+    int currentPage = view->getCurrentPageTransformation();
+    int currentObjectIndex = view->getCurrentObjectIndex();
+    GraphicObject* obj = display->getElementoNoIndice(currentObjectIndex);
+
+    switch (currentPage) {
+      case TRANSLATION: {
+        Coordinate translationVector(view->getEntryTranslationX(), view->getEntryTranslationY());
+        ObjectTransformation::translation(obj, &translationVector);
+        break;
+      }
+      case SCALING: {
+        Coordinate scalingVector(view->getEntryScalingX(), view->getEntryScalingY());
+        ObjectTransformation::scaling(obj, &scalingVector);
+        break;
+      }
+      case ROTATION: {
+        //ObjectTransformation::rotation(obj);
+        break;
+      }
+    }
+
+    updateDrawScreen();
+  }
+
   void openAddObjectWindow() {
     view->openAddObjectWindow();
+  }
+
+  void openEditObjectWindow() {
+    view->openEditObjectWindow();
   }
 
   void create_surface(GtkWidget *widget) {
@@ -158,4 +188,3 @@ public:
 };
 
 #endif
-
