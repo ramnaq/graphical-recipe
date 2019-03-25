@@ -3,10 +3,6 @@
 
 #include <vector>
 
-#include <iostream>
-
-using namespace std;
-
 class Matrix {
 private:
   vector<vector<double> > matrix;
@@ -21,20 +17,23 @@ public:
   }
 
   Matrix operator* (Matrix& obj) {
-    vector<vector<double> > newMatrix;
-    vector<vector<double> > objVector = obj.getMatrix(); // Objeto
-    vector<vector<double> >::iterator row;
-    vector<double>::iterator col;
-    int i = 0, j = 0;
+    std::vector<std::vector<double> > newMatrix;
+    std::vector<std::vector<double> > objVector = obj.getMatrix(); // Objeto
+    std::vector<std::vector<double> >::iterator row;
+    std::vector<double>::iterator col;
+    int i = 0;
 
     newMatrix.resize(matrix.size()); // Linhas
     for(row = matrix.begin(); row != matrix.end(); row++, i++) {
       newMatrix[i].resize(objVector[0].size()); // Colunas
-      newMatrix[i][0] = 0;
-      for (col = row->begin(); col != row->end(); col++, j++) {      
-        newMatrix[i][0] += *col * objVector[j][0];
+      for (int k = 0; k < objVector[i].size(); k++) {
+        int num = 0;
+        int j = 0;
+        for (col = row->begin(); col != row->end(); col++, j++) {
+           num += *col * objVector[j][k];
+        }
+        newMatrix[i][k] = num;
       }
-      j = 0;
     }
     return Matrix(newMatrix);
   }

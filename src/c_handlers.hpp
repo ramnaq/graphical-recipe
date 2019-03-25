@@ -189,7 +189,7 @@ extern "C" G_MODULE_EXPORT void on_btnConfirmEditObject_clicked(){
 //! Connected to signal "clicked" of element "radiobtnOrigin".
 extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
   try {
-    controller->executeObjectTransformation();
+    controller->updateRadioButtonState(1);
   } catch (...) {
 
   }
@@ -198,7 +198,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
 //! Connected to signal "clicked" of element "radiobtnCenter".
 extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
   try {
-    controller->executeObjectTransformation();
+    controller->updateRadioButtonState(2);
   } catch (...) {
 
   }
@@ -207,7 +207,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
 //! Connected to signal "clicked" of element "radiobtnPoint".
 extern "C" G_MODULE_EXPORT void on_radiobtnPoint_clicked(){
   try {
-    controller->executeObjectTransformation();
+    controller->updateRadioButtonState(3);
   } catch (...) {
 
   }

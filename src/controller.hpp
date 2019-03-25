@@ -101,7 +101,22 @@ public:
         break;
       }
       case ROTATION: {
-        //ObjectTransformation::rotation(obj);
+        int radioBtnChosen = view->getRotationRadioButtonState();
+        double angle = view->getAngle();
+        Coordinate* reference;
+        if (radioBtnChosen == 1) {
+          reference = new Coordinate(0,0);
+        }else if (radioBtnChosen == 2) {
+          Coordinate tmp = obj->getGeometricCenter();
+          reference = new Coordinate(tmp.getX(), tmp.getY());
+        } else {
+          double x = view->getEntryRotationX();
+          double y = view->getEntryRotationY();
+          reference = new Coordinate(x, y);
+        }
+        ObjectTransformation::rotation(obj, angle, reference);
+
+        delete reference;
         break;
       }
     }
@@ -161,6 +176,10 @@ public:
     double step = view->getStep();
     view->updateWindow(step, op);
     updateDrawScreen();
+  }
+
+  void updateRadioButtonState(int newState) {
+    view->updateRadioButtonState(newState);
   }
 
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.

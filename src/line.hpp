@@ -11,6 +11,7 @@ private:
   string name;
   Type type;
   vector<Coordinate*> lineCoordinates;
+  double cx, cy;
 
 public:
 	Line(string name,  Coordinate* a, Coordinate* b) {
@@ -18,6 +19,9 @@ public:
     lineCoordinates.push_back(b);
     this->name = name;
     this->type = LINE;
+
+    double cx = (a->getX() + b->getX()) / 2;
+    double cy = (a->getY() + b->getY()) / 2;
   }
 
 	~Line() {
@@ -36,7 +40,10 @@ public:
   Type getType() {
     return type;
   }
+
+  Coordinate getGeometricCenter() {
+    return Coordinate(cx, cy);
+  }
 };
 
 #endif
-

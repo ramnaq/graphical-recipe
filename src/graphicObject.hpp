@@ -21,7 +21,7 @@ public:
 	virtual string getObjectName()=0;
 	virtual Type getType()=0;
 	virtual vector<Coordinate*> getCoordinates()=0;
+	virtual Coordinate getGeometricCenter()=0;
 };
 
 #endif
-

@@ -35,6 +35,9 @@ private:
   GtkEntry *entryScalingY;
   GtkEntry *objectName;
   GtkEntry *entryStep;
+  GtkEntry *entryAngle;
+  GtkEntry *entryRotationX;
+  GtkEntry *entryRotationY;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
@@ -45,6 +48,8 @@ private:
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+
+  int rotationRadioButtonState;
 
 public:
   View() {
@@ -77,12 +82,17 @@ public:
     entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
     entryScalingX = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingX"));
     entryScalingY = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingY"));
+    entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
+    entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
+    entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
+
+    rotationRadioButtonState = 1;
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -187,6 +197,10 @@ public:
 
     gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
     return index;
+  }
+
+  void updateRadioButtonState(int newState) {
+    rotationRadioButtonState = newState;
   }
 
   void updateWindow(double step, int isZoomIn) {
@@ -305,8 +319,20 @@ public:
     return stod(gtk_entry_get_text(entryScalingY));
   }
 
+  double getEntryRotationX() {
+    return stod(gtk_entry_get_text(entryRotationX));
+  }
+
+  double getEntryRotationY() {
+    return stod(gtk_entry_get_text(entryRotationY));
+  }
+
   double getStep() {
     return stod(gtk_entry_get_text(entryStep));
+  }
+
+  double getAngle() {
+    return stod(gtk_entry_get_text(entryAngle));
   }
 
   string getObjectName() {
@@ -324,6 +350,10 @@ public:
   int getCurrentObjectIndex() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
     return gtk_list_box_row_get_index(row);
+  }
+
+  int getRotationRadioButtonState() {
+    return rotationRadioButtonState;
   }
 
 };

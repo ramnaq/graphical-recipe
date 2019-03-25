@@ -9,6 +9,7 @@ private:
   vector<Coordinate*> pointCoordinate;
   string name;
   Type type;
+  double cx, cy;
 
 public:
   // TODO Homogeinizar a passagem de parametros dos objetos (Ou passa x/y ou passa
@@ -18,6 +19,8 @@ public:
     pointCoordinate.push_back(point);
     this->name = name;
     this->type = POINT;
+    cx = x;
+    cy = y;
   }
 
 	~Point() {
@@ -35,7 +38,11 @@ public:
   Type getType() {
     return type;
   }
+
+  Coordinate getGeometricCenter() {
+    return Coordinate(cx, cy);
+  }
+
 };
 
 #endif
-

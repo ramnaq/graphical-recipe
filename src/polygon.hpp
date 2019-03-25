@@ -11,12 +11,15 @@ private:
   vector<Coordinate*> points;
   string name;
   Type type;
+  double cx;
+  double cy;
 
 public:
 	Polygon(string name, vector<Coordinate*> &points) {
     this->points = points;
     this->name = name;
     this->type = POLYGON;
+    computeGeometricCenter();
   }
 
 	~Polygon() {
@@ -24,6 +27,18 @@ public:
     for(it = points.begin(); it != points.end(); it++) {
       delete *it;
     }
+  }
+
+  void computeGeometricCenter() {
+    cx = 0;
+    cy = 0;
+    vector<Coordinate*>::iterator it;
+    for(it = points.begin(); it != points.end(); it++) {
+      cx += (*it)->getX();
+      cy += (*it)->getY();
+    }
+    cx = cx / points.size();
+    cy = cy / points.size();
   }
 
   vector<Coordinate*> getCoordinates() {
@@ -37,6 +52,11 @@ public:
   Type getType() {
     return type;
   }
+
+  Coordinate getGeometricCenter() {
+    return Coordinate(cx, cy);
+  }
+
 };
 
 #endif

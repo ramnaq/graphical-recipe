@@ -25,6 +25,12 @@ public:
            {0, 0 , 1}};
   }
 
+  static std::vector<std::vector<double> > rotationVectorToMatrix(double angle) {
+   return {{cos(angle), -sin(angle), 0},
+           {sin(angle), cos(angle), 0},
+           {0, 0 , 1}};
+  }
+
   static void translation(GraphicObject* obj, Coordinate* translationVector) {
     Matrix translationMatrix(ObjectTransformation::translationVectorToMatrix(translationVector));
 
@@ -42,7 +48,14 @@ public:
   }
 
   static void scaling(GraphicObject* obj, Coordinate* scalingVector) {
+    Coordinate objCenter = obj->getGeometricCenter();
+    Coordinate negativeObjCenter(-objCenter.getX(), -objCenter.getY());
+
     Matrix scalingMatrix(ObjectTransformation::scalingVectorToMatrix(scalingVector));
+    Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
+    Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&objCenter));
+
+    Matrix scalingOperation = translationMatrix1 * scalingMatrix * translationMatrix2;
 
     vector<Coordinate*> coordinates = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
@@ -50,11 +63,27 @@ public:
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
       Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
 
-      Matrix scaledObject = scalingMatrix * coord;
+      Matrix scaledObject = scalingOperation * coord;
 
       (*it)->setX(scaledObject.getMatrix()[0][0]);
       (*it)->setY(scaledObject.getMatrix()[1][0]);
     }
+  }
+
+  static void rotation(GraphicObject* obj, double angle, Coordinate* rotationVector) {
+    // Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(angle));
+    //
+    // vector<Coordinate*> coordinates = obj->getCoordinates();
+    // vector<Coordinate*>::iterator it;
+    //
+    // for(it = coordinates.begin(); it != coordinates.end(); it++) {
+    //   Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
+    //
+    //   Matrix scaledObject = rotationMatrix * coord;
+    //
+    //   (*it)->setX(scaledObject.getMatrix()[0][0]);
+    //   (*it)->setY(scaledObject.getMatrix()[1][0]);
+    // }
   }
 
 };
