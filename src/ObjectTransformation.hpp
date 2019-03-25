@@ -52,8 +52,8 @@ public:
     Coordinate negativeObjCenter(-objCenter.getX(), -objCenter.getY());
 
     Matrix scalingMatrix(ObjectTransformation::scalingVectorToMatrix(scalingVector));
-    Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
-    Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&objCenter));
+    Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(&objCenter));
+    Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
 
     Matrix scalingOperation = translationMatrix1 * scalingMatrix * translationMatrix2;
 

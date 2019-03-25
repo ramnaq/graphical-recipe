@@ -20,8 +20,8 @@ public:
     this->name = name;
     this->type = LINE;
 
-    double cx = (a->getX() + b->getX()) / 2;
-    double cy = (a->getY() + b->getY()) / 2;
+    cx = (a->getX() + b->getX()) / 2;
+    cy = (a->getY() + b->getY()) / 2;
   }
 
 	~Line() {
