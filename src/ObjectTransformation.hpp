@@ -71,19 +71,24 @@ public:
   }
 
   static void rotation(GraphicObject* obj, double angle, Coordinate* rotationVector) {
-    // Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(angle));
-    //
-    // vector<Coordinate*> coordinates = obj->getCoordinates();
-    // vector<Coordinate*>::iterator it;
-    //
-    // for(it = coordinates.begin(); it != coordinates.end(); it++) {
-    //   Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
-    //
-    //   Matrix scaledObject = rotationMatrix * coord;
-    //
-    //   (*it)->setX(scaledObject.getMatrix()[0][0]);
-    //   (*it)->setY(scaledObject.getMatrix()[1][0]);
-    // }
+    Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(angle));
+    Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(rotationVector));
+    Coordinate negativeObjCenter(-rotationVector->getX(), -rotationVector->getY());
+    Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
+
+    Matrix rotationOperation = translationMatrix1 * rotationMatrix * translationMatrix2;
+
+    vector<Coordinate*> coordinates = obj->getCoordinates();
+    vector<Coordinate*>::iterator it;
+
+    for(it = coordinates.begin(); it != coordinates.end(); it++) {
+      Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
+
+      Matrix scaledObject = rotationOperation * coord;
+
+      (*it)->setX(scaledObject.getMatrix()[0][0]);
+      (*it)->setY(scaledObject.getMatrix()[1][0]);
+    }
   }
 
 };
