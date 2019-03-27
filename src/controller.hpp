@@ -4,7 +4,7 @@
 #include "line.hpp"
 #include "polygon.hpp"
 #include "displayFile.hpp"
-#include "objectType.hpp"
+#include "enum.hpp"
 #include "ObjectTransformation.hpp"
 
 #ifndef CONTROLLER_HPP

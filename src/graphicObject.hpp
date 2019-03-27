@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "coordinate.hpp"
-#include "objectType.hpp"
+#include "enum.hpp"
 
 
 using namespace std;
