@@ -16,8 +16,13 @@ class Window {
     Coordinate *coordMax;
   public:
   	Window(double xMin, double yMin, double xMax, double yMax) {
-      coordMin = new Coordinate(xMin, yMin);
-      coordMax = new Coordinate(xMax, yMax);
+      this->coordMin = new Coordinate(xMin, yMin);
+      this->coordMax = new Coordinate(xMax, yMax);
+    }
+
+    ~Window() {
+      delete this->coordMin;
+      delete this->coordMax;
     }
 
     Coordinate* getCoordMin() {

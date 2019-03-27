@@ -32,7 +32,7 @@ public:
 	// }
 
 	void remove(int index) {
-		displayFile->retiraDaPosicao(index);
+		delete displayFile->retiraDaPosicao(index);
 	}
 
 	GraphicObject* getElementoNoIndice(int index) {
@@ -42,4 +42,3 @@ public:
 };
 
 #endif
-
