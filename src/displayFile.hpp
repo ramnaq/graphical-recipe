@@ -7,7 +7,7 @@
 class DisplayFile {
 
 private:
-	ListaEnc<GraphicObject*> *displayFile;
+	ListaEnc<GraphicObject*>* displayFile;
 
 public:
 

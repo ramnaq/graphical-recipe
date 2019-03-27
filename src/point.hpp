@@ -1,6 +1,8 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
+#include <stdio.h>
+
 
 /*! Structures a representation and behavior of a "line segment" */
 
