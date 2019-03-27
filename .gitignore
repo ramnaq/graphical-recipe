@@ -33,3 +33,6 @@
 
 # Compiled file directory
 tmp/*
+
+# glade tmp files
+windows.glade~
