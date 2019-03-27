@@ -1,8 +1,9 @@
 #ifndef OBJECTTRANSFORMATION_HPP
 #define OBJECTTRANSFORMATION_HPP
 
+#include <math.h>
+
 #include "Matrix.hpp"
-#include <iostream>
 
 class ObjectTransformation {
 
@@ -71,7 +72,8 @@ public:
   }
 
   static void rotation(GraphicObject* obj, double angle, Coordinate* rotationVector) {
-    Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(angle));
+    double radians = (angle*M_PI)/180;
+    Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(radians));
     Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(rotationVector));
     Coordinate negativeObjCenter(-rotationVector->getX(), -rotationVector->getY());
     Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
