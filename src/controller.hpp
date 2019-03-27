@@ -49,9 +49,10 @@ public:
         x1 = view->getEntryPointX();
         y1 = view->getEntryPointY();
 
-        Point* p = new Point(name, x1, y1);
+        vector<Coordinate*> pointCoordinate = {new Coordinate(x1, y1)};
+        Point* p = new Point(name, pointCoordinate);
         display->insert(p);
-        view->insertIntoListBox(p, "POINT");
+        view->insertIntoListBox(p, "PONTO");
         view->drawNewPoint(p);
 
         break;
@@ -65,10 +66,11 @@ public:
 
         Coordinate* a = new Coordinate(x1, y1);
         Coordinate* b = new Coordinate(x2, y2);
+        vector<Coordinate*> linesCoordinate = {a, b};
 
-        Line* line = new Line(name, a, b);
+        Line* line = new Line(name, linesCoordinate);
         display->insert(line);
-        view->insertIntoListBox(line, "LINE");
+        view->insertIntoListBox(line, "LINHA");
         view->drawNewLine(line);
 
         break;
@@ -76,7 +78,7 @@ public:
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
         display->insert(polygon);
-        view->insertIntoListBox(polygon, "POLYGON");
+        view->insertIntoListBox(polygon, "POLIGONO");
         view->drawNewPolygon(polygon);
 
         break;
