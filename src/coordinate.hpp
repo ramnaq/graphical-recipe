@@ -54,4 +54,3 @@ public:
 };
 
 #endif  //!< COORDINATE_HPP
-

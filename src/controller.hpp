@@ -4,7 +4,8 @@
 #include "line.hpp"
 #include "polygon.hpp"
 #include "displayFile.hpp"
-#include "objectType.hpp"
+#include "enum.hpp"
+#include "ObjectTransformation.hpp"
 
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
@@ -44,9 +45,10 @@ public:
         x1 = view.getEntryPointX();
         y1 = view.getEntryPointY();
 
-        Point* p = new Point(name, x1, y1);
+        vector<Coordinate*> pointCoordinate = {new Coordinate(x1, y1)};
+        Point* p = new Point(name, pointCoordinate);
         display.insert(p);
-        view.insertIntoListBox(*p, "POINT");
+        view.insertIntoListBox(*p, "PONTO");
         view.drawNewPoint(p);
 
         break;
@@ -60,10 +62,11 @@ public:
 
         Coordinate* a = new Coordinate(x1, y1);
         Coordinate* b = new Coordinate(x2, y2);
+        vector<Coordinate*> linesCoordinate = {a, b};
 
-        Line* line = new Line(name, *a, *b);
+        Line* line = new Line(name, linesCoordinate);
         display.insert(line);
-        view.insertIntoListBox(*line, "LINE");
+        view.insertIntoListBox(*line, "LINHA");
         view.drawNewLine(line);
 
         break;
@@ -71,7 +74,7 @@ public:
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
         display.insert(polygon);
-        view.insertIntoListBox(*polygon, "POLYGON");
+        view.insertIntoListBox(*polygon, "POLIGONO");
         view.drawNewPolygon(polygon);
 
         break;
@@ -79,8 +82,52 @@ public:
     }
   }
 
+  void executeObjectTransformation() {
+    int currentPage = view.getCurrentPageTransformation();
+    int currentObjectIndex = view.getCurrentObjectIndex();
+    GraphicObject* obj = display.getElementoNoIndice(currentObjectIndex);
+
+    switch (currentPage) {
+      case TRANSLATION: {
+        Coordinate translationVector(view.getEntryTranslationX(), view.getEntryTranslationY());
+        ObjectTransformation::translation(obj, &translationVector);
+        break;
+      }
+      case SCALING: {
+        Coordinate scalingVector(view.getEntryScalingX(), view.getEntryScalingY());
+        ObjectTransformation::scaling(obj, &scalingVector);
+        break;
+      }
+      case ROTATION: {
+        int radioBtnChosen = view.getRotationRadioButtonState();
+        double angle = view.getAngle();
+        Coordinate* reference;
+        if (radioBtnChosen == 1) {
+          reference = new Coordinate(0,0);
+        }else if (radioBtnChosen == 2) {
+          Coordinate tmp = obj->getGeometricCenter();
+          reference = new Coordinate(tmp.getX(), tmp.getY());
+        } else {
+          double x = view.getEntryRotationX();
+          double y = view.getEntryRotationY();
+          reference = new Coordinate(x, y);
+        }
+        ObjectTransformation::rotation(obj, angle, reference);
+
+        delete reference;
+        break;
+      }
+    }
+
+    updateDrawScreen();
+  }
+
   void openAddObjectWindow() {
     view.openAddObjectWindow();
+  }
+
+  void openEditObjectWindow() {
+    view.openEditObjectWindow();
   }
 
   void create_surface(GtkWidget *widget) {
@@ -129,6 +176,10 @@ public:
     updateDrawScreen();
   }
 
+  void updateRadioButtonState(int newState) {
+    view.updateRadioButtonState(newState);
+  }
+
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
     Elemento<GraphicObject*>* nextElement = display.getHead();
@@ -154,4 +205,3 @@ public:
 };
 
 #endif
-

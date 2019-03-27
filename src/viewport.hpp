@@ -17,6 +17,11 @@ class ViewPort {
       this->window = window;
     }
 
+    ~ViewPort () {
+      delete this->coordMin;
+      delete this->coordMax;
+    }
+
 	//! The viewport (coordinates system) transformation
 	/*!
 	 * Transforms coord into a Coordinate referred to the viewport.
