@@ -100,13 +100,13 @@ class Window {
       coordMax->setY( coordMax->getY() - step);
     }
 
-    Coordinate const * getDefaultCoordMin() const {
-      return this->defaultCoordMin;
-	}
-
-    Coordinate const * getDefaultCoordMax() const {
-      return this->defaultCoordMax;
+    void goCenter() {
+      coordMin->setX(defaultCoordMin->getX());
+      coordMin->setY(defaultCoordMin->getY());
+      coordMax->setX(defaultCoordMax->getX());
+      coordMax->setY(defaultCoordMax->getY());
     }
+
 };
 
 #endif

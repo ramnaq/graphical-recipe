@@ -168,6 +168,15 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_downRight(){
   }
 }
 
+//! Connected to signal "clicked" of element "btnCentralize".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_centralize(){
+  try {
+    controller->changeWindow(10);
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnEditObject".
 extern "C" G_MODULE_EXPORT void on_btnEditObject_clicked(){
   try {
