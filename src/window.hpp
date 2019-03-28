@@ -14,10 +14,15 @@ class Window {
   private:
     Coordinate *coordMin;
     Coordinate *coordMax;
+    Coordinate const *defaultCoordMin;
+    Coordinate const *defaultCoordMax;
+
   public:
   	Window(double xMin, double yMin, double xMax, double yMax) {
       coordMin = new Coordinate(xMin, yMin);
       coordMax = new Coordinate(xMax, yMax);
+      this->defaultCoordMin = new Coordinate(xMin, yMin);
+      this->defaultCoordMax = new Coordinate(xMax, yMax);
     }
 
     Coordinate* getCoordMin() {
@@ -88,6 +93,14 @@ class Window {
       coordMin->setY( coordMin->getY() - step);
       coordMax->setX( coordMax->getX() + step);
       coordMax->setY( coordMax->getY() - step);
+    }
+
+    Coordinate const * getDefaultCoordMin() const {
+      return this->defaultCoordMin;
+	}
+
+    Coordinate const * getDefaultCoordMax() const {
+      return this->defaultCoordMax;
     }
 };
 
