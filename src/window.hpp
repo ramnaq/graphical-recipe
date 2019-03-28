@@ -25,6 +25,11 @@ class Window {
       this->defaultCoordMax = new Coordinate(xMax, yMax);
     }
 
+    ~Window() {
+      delete this->coordMin;
+      delete this->coordMax;
+    }
+
     Coordinate* getCoordMin() {
       return coordMin;
     }

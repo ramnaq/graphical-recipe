@@ -4,6 +4,7 @@
 #include "drawer.hpp"
 #include "viewport.hpp"
 #include "window.hpp"
+#include <stdio.h>
 
 #ifndef VIEW_HPP
 #define VIEW_HPP
@@ -17,6 +18,7 @@ private:
 
   GtkWidget *gtkWindow;
   GtkWidget *addObjectWindow;
+  GtkWidget *editObjectWindow;
   GtkWidget *drawAreaViewPort;
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
@@ -28,17 +30,27 @@ private:
   GtkEntry *entryLineY2;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
+  GtkEntry *entryTranslationX;
+  GtkEntry *entryTranslationY;
+  GtkEntry *entryScalingX;
+  GtkEntry *entryScalingY;
   GtkEntry *objectName;
   GtkEntry *entryStep;
+  GtkEntry *entryAngle;
+  GtkEntry *entryRotationX;
+  GtkEntry *entryRotationY;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
 
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
+  GtkNotebook *notebookObjectOperations;
 
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+
+  int rotationRadioButtonState;
 
 public:
   View() {
@@ -54,6 +66,7 @@ public:
 
     gtkWindow = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
+    editObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowEditObject"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
@@ -66,11 +79,21 @@ public:
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
+    entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
+    entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
+    entryScalingX = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingX"));
+    entryScalingY = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingY"));
+    entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
+    entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
+    entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
+    notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
+
+    rotationRadioButtonState = 1;
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -109,6 +132,10 @@ public:
     gtk_widget_show(addObjectWindow);
   }
 
+  void openEditObjectWindow() {
+    gtk_widget_show(editObjectWindow);
+  }
+
   void drawNewPoint(GraphicObject* obj) {
     transform(obj);
     drawer->drawPoint(obj->getCoordinates().front());
@@ -117,7 +144,9 @@ public:
 
   void drawNewLine(GraphicObject* obj) {
     transform(obj);
-    drawer->drawLine(obj->getCoordinates().front(), obj->getCoordinates().back());
+	Coordinate* c1 = obj->getCoordinates().front();
+	Coordinate* c2 = obj->getCoordinates().back();
+    drawer->drawLine(c1, c2);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -125,16 +154,16 @@ public:
     transform(obj);
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
-    for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
+	for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
         drawer->drawLine(*it, *(std::next(it,1)));
-    }
+	}
 	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void insertIntoListBox(GraphicObject* obj, string tipo) {
+  void insertIntoListBox(GraphicObject& obj, string tipo) {
     GtkWidget* row = gtk_list_box_row_new();
-    GtkWidget* label = gtk_label_new((obj->getObjectName() + " (" + tipo + ")").c_str());
+    GtkWidget* label = gtk_label_new((obj.getObjectName() + " (" + tipo + ")").c_str());
 
     gtk_container_add((GtkContainer*) objectsListBox, label);
     gtk_widget_show_all((GtkWidget*) objectsListBox);
@@ -166,10 +195,12 @@ public:
 
   int removeFromCoordPolygonList() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
-    int index = gtk_list_box_row_get_index(row);
-
     gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-    return index;
+    return getCurrentObjectIndex();
+  }
+
+  void updateRadioButtonState(int newState) {
+    rotationRadioButtonState = newState;
   }
 
   void updateWindow(double step, int isZoomIn) {
@@ -226,10 +257,10 @@ public:
       }
       case POLYGON: {
         vector<Coordinate*> polygonPoints = object->getCoordinates();
-        vector<Coordinate*>::iterator it;
+		vector<Coordinate*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
             viewPort->transformation(*it);
-        }
+		}
         break;
       }
     }
@@ -272,8 +303,36 @@ public:
     return stod(gtk_entry_get_text(entryPolygonY));
   }
 
+  double getEntryTranslationX() {
+    return stod(gtk_entry_get_text(entryTranslationX));
+  }
+
+  double getEntryTranslationY() {
+    return stod(gtk_entry_get_text(entryTranslationY));
+  }
+
+  double getEntryScalingX() {
+    return stod(gtk_entry_get_text(entryScalingX));
+  }
+
+  double getEntryScalingY() {
+    return stod(gtk_entry_get_text(entryScalingY));
+  }
+
+  double getEntryRotationX() {
+    return stod(gtk_entry_get_text(entryRotationX));
+  }
+
+  double getEntryRotationY() {
+    return stod(gtk_entry_get_text(entryRotationY));
+  }
+
   double getStep() {
     return stod(gtk_entry_get_text(entryStep));
+  }
+
+  double getAngle() {
+    return stod(gtk_entry_get_text(entryAngle));
   }
 
   string getObjectName() {
@@ -284,7 +343,19 @@ public:
     return gtk_notebook_get_current_page(notebookObjects);
   }
 
+  int getCurrentPageTransformation () {
+    return gtk_notebook_get_current_page(notebookObjectOperations);
+  }
+
+  int getCurrentObjectIndex() {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
+    return gtk_list_box_row_get_index(row);
+  }
+
+  int getRotationRadioButtonState() {
+    return rotationRadioButtonState;
+  }
+
 };
 
 #endif  //!< VIEW_HPP
-

@@ -32,7 +32,7 @@ public:
   }
 
   void draw(cairo_t *cr) {
-		cairo_set_source_surface(cr, surface, 0, 0);
+	  cairo_set_source_surface(cr, surface, 0, 0);
 	  cairo_paint(cr);
   }
 
@@ -40,18 +40,18 @@ public:
 		cairo_t *c = cairo_create (surface);
 
 		cairo_move_to(c, coord->getXvp(), coord->getYvp());
-		cairo_arc(c,coord->getXvp(), coord->getYvp(), 1.0, 0.0, 2*M_PI);
+		cairo_arc(c, coord->getXvp(), coord->getYvp(), 1.0, 0.0, 2*M_PI);
 		cairo_fill(c);
 
 		cairo_stroke(c);
 	}
 
 	void drawLine(Coordinate* coordIn, Coordinate* coordFin) {
-		cairo_t *cr = cairo_create (surface);
+		cairo_t* cr = cairo_create (surface);
 
 		cairo_move_to(cr, coordIn->getXvp(), coordIn->getYvp());
-	  cairo_line_to(cr, coordFin->getXvp(), coordFin->getYvp());
-	  cairo_stroke(cr);
+		cairo_line_to(cr, coordFin->getXvp(), coordFin->getYvp());
+		cairo_stroke(cr);
 
 		cairo_stroke(cr);
 	}

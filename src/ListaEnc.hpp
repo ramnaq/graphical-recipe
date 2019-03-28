@@ -97,7 +97,7 @@ class ListaEnc {
 
 	T retiraDaPosicao(int pos) {
 	    if (listaVazia()) throw -1;
-	    if (pos > size) throw -1;
+	    if (pos > size || pos < 0) throw -1;
 	    if (pos == 0) {
 	        return retiraDoInicio();
 	    } else {
