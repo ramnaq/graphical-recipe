@@ -16,10 +16,13 @@ class View {
 private:
   GtkBuilder *builder;
 
-  GtkWidget *gtkWindow;
-  GtkWidget *addObjectWindow;
-  GtkWidget *editObjectWindow;
-  GtkWidget *drawAreaViewPort;
+  GtkWidget* gtkWindow;
+  GtkWidget* addObjectWindow;
+  GtkWidget* editObjectWindow;
+  GtkWidget* drawAreaViewPort;
+  GtkWidget* logTextView;
+  //TODO implement logging, starting with the catch block in updateWindow()
+  //(the exceptiong should be catched in controller)
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
   GtkEntry *entryPointX;
@@ -68,6 +71,7 @@ public:
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
     editObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowEditObject"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
+	logTextView = GTK_WIDGET(gtk_builder_get_object(builder, "logTextView"));
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
     entryPointY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointY"));
@@ -206,7 +210,11 @@ public:
   void updateWindow(double step, int isZoomIn) {
     switch (isZoomIn) {
       case 0: {
-        this->window->zoomIn(step);
+        try {
+		  this->window->zoomIn(step);
+		} catch (int e) {
+		  printf("Ops! Zoom além do limite permitido.\n");
+		}
         break;
       } case 1: {
         this->window->zoomOut(step);

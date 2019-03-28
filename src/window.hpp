@@ -14,6 +14,7 @@ class Window {
   private:
     Coordinate *coordMin;
     Coordinate *coordMax;
+
   public:
   	Window(double xMin, double yMin, double xMax, double yMax) {
       this->coordMin = new Coordinate(xMin, yMin);
@@ -34,10 +35,11 @@ class Window {
     }
 
     void zoomIn(double passo) {
-      coordMin->setX( coordMin->getX() + passo);
-      coordMin->setY( coordMin->getY() + passo);
-      coordMax->setX( coordMax->getX() - passo);
-      coordMax->setY( coordMax->getY() - passo);
+	  if (not validZoomStep(passo)) throw -1;
+      coordMin->setX(coordMin->getX() + passo);
+      coordMin->setY(coordMin->getY() + passo);
+      coordMax->setX(coordMax->getX() - passo);
+      coordMax->setY(coordMax->getY() - passo);
     }
 
     void zoomOut(double passo) {
@@ -94,6 +96,20 @@ class Window {
       coordMax->setX( coordMax->getX() + passo);
       coordMax->setY( coordMax->getY() - passo);
     }
+
+	//! Checks if 'step' for a zoom-in ist within the limits.
+	/**
+	 * If 'step' is too big, the zoom-in operation would be inverted (doing
+	 * zoom-out), in that case it is considered an invalid value for 'step'.
+	 *
+	 * @param step The step of a zoom operation (@see zoomIn()).
+	 * @return true if 'step' doesn't exceeds the limits or false otherwise.
+	 */
+	bool validZoomStep(double step) {
+	  double newXMin = coordMin->getX() + step;
+	  double newXMax = coordMax->getX() - step;
+	  return (newXMin < newXMax);
+	}
 };
 
 #endif
