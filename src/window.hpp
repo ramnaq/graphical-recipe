@@ -33,66 +33,66 @@ class Window {
       return coordMax;
     }
 
-    void zoomIn(double passo) {
-      coordMin->setX( coordMin->getX() + passo);
-      coordMin->setY( coordMin->getY() + passo);
-      coordMax->setX( coordMax->getX() - passo);
-      coordMax->setY( coordMax->getY() - passo);
+    void zoomIn(double step) {
+      coordMin->setX( coordMin->getX() + step);
+      coordMin->setY( coordMin->getY() + step);
+      coordMax->setX( coordMax->getX() - step);
+      coordMax->setY( coordMax->getY() - step);
     }
 
-    void zoomOut(double passo) {
-      coordMin->setX( coordMin->getX() - passo);
-      coordMin->setY( coordMin->getY() - passo);
-      coordMax->setX( coordMax->getX() + passo);
-      coordMax->setY( coordMax->getY() + passo);
+    void zoomOut(double step) {
+      coordMin->setX( coordMin->getX() - step);
+      coordMin->setY( coordMin->getY() - step);
+      coordMax->setX( coordMax->getX() + step);
+      coordMax->setY( coordMax->getY() + step);
     }
 
-    void goRight(double passo) {
-      coordMin->setX( coordMin->getX() + passo);
-      coordMax->setX( coordMax->getX() + passo);
+    void goRight(double step) {
+      coordMin->setX( coordMin->getX() + step);
+      coordMax->setX( coordMax->getX() + step);
     }
 
-    void goLeft(double passo) {
-      coordMin->setX( coordMin->getX() - passo);
-      coordMax->setX( coordMax->getX() - passo);
+    void goLeft(double step) {
+      coordMin->setX( coordMin->getX() - step);
+      coordMax->setX( coordMax->getX() - step);
     }
 
-    void goUp(double passo) {
-      coordMin->setY( coordMin->getY() + passo);
-      coordMax->setY( coordMax->getY() + passo);
+    void goUp(double step) {
+      coordMin->setY( coordMin->getY() + step);
+      coordMax->setY( coordMax->getY() + step);
     }
 
-    void goDown(double passo) {
-      coordMin->setY( coordMin->getY() - passo);
-      coordMax->setY( coordMax->getY() - passo);
+    void goDown(double step) {
+      coordMin->setY( coordMin->getY() - step);
+      coordMax->setY( coordMax->getY() - step);
     }
 
-    void goUpLeft(double passo) {
-      coordMin->setX( coordMin->getX() - passo);
-      coordMin->setY( coordMin->getY() + passo);
-      coordMax->setX( coordMax->getX() - passo);
-      coordMax->setY( coordMax->getY() + passo);
+    void goUpLeft(double step) {
+      coordMin->setX( coordMin->getX() - step);
+      coordMin->setY( coordMin->getY() + step);
+      coordMax->setX( coordMax->getX() - step);
+      coordMax->setY( coordMax->getY() + step);
     }
 
-    void goUpRight(double passo) {
-      coordMin->setX( coordMin->getX() + passo);
-      coordMin->setY( coordMin->getY() + passo);
-      coordMax->setX( coordMax->getX() + passo);
-      coordMax->setY( coordMax->getY() + passo);
+    void goUpRight(double step) {
+      coordMin->setX( coordMin->getX() + step);
+      coordMin->setY( coordMin->getY() + step);
+      coordMax->setX( coordMax->getX() + step);
+      coordMax->setY( coordMax->getY() + step);
     }
 
-    void goDownLeft(double passo) {
-      coordMin->setX( coordMin->getX() - passo);
-      coordMin->setY( coordMin->getY() - passo);
-      coordMax->setX( coordMax->getX() - passo);
-      coordMax->setY( coordMax->getY() - passo);
+    void goDownLeft(double step) {
+      coordMin->setX( coordMin->getX() - step);
+      coordMin->setY( coordMin->getY() - step);
+      coordMax->setX( coordMax->getX() - step);
+      coordMax->setY( coordMax->getY() - step);
     }
 
-    void goDownRight(double passo) {
-      coordMin->setX( coordMin->getX() + passo);
-      coordMin->setY( coordMin->getY() - passo);
-      coordMax->setX( coordMax->getX() + passo);
-      coordMax->setY( coordMax->getY() - passo);
+    void goDownRight(double step) {
+      coordMin->setX( coordMin->getX() + step);
+      coordMin->setY( coordMin->getY() - step);
+      coordMax->setX( coordMax->getX() + step);
+      coordMax->setY( coordMax->getY() - step);
     }
 };
 
