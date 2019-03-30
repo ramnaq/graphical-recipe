@@ -235,6 +235,9 @@ public:
       } case 9: {
         this->window->goDownRight(step);
         break;
+      } case 10: {
+        this->window->goCenter();
+        break;
       }
     }
   }
