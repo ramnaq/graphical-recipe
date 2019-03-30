@@ -1,8 +1,9 @@
-#include <math.h>
-#include "graphicObject.hpp" // TODO para todo o código. Verificar inclusoes, tem algumas redundantes
-
 #ifndef DRAWER_HPP
 #define DRAWER_HPP
+
+#include <math.h>
+#include "graphicObject.hpp"
+
 
 static cairo_surface_t *surface = NULL;
 

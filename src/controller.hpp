@@ -1,14 +1,14 @@
+#ifndef CONTROLLER_HPP
+#define CONTROLLER_HPP
+
 #include <iostream>
+#include "enum.hpp"
 #include "view.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
 #include "displayFile.hpp"
-#include "enum.hpp"
 #include "ObjectTransformation.hpp"
-
-#ifndef CONTROLLER_HPP
-#define CONTROLLER_HPP
 
 
 /*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */

@@ -1,8 +1,9 @@
+#ifndef DISPLAYFILE_HPP
+#define DISPLAYFILE_HPP
+
 #include "ListaEnc.hpp"
 #include "point.hpp"
 
-#ifndef DISPLAYFILE_HPP
-#define DISPLAYFILE_HPP
 
 class DisplayFile {
 
