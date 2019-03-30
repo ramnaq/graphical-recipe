@@ -7,9 +7,7 @@ class Polygon: public GraphicObject {
 
 public:
 	Polygon(string name, vector<Coordinate*> &polygonCoordinates) :
-    GraphicObject(name, POLYGON, polygonCoordinates) {
-
-  }
+		GraphicObject(name, POLYGON, polygonCoordinates) {}
 
 };
 

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "view.hpp"
 #include "point.hpp"
 #include "line.hpp"
@@ -51,9 +50,10 @@ public:
 
         vector<Coordinate*> pointCoordinate = {new Coordinate(x1, y1)};
         Point* p = new Point(name, pointCoordinate);
+
         display->insert(p);
         view->insertIntoListBox(p, "PONTO");
-        view->drawNewPoint(p);
+        //view->drawNewPoint(p);
 
         break;
      }
@@ -67,23 +67,25 @@ public:
         Coordinate* a = new Coordinate(x1, y1);
         Coordinate* b = new Coordinate(x2, y2);
         vector<Coordinate*> linesCoordinate = {a, b};
-
         Line* line = new Line(name, linesCoordinate);
+
         display->insert(line);
         view->insertIntoListBox(line, "LINHA");
-        view->drawNewLine(line);
+        //view->drawNewLine(line);
 
         break;
       }
       case POLYGON: {
         Polygon *polygon = new Polygon(name, pointsForPolygon);
+
         display->insert(polygon);
         view->insertIntoListBox(polygon, "POLIGONO");
-        view->drawNewPolygon(polygon);
+        //view->drawNewPolygon(polygon);
 
         break;
       }
     }
+    updateDrawScreen();
   }
 
   void executeObjectTransformation() {
@@ -175,8 +177,8 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double step = view->getStep();
-    view->updateWindow(step, op);
+    double changeFactor = view->getStep() ? (op < 10) : view->getAngleRotateWindow();
+    view->updateWindow(changeFactor, op);
     updateDrawScreen();
   }
 
@@ -188,18 +190,29 @@ public:
   void updateDrawScreen() {
     Elemento<GraphicObject*>* nextElement = display->getHead();
     view->clear_surface();
+
+    // Update window coordinates
+    Window* window = view->getWindow();
+    Coordinate* windowCoord = window->getCoordinates().back();
+    Coordinate geometriCenter = window->getGeometricCenter();
+    Coordinate windowScalingFactor(1,1);
+    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
+
+    view->transformSCN(window, &geometriCenter, &windowScalingFactor, 360.0);
+
     while (nextElement != NULL) {
     	GraphicObject* element = nextElement->getInfo();
-    	switch (element->getType()) {
-    		case POINT: {
-    				view->drawNewPoint(element);
-            break;
-    		} case LINE: {
-    				view->drawNewLine(element);
-            break;
-    		} case POLYGON: {
-            view->drawNewPolygon(element);
-            break;
+      view->transformSCN(element, &geometriCenter, &scalingFactor, 360.0);
+      switch (element->getType()) {
+        case POINT: {
+          view->drawNewPoint(element);
+          break;
+        } case LINE: {
+          view->drawNewLine(element);
+          break;
+        } case POLYGON: {
+          view->drawNewPolygon(element);
+          break;
         }
       }
       nextElement = nextElement->getProximo();

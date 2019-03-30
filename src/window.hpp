@@ -1,39 +1,33 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <iostream>
-
-
 //! Window is the visible area of a graphical world.
 /*!
  * The graphical world moves (horizontally, vertically, diagonally) and the window
  * shows a limited area of it.
  */
-
-class Window {
+// TODO Lembrar de transformar para radianos
+class Window: public GraphicObject{
   private:
-    Coordinate *coordMin;
-    Coordinate *coordMax;
+    double angle;
   public:
-  	Window(double xMin, double yMin, double xMax, double yMax) {
-      this->coordMin = new Coordinate(xMin, yMin);
-      this->coordMax = new Coordinate(xMax, yMax);
+    Window(vector<Coordinate*> &windowCoordinates) :
+      GraphicObject("Window", WINDOW, windowCoordinates) {
+      this->angle = 0;
     }
 
-    ~Window() {
-      delete this->coordMin;
-      delete this->coordMax;
+    double getAngle() {
+      return this->angle;
     }
 
-    Coordinate* getCoordMin() {
-      return coordMin;
-    }
-
-    Coordinate* getCoordMax() {
-      return coordMax;
+    void setAngle(double angle) {
+      this->angle = angle;
     }
 
     void zoomIn(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() + passo);
       coordMin->setY( coordMin->getY() + passo);
       coordMax->setX( coordMax->getX() - passo);
@@ -41,6 +35,9 @@ class Window {
     }
 
     void zoomOut(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() - passo);
       coordMin->setY( coordMin->getY() - passo);
       coordMax->setX( coordMax->getX() + passo);
@@ -48,26 +45,41 @@ class Window {
     }
 
     void goRight(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() + passo);
       coordMax->setX( coordMax->getX() + passo);
     }
 
     void goLeft(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() - passo);
       coordMax->setX( coordMax->getX() - passo);
     }
 
     void goUp(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setY( coordMin->getY() + passo);
       coordMax->setY( coordMax->getY() + passo);
     }
 
     void goDown(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setY( coordMin->getY() - passo);
       coordMax->setY( coordMax->getY() - passo);
     }
 
     void goUpLeft(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() - passo);
       coordMin->setY( coordMin->getY() + passo);
       coordMax->setX( coordMax->getX() - passo);
@@ -75,6 +87,9 @@ class Window {
     }
 
     void goUpRight(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() + passo);
       coordMin->setY( coordMin->getY() + passo);
       coordMax->setX( coordMax->getX() + passo);
@@ -82,6 +97,9 @@ class Window {
     }
 
     void goDownLeft(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() - passo);
       coordMin->setY( coordMin->getY() - passo);
       coordMax->setX( coordMax->getX() - passo);
@@ -89,6 +107,9 @@ class Window {
     }
 
     void goDownRight(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX( coordMin->getX() + passo);
       coordMin->setY( coordMin->getY() - passo);
       coordMax->setX( coordMax->getX() + passo);

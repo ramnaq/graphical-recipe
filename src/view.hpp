@@ -3,6 +3,7 @@
 
 #include "drawer.hpp"
 #include "viewport.hpp"
+#include "scn.hpp"
 #include "window.hpp"
 
 #ifndef VIEW_HPP
@@ -38,6 +39,7 @@ private:
   GtkEntry *entryAngle;
   GtkEntry *entryRotationX;
   GtkEntry *entryRotationY;
+  GtkEntry *entryAngleRotateWindow;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
@@ -48,12 +50,14 @@ private:
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+  Scn* scn;
 
   int rotationRadioButtonState;
 
 public:
   View() {
     drawer = new Drawer();
+    scn = new Scn();
   }
 
   //! Startup the user interface: initiates GTK, creates all graphical elements and runs gtk_main();
@@ -85,6 +89,7 @@ public:
     entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
     entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
+    entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
@@ -110,7 +115,10 @@ public:
   void initializeWindowViewPort() {
     double xMax = (double) gtk_widget_get_allocated_width(drawAreaViewPort);
     double yMax = (double) gtk_widget_get_allocated_height(drawAreaViewPort);
-    window = new Window(1, 1, xMax, yMax);
+
+    vector<Coordinate*> windowCoord = {new Coordinate(-xMax/2, -yMax/2), new Coordinate(xMax/2, yMax/2)};
+
+    window = new Window(windowCoord);
     viewPort = new ViewPort(xMax, yMax, window);
   }
 
@@ -152,9 +160,9 @@ public:
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
     for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-        drawer->drawLine(*it, *(std::next(it,1)));
+      drawer->drawLine(*it, *(std::next(it,1)));
     }
-	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
+    drawer->drawLine(polygonPoints.back(), polygonPoints.front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -235,6 +243,12 @@ public:
       } case 9: {
         this->window->goDownRight(step);
         break;
+      } case 10: {
+        //this->window->rotate(step);
+        break;
+      } case 11: {
+        //this->window->rotate(step);
+        break;
       }
     }
   }
@@ -259,11 +273,15 @@ public:
         vector<Coordinate*> polygonPoints = object->getCoordinates();
         vector<Coordinate*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
-            viewPort->transformation(*it);
+          viewPort->transformation(*it);
         }
         break;
       }
     }
+  }
+
+  void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
+    scn->transformation(elem, geometriCenter, factor, angle);
   }
 
 
@@ -327,6 +345,10 @@ public:
     return stod(gtk_entry_get_text(entryRotationY));
   }
 
+  double getAngleRotateWindow() {
+    return stod(gtk_entry_get_text(entryAngleRotateWindow));
+  }
+
   double getStep() {
     return stod(gtk_entry_get_text(entryStep));
   }
@@ -354,6 +376,10 @@ public:
 
   int getRotationRadioButtonState() {
     return rotationRadioButtonState;
+  }
+
+  Window* getWindow() {
+    return window;
   }
 
 };

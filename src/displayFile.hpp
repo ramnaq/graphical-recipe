@@ -26,7 +26,7 @@ public:
 	// void inserirNovaReta(Reta* r) {
 	// 	displayFile->adiciona(r);
 	// }
-  //
+	//
 	// void inserirNovoPoligono(Poligono* pol) {
 	// 	displayFile->adiciona(pol);
 	// }
