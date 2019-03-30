@@ -7,7 +7,6 @@
 
 static cairo_surface_t *surface = NULL;
 
-// TODO Transformar em objeto statico?
 class Drawer {
 public:
 	Drawer() {}
