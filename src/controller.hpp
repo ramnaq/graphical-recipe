@@ -177,7 +177,7 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double changeFactor = view->getStep() ? (op < 10) : view->getAngleRotateWindow();
+    double changeFactor =  (op < 12) ? view->getStep() : view->getAngleRotateWindow();
     view->updateWindow(changeFactor, op);
     updateDrawScreen();
   }
