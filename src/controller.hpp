@@ -53,7 +53,6 @@ public:
 
         display->insert(p);
         view->insertIntoListBox(p, "PONTO");
-        //view->drawNewPoint(p);
 
         break;
      }
@@ -71,7 +70,6 @@ public:
 
         display->insert(line);
         view->insertIntoListBox(line, "LINHA");
-        //view->drawNewLine(line);
 
         break;
       }
@@ -80,7 +78,6 @@ public:
 
         display->insert(polygon);
         view->insertIntoListBox(polygon, "POLIGONO");
-        //view->drawNewPolygon(polygon);
 
         break;
       }

@@ -6,7 +6,6 @@
  * The graphical world moves (horizontally, vertically, diagonally) and the window
  * shows a limited area of it.
  */
-// TODO Lembrar de transformar para radianos
 class Window: public GraphicObject{
   private:
     double angle;
