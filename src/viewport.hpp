@@ -39,9 +39,9 @@ class ViewPort {
       double yvpMin = coordMin->getY();
 
       double x = ((coord->getX() - xwMin) / (xwMax - xwMin)) * (xvpMax - xvpMin);
-	  double y = (1 - (coord->getY() - ywMin) / (ywMax - ywMin)) * (yvpMax - yvpMin);
+      double y = (1 - (coord->getY() - ywMin) / (ywMax - ywMin)) * (yvpMax - yvpMin);
 
-	  coord->setXvp(x);
+      coord->setXvp(x);
       coord->setYvp(y);
   	}
 };
