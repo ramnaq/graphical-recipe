@@ -21,7 +21,7 @@ class Window: public GraphicObject{
     }
 
     void setAngle(double angle) {
-      this->angle = angle;
+      this->angle += angle;
     }
 
     void zoomIn(double passo) {

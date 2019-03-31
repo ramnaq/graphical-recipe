@@ -177,7 +177,7 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double changeFactor =  (op < 12) ? view->getStep() : view->getAngleRotateWindow();
+    double changeFactor =  (op < 10) ? view->getStep() : view->getAngleRotateWindow();
     view->updateWindow(changeFactor, op);
     updateDrawScreen();
   }
@@ -195,14 +195,15 @@ public:
     Window* window = view->getWindow();
     Coordinate* windowCoord = window->getCoordinates().back();
     Coordinate geometriCenter = window->getGeometricCenter();
+    double currentAngle = window->getAngle();
     Coordinate windowScalingFactor(1,1);
     Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
 
-    view->transformSCN(window, &geometriCenter, &windowScalingFactor, 360.0);
+    view->transformSCN(window, &geometriCenter, &windowScalingFactor, currentAngle);
 
     while (nextElement != NULL) {
-    	GraphicObject* element = nextElement->getInfo();
-      view->transformSCN(element, &geometriCenter, &scalingFactor, 360.0);
+      GraphicObject* element = nextElement->getInfo();
+      view->transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
       switch (element->getType()) {
         case POINT: {
           view->drawNewPoint(element);

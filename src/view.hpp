@@ -220,34 +220,34 @@ public:
         this->window->zoomOut(step);
         break;
       } case 2: {
-        this->window->goRight(step);
+        this->window->goRight(step/100);
         break;
       } case 3: {
-        this->window->goLeft(step);
+        this->window->goLeft(step/100);
         break;
       } case 4: {
-        this->window->goUp(step);
+        this->window->goUp(step/100);
         break;
       } case 5: {
-        this->window->goDown(step);
+        this->window->goDown(step/100);
         break;
       } case 6: {
-        this->window->goUpLeft(step);
+        this->window->goUpLeft(step/100);
         break;
       } case 7: {
-        this->window->goUpRight(step);
+        this->window->goUpRight(step/100);
         break;
       } case 8: {
-        this->window->goDownLeft(step);
+        this->window->goDownLeft(step/100);
         break;
       } case 9: {
-        this->window->goDownRight(step);
+        this->window->goDownRight(step/100);
         break;
       } case 10: {
-        //this->window->rotate(step);
+        this->window->setAngle(-step);
         break;
       } case 11: {
-        //this->window->rotate(step);
+        this->window->setAngle(step);
         break;
       }
     }
