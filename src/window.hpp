@@ -9,10 +9,22 @@
 class Window: public GraphicObject{
   private:
     double angle;
+    Coordinate const *defaultCoordMin;
+    Coordinate const *defaultCoordMax;
   public:
     Window(vector<Coordinate*> &windowCoordinates) :
       GraphicObject("Window", WINDOW, windowCoordinates) {
       this->angle = 0;
+
+      Coordinate* coordMin = windowCoordinates.front();
+      Coordinate* coordMax = windowCoordinates.back();
+      this->defaultCoordMin = new Coordinate(coordMin->getX(), coordMin->getY());
+      this->defaultCoordMax = new Coordinate(coordMax->getX(), coordMax->getY());
+    }
+
+    ~Window() {
+      delete this->defaultCoordMax;
+      delete this->defaultCoordMin;
     }
 
     double getAngle() {
@@ -114,6 +126,19 @@ class Window: public GraphicObject{
       coordMax->setX( coordMax->getX() + passo);
       coordMax->setY( coordMax->getY() - passo);
     }
+
+    void goCenter() {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX(defaultCoordMin->getX());
+      coordMin->setY(defaultCoordMin->getY());
+      coordMax->setX(defaultCoordMax->getX());
+      coordMax->setY(defaultCoordMax->getY());
+
+      this->angle = 0;
+    }
+
 };
 
 #endif

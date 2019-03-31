@@ -29,11 +29,11 @@ public:
     this->y = y;
   }
 
-  double getX() {
+  double getX() const {
     return this->x;
   }
 
-  double getY() {
+  double getY() const {
     return this->y;
   }
 
@@ -45,11 +45,11 @@ public:
     this->yvp = y;
   }
 
-  double getXvp() {
+  double getXvp() const {
     return this->xvp;
   }
 
-  double getYvp() {
+  double getYvp() const {
     return this->yvp;
   }
 
