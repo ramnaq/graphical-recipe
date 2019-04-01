@@ -1,13 +1,15 @@
+#ifndef VIEW_HPP
+#define VIEW_HPP
+
 #include <gtk/gtk.h>
 #include <string>
 
+#include "logger.hpp"
 #include "drawer.hpp"
-#include "viewport.hpp"
 #include "window.hpp"
+#include "viewport.hpp"
 #include <stdio.h>
 
-#ifndef VIEW_HPP
-#define VIEW_HPP
 
 using namespace std;
 
@@ -20,6 +22,7 @@ private:
   GtkWidget *addObjectWindow;
   GtkWidget *editObjectWindow;
   GtkWidget *drawAreaViewPort;
+  GtkWidget *gtkTextView;
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
   GtkEntry *entryPointX;
@@ -49,12 +52,14 @@ private:
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+  Logger* logger;
 
   int rotationRadioButtonState;
 
 public:
   View() {
     drawer = new Drawer();
+    logger = new Logger();
   }
 
   //! Startup the user interface: initiates GTK, creates all graphical elements and runs gtk_main();
@@ -68,6 +73,8 @@ public:
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
     editObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowEditObject"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
+    gtkTextView = GTK_WIDGET(gtk_builder_get_object(builder, "textView"));
+    logger->setTextView(gtkTextView);
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
     entryPointY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointY"));
