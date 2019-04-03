@@ -14,8 +14,12 @@ class Logger {
       gtk_text_buffer_get_iter_at_offset(buffer, &iter, 0);
     }
 
-    void logWarning(string war) {
-	  gtk_text_buffer_insert(buffer, &iter, war.c_str(), -1);
+    void logWarning(string wrn) {
+	  logMessage("[AVISO] " + wrn);
+	}
+
+    void logError(string err) {
+	  logMessage("[ERRO] " + err);
 	}
 
   private:
@@ -23,6 +27,11 @@ class Logger {
 	GtkTextBuffer* buffer;
 
 	GtkTextIter iter;
+
+    void logMessage(string msg) {
+	  gtk_text_buffer_insert(buffer, &iter, msg.c_str(), -1);
+	}
+
 };
 
 #endif  //!< LOGGER_HPP

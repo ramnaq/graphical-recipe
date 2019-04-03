@@ -273,8 +273,8 @@ public:
     }
   }
 
-  void logWarning(string w) {
-    logger->logWarning(w);
+  void logWarning(string wrn) {
+    logger->logWarning(wrn);
   }
 
 
