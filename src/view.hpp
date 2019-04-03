@@ -214,6 +214,7 @@ public:
     switch (isZoomIn) {
       case 0: {
         this->window->zoomIn(step);
+        logWarning("Zoom in\n");
         break;
       } case 1: {
         this->window->zoomOut(step);
@@ -271,6 +272,10 @@ public:
         break;
       }
     }
+  }
+
+  void logWarning(string w) {
+    logger->logWarning(w);
   }
 
 
