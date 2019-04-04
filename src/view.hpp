@@ -182,9 +182,13 @@ public:
    */
   int removeSelectedObject() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
-    int index = gtk_list_box_row_get_index(row);
-
-    gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
+    int index = -1;
+    if (row == NULL) {
+      logger->logError("Nenhum objeto selecionado!\n");
+    } else {
+      index = gtk_list_box_row_get_index(row);
+      gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
+    }
     return index;
   }
 
