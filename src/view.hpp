@@ -208,8 +208,14 @@ public:
 
   int removeFromCoordPolygonList() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
-    gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-    return getCurrentObjectIndex();
+    int index = -1;
+    if (row == NULL) {
+      logger->logError("Nenhuma coordenada selecionada!\n");
+    } else {
+      gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+      index = getCurrentObjectIndex();
+    }
+    return index;
   }
 
   void updateRadioButtonState(int newState) {
@@ -370,7 +376,11 @@ public:
 
   int getCurrentObjectIndex() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
-    return gtk_list_box_row_get_index(row);
+    if (row == NULL) {
+      return -1;
+    } else {
+      return gtk_list_box_row_get_index(row);
+    }
   }
 
   int getRotationRadioButtonState() {

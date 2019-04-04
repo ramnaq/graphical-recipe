@@ -157,7 +157,9 @@ public:
 
   void removeFromCoordPolygonList() {
     int index = view.removeFromCoordPolygonList();
-    pointsForPolygon.erase(pointsForPolygon.begin() + index);
+    if (index > -1) {
+      pointsForPolygon.erase(pointsForPolygon.begin() + index);
+    }
   }
 
   /*!
