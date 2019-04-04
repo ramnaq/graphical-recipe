@@ -30,6 +30,7 @@ class Logger {
 
     void logMessage(string msg) {
 	  gtk_text_buffer_insert(buffer, &iter, msg.c_str(), -1);
+	  gtk_text_view_scroll_to_iter(textView, &iter, 0.0, false, 0.0, 0.0);
 	}
 
 };
