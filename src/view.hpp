@@ -160,11 +160,13 @@ public:
   void drawNewPolygon(GraphicObject* obj) {
     transform(obj);
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
-    vector<Coordinate*>::iterator it;
-	for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-        drawer->drawLine(*it, *(std::next(it,1)));
-	}
-	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
+    int end = polygonPoints.size() - 1;
+
+    // Draws polygon's edges two by two points. The last edge is the segment
+    // polygonPoints[end]|polygonPoints[0].
+    for (int i = 0; i < end; i++) {
+      drawer->drawLine(polygonPoints[i], polygonPoints[(i+1) % end]);
+    }
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -279,6 +281,10 @@ public:
 
   void logWarning(string wrn) {
     logger->logWarning(wrn);
+  }
+
+  void logError(string err) {
+    logger->logError(err);
   }
 
 

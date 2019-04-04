@@ -72,7 +72,13 @@ public:
         break;
       }
       case POLYGON: {
-        Polygon *polygon = new Polygon(name, pointsForPolygon);
+        Polygon* polygon;
+        try {
+          polygon = new Polygon(name, pointsForPolygon);
+        } catch(...) {
+          view.logError("Pontos insuficientes para criação de polígono.\n");
+          return;
+        }
         display.insert(polygon);
         view.insertIntoListBox(*polygon, "POLIGONO");
         view.drawNewPolygon(polygon);
