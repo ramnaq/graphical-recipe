@@ -14,11 +14,15 @@ class Window {
   private:
     Coordinate *coordMin;
     Coordinate *coordMax;
+    Coordinate const *defaultCoordMin;
+    Coordinate const *defaultCoordMax;
 
   public:
   	Window(double xMin, double yMin, double xMax, double yMax) {
-      this->coordMin = new Coordinate(xMin, yMin);
-      this->coordMax = new Coordinate(xMax, yMax);
+      coordMin = new Coordinate(xMin, yMin);
+      coordMax = new Coordinate(xMax, yMax);
+      this->defaultCoordMin = new Coordinate(xMin, yMin);
+      this->defaultCoordMax = new Coordinate(xMax, yMax);
     }
 
     ~Window() {
@@ -97,6 +101,13 @@ class Window {
       coordMax->setY( coordMax->getY() - step);
     }
 
+    void goCenter() {
+      coordMin->setX(defaultCoordMin->getX());
+      coordMin->setY(defaultCoordMin->getY());
+      coordMax->setX(defaultCoordMax->getX());
+      coordMax->setY(defaultCoordMax->getY());
+    }
+
 	//! Checks if 'step' for a zoom-in ist within the limits.
 	/**
 	 * If 'step' is too big, the zoom-in operation would be inverted (doing
@@ -110,6 +121,7 @@ class Window {
 	  double newXMax = coordMax->getX() - step;
 	  return (newXMin < newXMax);
 	}
+
 };
 
 #endif

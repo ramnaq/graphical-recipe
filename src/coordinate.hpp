@@ -6,9 +6,9 @@
 
 class Coordinate {
 private:
-  double x;
+  double x;   /*! World coordinates. */
   double y;
-  double xvp;
+  double xvp; /*! ViewPort coordinates. */
   double yvp;
 
 public:
@@ -27,11 +27,11 @@ public:
     this->y = y;
   }
 
-  double getX() {
+  double getX() const {
     return this->x;
   }
 
-  double getY() {
+  double getY() const {
     return this->y;
   }
 
@@ -43,11 +43,11 @@ public:
     this->yvp = y;
   }
 
-  double getXvp() {
+  double getXvp() const {
     return this->xvp;
   }
 
-  double getYvp() {
+  double getYvp() const {
     return this->yvp;
   }
 

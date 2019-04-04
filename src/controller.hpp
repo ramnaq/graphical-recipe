@@ -88,6 +88,10 @@ public:
     }
   }
 
+  //! Changes an object position through translation, scaling or rotation.
+  /*!
+   * Takes the selected object in the object list and applies a transformation.
+   */
   void executeObjectTransformation() {
     int currentPage = view.getCurrentPageTransformation();
     int currentObjectIndex = view.getCurrentObjectIndex();

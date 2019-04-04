@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include <iostream>
-
 using namespace std;
+
+/*! Structures a representation and operations of a Matrix */
 
 class Matrix {
 private:

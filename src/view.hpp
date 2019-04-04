@@ -254,6 +254,9 @@ public:
       } case 9: {
         this->window->goDownRight(step);
         break;
+      } case 10: {
+        this->window->goCenter();
+        break;
       }
     }
   }
@@ -276,10 +279,10 @@ public:
       }
       case POLYGON: {
         vector<Coordinate*> polygonPoints = object->getCoordinates();
-		vector<Coordinate*>::iterator it;
+        vector<Coordinate*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
-            viewPort->transformation(*it);
-		}
+          viewPort->transformation(*it);
+        }
         break;
       }
     }

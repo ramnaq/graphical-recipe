@@ -5,6 +5,8 @@
 
 #include "Matrix.hpp"
 
+/*! Applies translation, scaling or rotation transformations to an object. */
+
 class ObjectTransformation {
 
 public:
