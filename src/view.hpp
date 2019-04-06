@@ -160,7 +160,7 @@ public:
   void drawNewPolygon(GraphicObject* obj) {
     transform(obj);
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
-    int end = polygonPoints.size() - 1;
+    int end = polygonPoints.size();
 
     // Draws polygon's edges two by two points. The last edge is the segment
     // polygonPoints[end]|polygonPoints[0].
