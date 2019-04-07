@@ -157,6 +157,17 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
+  //! Draws a Polygon and properly clears elements in the "New Polygon window"
+  /*!
+   * @param obj The object to be drawn.
+   */
+  void newPolygon(GraphicObject* obj) {
+	drawNewPolygon(obj);
+	insertIntoListBox(*obj, "POLIGONO");
+	removeAllPolygonCoordinates();
+	clearPolygonCoordEntries();
+  }
+
   void drawNewPolygon(GraphicObject* obj) {
     transform(obj);
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
@@ -216,6 +227,19 @@ public:
       index = getCurrentObjectIndex();
     }
     return index;
+  }
+
+  void removeAllPolygonCoordinates() {
+	do {
+	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
+	  gtk_list_box_select_row(listCoordPolygon, row);
+	  gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
+  }
+
+  void clearPolygonCoordEntries() {
+	gtk_entry_set_text(entryPolygonX, "");
+	gtk_entry_set_text(entryPolygonY, "");
   }
 
   void updateRadioButtonState(int newState) {

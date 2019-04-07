@@ -75,14 +75,12 @@ public:
         Polygon* polygon;
         try {
           polygon = new Polygon(name, pointsForPolygon);
+          display.insert(polygon);
+          view.newPolygon(polygon);
+          pointsForPolygon.clear();
         } catch(...) {
           view.logError("Pontos insuficientes para criação de polígono.\n");
-          return;
         }
-        display.insert(polygon);
-        view.insertIntoListBox(*polygon, "POLIGONO");
-        view.drawNewPolygon(polygon);
-
         break;
       }
     }
