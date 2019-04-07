@@ -188,11 +188,11 @@ public:
    */
   void changeWindow(int op) {
     double step = view.getStep();
-	try {
-	  view.updateWindow(step, op);
-	} catch (int e) {
+    try {
+      view.updateWindow(step, op);
+    } catch (int e) {
       view.logWarning("Passo do zoom acima do limite!\n");
-	}
+    }
     updateDrawScreen();
   }
 

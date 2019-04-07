@@ -24,9 +24,9 @@ class Logger {
 
   private:
     GtkTextView* textView;
-	GtkTextBuffer* buffer;
+    GtkTextBuffer* buffer;
 
-	GtkTextIter iter;
+    GtkTextIter iter;
 
     void logMessage(string msg) {
 	  gtk_text_buffer_insert(buffer, &iter, msg.c_str(), -1);
