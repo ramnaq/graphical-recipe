@@ -2,6 +2,8 @@
 #define CONTROLLER_HPP
 
 #include <iostream>
+#include <stdexcept>
+
 #include "enum.hpp"
 #include "view.hpp"
 #include "point.hpp"
@@ -74,11 +76,15 @@ public:
       case POLYGON: {
         Polygon* polygon;
         try {
+          if (pointsForPolygon.size() < 3) {
+            throw std::runtime_error("Cannot create polygon without at least three points!");
+          }
           polygon = new Polygon(name, pointsForPolygon);
           display.insert(polygon);
           view.newPolygon(polygon);
           pointsForPolygon.clear();
-        } catch(...) {
+        } catch(const std::runtime_error& e) {
+          std::cout << "[ERROR] " << e.what() << std::endl;
           view.logError("Pontos insuficientes para criação de polígono.\n");
         }
         break;
