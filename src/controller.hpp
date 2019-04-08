@@ -92,6 +92,13 @@ public:
     }
   }
 
+  void createObjectFromFile() {
+    // filename = view.fileChooser;
+	// obj = objDescriptor.readObject(fileName);
+	// displayFile.insert(obj);
+	// controller.createObject(obj);  (tipo método acima)
+  }
+
   //! Changes an object position through translation, scaling or rotation.
   /*!
    * Takes the selected object in the object list and applies a transformation.
