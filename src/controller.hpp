@@ -2,6 +2,8 @@
 #define CONTROLLER_HPP
 
 #include <iostream>
+#include <stdexcept>
+
 #include "enum.hpp"
 #include "view.hpp"
 #include "point.hpp"
@@ -72,11 +74,19 @@ public:
         break;
       }
       case POLYGON: {
-        Polygon *polygon = new Polygon(name, pointsForPolygon);
-        display.insert(polygon);
-        view.insertIntoListBox(*polygon, "POLIGONO");
-        view.drawNewPolygon(polygon);
-
+        Polygon* polygon;
+        try {
+          if (pointsForPolygon.size() < 3) {
+            throw std::runtime_error("Cannot create polygon without at least three points!");
+          }
+          polygon = new Polygon(name, pointsForPolygon);
+          display.insert(polygon);
+          view.newPolygon(polygon);
+          pointsForPolygon.clear();
+        } catch(const std::runtime_error& e) {
+          std::cout << "[ERROR] " << e.what() << std::endl;
+          view.logError("Pontos insuficientes para criação de polígono.\n");
+        }
         break;
       }
     }
@@ -155,7 +165,9 @@ public:
 
   void removeFromCoordPolygonList() {
     int index = view.removeFromCoordPolygonList();
-    pointsForPolygon.erase(pointsForPolygon.begin() + index);
+    if (index > -1) {
+      pointsForPolygon.erase(pointsForPolygon.begin() + index);
+    }
   }
 
   /*!
@@ -176,7 +188,11 @@ public:
    */
   void changeWindow(int op) {
     double step = view.getStep();
-    view.updateWindow(step, op);
+	try {
+	  view.updateWindow(step, op);
+	} catch (int e) {
+      view.logWarning("Passo do zoom acima do limite!\n");
+	}
     updateDrawScreen();
   }
 
