@@ -35,7 +35,6 @@ class Window: public GraphicObject{
       this->angle += angle;
     }
 
-<<<<<<< HEAD
     void zoomIn(double passo) {
       Coordinate* coordMin = getCoordinates().front();
       Coordinate* coordMax = getCoordinates().back();
@@ -44,14 +43,6 @@ class Window: public GraphicObject{
       coordMin->setY( coordMin->getY() + passo);
       coordMax->setX( coordMax->getX() - passo);
       coordMax->setY( coordMax->getY() - passo);
-=======
-    void zoomIn(double step) {
-      if (not validZoomStep(step)) throw -1;
-      coordMin->setX( coordMin->getX() + step);
-      coordMin->setY( coordMin->getY() + step);
-      coordMax->setX( coordMax->getX() - step);
-      coordMax->setY( coordMax->getY() - step);
->>>>>>> 57782fd51356da53cddf048e0e65c7bdba2206d0
     }
 
     void zoomOut(double passo) {
