@@ -5,6 +5,8 @@
 
 using namespace std;
 
+/*! Structures a representation and operations of a Matrix */
+
 class Matrix {
 private:
   vector<vector<double> > matrix;

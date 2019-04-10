@@ -35,6 +35,7 @@ class Window: public GraphicObject{
       this->angle += angle;
     }
 
+<<<<<<< HEAD
     void zoomIn(double passo) {
       Coordinate* coordMin = getCoordinates().front();
       Coordinate* coordMax = getCoordinates().back();
@@ -43,6 +44,14 @@ class Window: public GraphicObject{
       coordMin->setY( coordMin->getY() + passo);
       coordMax->setX( coordMax->getX() - passo);
       coordMax->setY( coordMax->getY() - passo);
+=======
+    void zoomIn(double step) {
+      if (not validZoomStep(step)) throw -1;
+      coordMin->setX( coordMin->getX() + step);
+      coordMin->setY( coordMin->getY() + step);
+      coordMax->setX( coordMax->getX() - step);
+      coordMax->setY( coordMax->getY() - step);
+>>>>>>> 57782fd51356da53cddf048e0e65c7bdba2206d0
     }
 
     void zoomOut(double passo) {
@@ -138,6 +147,20 @@ class Window: public GraphicObject{
 
       this->angle = 0;
     }
+
+	//! Checks if 'step' for a zoom-in ist within the limits.
+	/**
+	 * If 'step' is too big, the zoom-in operation would be inverted (doing
+	 * zoom-out), in that case it is considered an invalid value for 'step'.
+	 *
+	 * @param step The step of a zoom operation (@see zoomIn()).
+	 * @return true if 'step' doesn't exceeds the limits or false otherwise.
+	 */
+	bool validZoomStep(double step) {
+	  double newXMin = coordMin->getX() + step;
+	  double newXMax = coordMax->getX() - step;
+	  return (newXMin < newXMax);
+	}
 
 };
 

@@ -1,14 +1,16 @@
+#ifndef VIEW_HPP
+#define VIEW_HPP
+
 #include <gtk/gtk.h>
 #include <string>
 
+#include "logger.hpp"
 #include "drawer.hpp"
-#include "viewport.hpp"
 #include "scn.hpp"
 #include "window.hpp"
+#include "viewport.hpp"
 #include <stdio.h>
 
-#ifndef VIEW_HPP
-#define VIEW_HPP
 
 using namespace std;
 
@@ -21,6 +23,7 @@ private:
   GtkWidget *addObjectWindow;
   GtkWidget *editObjectWindow;
   GtkWidget *drawAreaViewPort;
+  GtkWidget *gtkTextView;
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
   GtkEntry *entryPointX;
@@ -52,6 +55,7 @@ private:
   Window* window;
   ViewPort* viewPort;
   Scn* scn;
+  Logger* logger;
 
   int rotationRadioButtonState;
 
@@ -59,6 +63,7 @@ public:
   View() {
     drawer = new Drawer();
     scn = new Scn();
+    logger = new Logger();
   }
 
   //! Startup the user interface: initiates GTK, creates all graphical elements and runs gtk_main();
@@ -72,6 +77,8 @@ public:
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
     editObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowEditObject"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
+    gtkTextView = GTK_WIDGET(gtk_builder_get_object(builder, "textView"));
+    logger->setTextView(gtkTextView);
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
     entryPointY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointY"));
@@ -158,14 +165,27 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
+  //! Draws a Polygon and properly clears elements in the "New Polygon window"
+  /*!
+   * @param obj The object to be drawn.
+   */
+  void newPolygon(GraphicObject* obj) {
+	drawNewPolygon(obj);
+	insertIntoListBox(*obj, "POLIGONO");
+	removeAllPolygonCoordinates();
+	clearPolygonCoordEntries();
+  }
+
   void drawNewPolygon(GraphicObject* obj) {
     transform(obj);
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
-    vector<Coordinate*>::iterator it;
-    for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-      drawer->drawLine(*it, *(std::next(it,1)));
+    int end = polygonPoints.size();
+
+    // Draws polygon's edges two by two points. The last edge is the segment
+    // polygonPoints[end]|polygonPoints[0].
+    for (int i = 0; i < end; i++) {
+      drawer->drawLine(polygonPoints[i], polygonPoints[(i+1) % end]);
     }
-    drawer->drawLine(polygonPoints.back(), polygonPoints.front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -183,9 +203,13 @@ public:
    */
   int removeSelectedObject() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
-    int index = gtk_list_box_row_get_index(row);
-
-    gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
+    int index = -1;
+    if (row == NULL) {
+      logger->logError("Nenhum objeto selecionado!\n");
+    } else {
+      index = gtk_list_box_row_get_index(row);
+      gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
+    }
     return index;
   }
 
@@ -203,8 +227,27 @@ public:
 
   int removeFromCoordPolygonList() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
-    gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-    return getCurrentObjectIndex();
+    int index = -1;
+    if (row == NULL) {
+      logger->logError("Nenhuma coordenada selecionada!\n");
+    } else {
+      gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+      index = getCurrentObjectIndex();
+    }
+    return index;
+  }
+
+  void removeAllPolygonCoordinates() {
+	do {
+	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
+	  gtk_list_box_select_row(listCoordPolygon, row);
+	  gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
+  }
+
+  void clearPolygonCoordEntries() {
+	gtk_entry_set_text(entryPolygonX, "");
+	gtk_entry_set_text(entryPolygonY, "");
   }
 
   void updateRadioButtonState(int newState) {
@@ -285,8 +328,14 @@ public:
 
   void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
     scn->transformation(elem, geometriCenter, factor, angle);
+
+  void logWarning(string wrn) {
+    logger->logWarning(wrn);
   }
 
+  void logError(string err) {
+    logger->logError(err);
+  }
 
   ///
   /// Get methods
@@ -374,7 +423,11 @@ public:
 
   int getCurrentObjectIndex() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
-    return gtk_list_box_row_get_index(row);
+    if (row == NULL) {
+      return -1;
+    } else {
+      return gtk_list_box_row_get_index(row);
+    }
   }
 
   int getRotationRadioButtonState() {

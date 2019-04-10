@@ -6,9 +6,9 @@
 
 class Coordinate {
 private:
-  double x;
+  double x;   /*! World coordinates. */
   double y;
-  double xvp;
+  double xvp; /*! ViewPort coordinates. */
   double yvp;
   double xns;
   double yns;

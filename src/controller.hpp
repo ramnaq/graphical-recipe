@@ -1,6 +1,8 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include <stdexcept>
+
 #include "enum.hpp"
 #include "view.hpp"
 #include "point.hpp"
@@ -71,17 +73,29 @@ public:
         break;
       }
       case POLYGON: {
-        Polygon *polygon = new Polygon(name, pointsForPolygon);
-
-        display.insert(polygon);
-        view.insertIntoListBox(*polygon, "POLIGONO");
-
+        Polygon* polygon;
+        try {
+          if (pointsForPolygon.size() < 3) {
+            throw std::runtime_error("Cannot create polygon without at least three points!");
+          }
+          polygon = new Polygon(name, pointsForPolygon);
+          display.insert(polygon);
+          view.newPolygon(polygon);
+          pointsForPolygon.clear();
+        } catch(const std::runtime_error& e) {
+          std::cout << "[ERROR] " << e.what() << std::endl;
+          view.logError("Pontos insuficientes para criação de polígono.\n");
+        }
         break;
       }
     }
     updateDrawScreen();
   }
 
+  //! Changes an object position through translation, scaling or rotation.
+  /*!
+   * Takes the selected object in the object list and applies a transformation.
+   */
   void executeObjectTransformation() {
     int currentPage = view.getCurrentPageTransformation();
     int currentObjectIndex = view.getCurrentObjectIndex();
@@ -151,7 +165,9 @@ public:
 
   void removeFromCoordPolygonList() {
     int index = view.removeFromCoordPolygonList();
-    pointsForPolygon.erase(pointsForPolygon.begin() + index);
+    if (index > -1) {
+      pointsForPolygon.erase(pointsForPolygon.begin() + index);
+    }
   }
 
   /*!
@@ -171,10 +187,13 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double changeFactor;
     if (op != WINDOW_ORIGINAL_POSITION)
       changeFactor =  (op < 10) ? view.getStep() : view.getAngleRotateWindow();
-    view.updateWindow(changeFactor, op);
+    try {
+      view.updateWindow(changeFactor, op);
+    } catch (int e) {
+      view.logWarning("Passo do zoom acima do limite!\n");
+    }
     updateDrawScreen();
   }
 
