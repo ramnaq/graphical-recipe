@@ -328,7 +328,8 @@ public:
 
   void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
     scn->transformation(elem, geometriCenter, factor, angle);
-
+  }
+  
   void logWarning(string wrn) {
     logger->logWarning(wrn);
   }

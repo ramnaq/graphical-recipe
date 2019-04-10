@@ -2,6 +2,7 @@
 #define CONTROLLER_HPP
 
 #include <stdexcept>
+#include <iostream>
 
 #include "enum.hpp"
 #include "view.hpp"
@@ -187,6 +188,7 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
+    double changeFactor;
     if (op != WINDOW_ORIGINAL_POSITION)
       changeFactor =  (op < 10) ? view.getStep() : view.getAngleRotateWindow();
     try {

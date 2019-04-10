@@ -148,8 +148,8 @@ class Window: public GraphicObject{
 	 * @return true if 'step' doesn't exceeds the limits or false otherwise.
 	 */
 	bool validZoomStep(double step) {
-	  double newXMin = coordMin->getX() + step;
-	  double newXMax = coordMax->getX() - step;
+	  double newXMin = getCoordinates().front()->getX() + step;
+	  double newXMax = getCoordinates().back()->getX() - step;
 	  return (newXMin < newXMax);
 	}
 
