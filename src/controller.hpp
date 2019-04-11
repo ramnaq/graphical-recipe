@@ -94,17 +94,33 @@ public:
   }
 
   void createObjectsFromFile() {
-    string fileName = "square.obj";
+    string fileName = "example.obj";
     ObjDescriptor od;
     vector<GraphicObject*> objs = od.read(fileName);
-    display.insert(objs[0]);
-    display.insert(objs[1]);
-    view.newPolygon(objs[0]);
-    view.newPolygon(objs[1]);
-    // filename = view.fileChooser;
-    // obj = objDescriptor.readObject(fileName);
-    // displayFile.insert(obj);
-    // controller.createObject(obj);  (tipo método acima)
+	for (int i = 0; i < objs.size(); ++i) {
+	  display.insert(objs[i]);
+	  createGraphicObject(objs[i]);
+	}
+  }
+
+  void createGraphicObject(GraphicObject* gobj) {
+    switch (gobj->getType()) {
+      case POINT: {
+        view.insertIntoListBox(*gobj, "PONTO");
+        view.drawNewPoint(gobj);
+        break;
+      }
+      case LINE: {
+        view.insertIntoListBox(*gobj, "LINHA");
+        view.drawNewLine(gobj);
+        break;
+      }
+      case POLYGON: {
+        view.newPolygon(gobj);
+        pointsForPolygon.clear();
+        break;
+      }
+    }
   }
 
   //! Changes an object position through translation, scaling or rotation.
