@@ -10,6 +10,7 @@
 #include "line.hpp"
 #include "polygon.hpp"
 #include "displayFile.hpp"
+#include "ObjDescriptor.hpp"
 #include "ObjectTransformation.hpp"
 
 
@@ -92,11 +93,18 @@ public:
     }
   }
 
-  void createObjectFromFile() {
+  void createObjectsFromFile() {
+    string fileName = "square.obj";
+    ObjDescriptor od;
+    vector<GraphicObject*> objs = od.read(fileName);
+    display.insert(objs[0]);
+    display.insert(objs[1]);
+    view.newPolygon(objs[0]);
+    view.newPolygon(objs[1]);
     // filename = view.fileChooser;
-	// obj = objDescriptor.readObject(fileName);
-	// displayFile.insert(obj);
-	// controller.createObject(obj);  (tipo método acima)
+    // obj = objDescriptor.readObject(fileName);
+    // displayFile.insert(obj);
+    // controller.createObject(obj);  (tipo método acima)
   }
 
   //! Changes an object position through translation, scaling or rotation.
