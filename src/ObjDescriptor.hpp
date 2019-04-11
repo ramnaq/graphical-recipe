@@ -10,8 +10,28 @@
 
 class ObjDescriptor {
   public:
-	void write(GraphicObject& obj) {
-	}
+    void write(ListaEnc<GraphicObject*>* objs, string fileName) {
+      std::ofstream outfile(fileName);
+      for (int i = 0; i < objs->getSize(); ++i) {
+        vector<Coordinate*> coordinates = objs->elementoNoIndice(i)->getCoordinates();
+
+        /* vertex list of objs[i] */
+        for (int c = 0; c < coordinates.size(); ++c) {
+          Coordinate* coord = coordinates[c];
+          outfile << "v " << coord->getX() << " " << coord->getY() << '\n';
+        }
+
+        /* graphic element face */
+        outfile << "f";
+        for (int c = 0; c < coordinates.size(); ++c) {
+          outfile << " " << (c + 1);
+        }
+
+        outfile << '\n';
+      }
+
+      outfile.close();
+    }
 
     vector<GraphicObject*> read(string fileName) {
       vector<GraphicObject*> objects;
@@ -46,6 +66,8 @@ class ObjDescriptor {
             std::getline(infile, line);  //!< it's a commentary, ignore line.
         }
       }
+
+	  infile.close();
 
       return objects;
     }

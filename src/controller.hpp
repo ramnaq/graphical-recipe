@@ -103,6 +103,12 @@ public:
 	}
   }
 
+  void saveWorldToFile() {
+    string fileName = view.getFileToSaveWorld();
+    ObjDescriptor od;
+    od.write(display.getObjs(), fileName);
+  }
+
   void createGraphicObject(GraphicObject* gobj) {
     switch (gobj->getType()) {
       case POINT: {

@@ -60,10 +60,15 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   }
 }
 
-//! Connected to singal "clicked" of element "btnAddObjFile".
-
+//! Connected to signal "clicked" of element "btnAddObjFile".
 extern "C" G_MODULE_EXPORT void on_btnCreateFromFile_clicked() {
   controller->createObjectsFromFile();
+}
+
+
+//! Connected to signal "clicked" of element "btnSaveWorld".
+extern "C" G_MODULE_EXPORT void on_btnSaveWorld_clicked() {
+  controller->saveWorldToFile();
 }
 
 //! Connected to signal "clicked" of element "btnRemoveCoordinate".

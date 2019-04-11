@@ -36,6 +36,10 @@ public:
 		delete displayFile->retiraDaPosicao(index);
 	}
 
+	ListaEnc<GraphicObject*>* getObjs() {
+        return displayFile;
+	}
+
 	GraphicObject* getElementoNoIndice(int index) {
 		return displayFile->elementoNoIndice(index);
 	}
