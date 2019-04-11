@@ -11,8 +11,9 @@
 #include "viewport.hpp"
 #include <stdio.h>
 
-
 using namespace std;
+
+#define VIEWPORT_MARGIN 20
 
 class View {
 
@@ -51,6 +52,8 @@ private:
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
   GtkNotebook *notebookObjectOperations;
 
+  GtkCheckButton* checkbtnFillPolygon;
+
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
@@ -58,6 +61,8 @@ private:
   Logger* logger;
 
   int rotationRadioButtonState;
+  int clippingRadioButtonState;
+  bool checkFillButtonState;
 
 public:
   View() {
@@ -106,6 +111,8 @@ public:
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
 
     rotationRadioButtonState = 1;
+    clippingRadioButtonState = 1;
+    checkFillButtonState = false;
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -121,13 +128,23 @@ public:
    * 'drawAreaViewPort' GtkWidget.
    */
   void initializeWindowViewPort() {
+    double xMin = 0;
+    double yMin = 0;
     double xMax = (double) gtk_widget_get_allocated_width(drawAreaViewPort);
     double yMax = (double) gtk_widget_get_allocated_height(drawAreaViewPort);
 
-    vector<Coordinate*> windowCoord = {new Coordinate(-xMax/2, -yMax/2), new Coordinate(xMax/2, yMax/2)};
+    Coordinate* coordMin = new Coordinate(xMin+VIEWPORT_MARGIN, yMin+VIEWPORT_MARGIN);
+    Coordinate* coordMax = new Coordinate(xMax-VIEWPORT_MARGIN, yMax-VIEWPORT_MARGIN);
+    vector<Coordinate*> vpCoord = {coordMin, coordMax};
+
+    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2);
+    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2);
+    vector<Coordinate*> windowCoord = {wCoordMin, wCoordMax};
 
     window = new Window(windowCoord);
-    viewPort = new ViewPort(xMax, yMax, window);
+    viewPort = new ViewPort(vpCoord, window); // TODO PQ Não centrado em 0,0 ?
+
+    drawViewPortArea();
   }
 
   void clear_surface() {
@@ -143,6 +160,10 @@ public:
     drawer->draw(cr);
   }
 
+  void drawViewPortArea() {
+    drawer->drawViewPortArea(getViewPortCoord().back(), VIEWPORT_MARGIN);
+  }
+
   void openAddObjectWindow() {
     gtk_widget_show(addObjectWindow);
   }
@@ -152,15 +173,13 @@ public:
   }
 
   void drawNewPoint(GraphicObject* obj) {
-    transform(obj);
     drawer->drawPoint(obj->getCoordinates().front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewLine(GraphicObject* obj) {
-    transform(obj);
-	Coordinate* c1 = obj->getCoordinates().front();
-	Coordinate* c2 = obj->getCoordinates().back();
+    Coordinate* c1 = obj->getCoordinates().front();
+    Coordinate* c2 = obj->getCoordinates().back();
     drawer->drawLine(c1, c2);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
@@ -170,22 +189,14 @@ public:
    * @param obj The object to be drawn.
    */
   void newPolygon(GraphicObject* obj) {
-	drawNewPolygon(obj);
-	insertIntoListBox(*obj, "POLIGONO");
-	removeAllPolygonCoordinates();
-	clearPolygonCoordEntries();
+  	insertIntoListBox(*obj, "POLIGONO");
+  	removeAllPolygonCoordinates();
+  	clearPolygonCoordEntries();
   }
 
-  void drawNewPolygon(GraphicObject* obj) {
-    transform(obj);
+  void drawNewPolygon(GraphicObject* obj, bool fill) {
     vector<Coordinate*> polygonPoints = obj->getCoordinates();
-    int end = polygonPoints.size();
-
-    // Draws polygon's edges two by two points. The last edge is the segment
-    // polygonPoints[end]|polygonPoints[0].
-    for (int i = 0; i < end; i++) {
-      drawer->drawLine(polygonPoints[i], polygonPoints[(i+1) % end]);
-    }
+    drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
@@ -238,20 +249,28 @@ public:
   }
 
   void removeAllPolygonCoordinates() {
-	do {
-	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
-	  gtk_list_box_select_row(listCoordPolygon, row);
-	  gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
+  	do {
+  	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
+  	  gtk_list_box_select_row(listCoordPolygon, row);
+  	  gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+  	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
   }
 
   void clearPolygonCoordEntries() {
-	gtk_entry_set_text(entryPolygonX, "");
-	gtk_entry_set_text(entryPolygonY, "");
+  	gtk_entry_set_text(entryPolygonX, "");
+  	gtk_entry_set_text(entryPolygonY, "");
   }
 
   void updateRadioButtonState(int newState) {
     rotationRadioButtonState = newState;
+  }
+
+  void updateClippingRadioButtonState(int newState) {
+    clippingRadioButtonState = newState;
+  }
+
+  void updateCheckBtnState () {
+    checkFillButtonState = !checkFillButtonState;
   }
 
   void updateWindow(double step, int isZoomIn) {
@@ -329,7 +348,7 @@ public:
   void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
     scn->transformation(elem, geometriCenter, factor, angle);
   }
-  
+
   void logWarning(string wrn) {
     logger->logWarning(wrn);
   }
@@ -435,8 +454,20 @@ public:
     return rotationRadioButtonState;
   }
 
+  int getLineClippingAlgorithm() {
+    return clippingRadioButtonState;
+  }
+
+  bool getCheckBtnState () {
+    return checkFillButtonState;
+  }
+
   Window* getWindow() {
     return window;
+  }
+
+  vector<Coordinate*> getViewPortCoord() {
+    return viewPort->getCoordinates();
   }
 
 };

@@ -6,6 +6,7 @@
 
 #include "enum.hpp"
 #include "view.hpp"
+#include "clipping.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
@@ -21,6 +22,7 @@ class Controller {
 private:
   View view;
   DisplayFile display;
+  Clipping* clipping;
   vector<Coordinate*> pointsForPolygon;
 
 public:
@@ -79,9 +81,11 @@ public:
           if (pointsForPolygon.size() < 3) {
             throw std::runtime_error("Cannot create polygon without at least three points!");
           }
-          polygon = new Polygon(name, pointsForPolygon);
+          polygon = new Polygon(name, pointsForPolygon, view.getCheckBtnState());
+
           display.insert(polygon);
           view.newPolygon(polygon);
+
           pointsForPolygon.clear();
         } catch(const std::runtime_error& e) {
           std::cout << "[ERROR] " << e.what() << std::endl;
@@ -155,6 +159,8 @@ public:
 
   void initializeWindowViewPort() {
     view.initializeWindowViewPort();
+
+    clipping = new Clipping(view.getViewPortCoord()); // TODO Talvez colocar ele em um local melhor?
   }
 
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
@@ -203,10 +209,18 @@ public:
     view.updateRadioButtonState(newState);
   }
 
+  void updateClippingRadioButtonState(int newState) {
+    view.updateClippingRadioButtonState(newState);
+  }
+
+  void updateCheckBtnState() {
+    view.updateCheckBtnState();
+  }
+
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
-    Elemento<GraphicObject*>* nextElement = display.getHead();
     view.clear_surface();
+    int chosenAlgorithm = view.getLineClippingAlgorithm();
 
     // Update window coordinates
     Window* window = view.getWindow();
@@ -218,23 +232,31 @@ public:
 
     view.transformSCN(window, &geometriCenter, &windowScalingFactor, currentAngle);
 
+    Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
+      view.transform(element);
       switch (element->getType()) {
         case POINT: {
-          view.drawNewPoint(element);
+          clipping->pointClipping(element);
+          if (element->isVisible())
+            view.drawNewPoint(element);
           break;
         } case LINE: {
-          view.drawNewLine(element);
+          clipping->lineClipping(element, chosenAlgorithm);
+          if (element->isVisible())
+            view.drawNewLine(element);
           break;
         } case POLYGON: {
-          view.drawNewPolygon(element);
+          bool fill = static_cast<Polygon*>(element)->fill();
+          view.drawNewPolygon(element, fill);
           break;
         }
       }
       nextElement = nextElement->getProximo();
     }
+    view.drawViewPortArea();
   }
 
 };
