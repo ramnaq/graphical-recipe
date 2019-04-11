@@ -15,17 +15,23 @@ class ObjDescriptor {
 
     vector<GraphicObject*> read(string fileName) {
       vector<GraphicObject*> objects;
+
       vector<Coordinate*> vertices;
+      std::string c, line;
+      double x, y;  //!< vertices (e.g `v 3.45 6 10` is a point/vertex in R³)
+      bool readingFaces = false;  //!< used to detect a new vertix list.
 
       std::ifstream infile(fileName);
-      std::string c, line;
-      double x, y;
-
       while (infile >> c) {
         if (c == "v") {
+            if (readingFaces) {
+              vertices.clear();
+              readingFaces = false;
+            }
             infile >> x >> y;
             vertices.push_back(new Coordinate(x, y));
         } else if (c == "f") {
+            readingFaces = true;
             int i = 0;
             vector<int> vindexes;
             std::getline(infile, line);
@@ -54,14 +60,14 @@ class ObjDescriptor {
         case 1: {
           vector<Coordinate*> point;
           point.push_back(vertices.at(indexes[0]));
-          gobject = new Point("Ponto", point);
+          gobject = new Point("", point);
           break;
         }
         case 2: {
           vector<Coordinate*> linePoints;
           linePoints.push_back(vertices.at(indexes[0]));
           linePoints.push_back(vertices.at(indexes[1]));
-          gobject = new Line("Linha", linePoints);
+          gobject = new Line("", linePoints);
           break;
         }
         default: {
@@ -70,7 +76,7 @@ class ObjDescriptor {
           int n = vertices.size();
           for (int i = 0; i < indexes.size(); ++i)
             polygonPoints.push_back(vertices.at(indexes[i]));
-          gobject = new Polygon("Polígono", polygonPoints);
+          gobject = new Polygon("", polygonPoints);
           break;
         }
       }
