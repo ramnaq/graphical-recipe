@@ -94,7 +94,7 @@ public:
   }
 
   void createObjectsFromFile() {
-    string fileName = "example.obj";
+    string fileName = view.chooseFile();
     ObjDescriptor od;
     vector<GraphicObject*> objs = od.read(fileName);
 	for (int i = 0; i < objs.size(); ++i) {
