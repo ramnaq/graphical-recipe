@@ -6,6 +6,7 @@
 
 #include "logger.hpp"
 #include "drawer.hpp"
+#include "scn.hpp"
 #include "window.hpp"
 #include "viewport.hpp"
 #include <stdio.h>
@@ -42,6 +43,7 @@ private:
   GtkEntry *entryAngle;
   GtkEntry *entryRotationX;
   GtkEntry *entryRotationY;
+  GtkEntry *entryAngleRotateWindow;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
@@ -52,6 +54,7 @@ private:
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+  Scn* scn;
   Logger* logger;
 
   int rotationRadioButtonState;
@@ -59,6 +62,7 @@ private:
 public:
   View() {
     drawer = new Drawer();
+    scn = new Scn();
     logger = new Logger();
   }
 
@@ -93,6 +97,7 @@ public:
     entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
     entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
+    entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
@@ -118,7 +123,10 @@ public:
   void initializeWindowViewPort() {
     double xMax = (double) gtk_widget_get_allocated_width(drawAreaViewPort);
     double yMax = (double) gtk_widget_get_allocated_height(drawAreaViewPort);
-    window = new Window(1, 1, xMax, yMax);
+
+    vector<Coordinate*> windowCoord = {new Coordinate(-xMax/2, -yMax/2), new Coordinate(xMax/2, yMax/2)};
+
+    window = new Window(windowCoord);
     viewPort = new ViewPort(xMax, yMax, window);
   }
 
@@ -255,31 +263,37 @@ public:
         this->window->zoomOut(step);
         break;
       } case 2: {
-        this->window->goRight(step);
+        this->window->goRight(step/100);
         break;
       } case 3: {
-        this->window->goLeft(step);
+        this->window->goLeft(step/100);
         break;
       } case 4: {
-        this->window->goUp(step);
+        this->window->goUp(step/100);
         break;
       } case 5: {
-        this->window->goDown(step);
+        this->window->goDown(step/100);
         break;
       } case 6: {
-        this->window->goUpLeft(step);
+        this->window->goUpLeft(step/100);
         break;
       } case 7: {
-        this->window->goUpRight(step);
+        this->window->goUpRight(step/100);
         break;
       } case 8: {
-        this->window->goDownLeft(step);
+        this->window->goDownLeft(step/100);
         break;
       } case 9: {
-        this->window->goDownRight(step);
+        this->window->goDownRight(step/100);
         break;
       } case 10: {
         this->window->goCenter();
+        break;
+      } case 11: {
+        this->window->setAngle(-step);
+        break;
+      } case 12: {
+        this->window->setAngle(step);
         break;
       }
     }
@@ -312,6 +326,10 @@ public:
     }
   }
 
+  void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
+    scn->transformation(elem, geometriCenter, factor, angle);
+  }
+  
   void logWarning(string wrn) {
     logger->logWarning(wrn);
   }
@@ -319,7 +337,6 @@ public:
   void logError(string err) {
     logger->logError(err);
   }
-
 
   ///
   /// Get methods
@@ -381,6 +398,10 @@ public:
     return stod(gtk_entry_get_text(entryRotationY));
   }
 
+  double getAngleRotateWindow() {
+    return stod(gtk_entry_get_text(entryAngleRotateWindow));
+  }
+
   double getStep() {
     return stod(gtk_entry_get_text(entryStep));
   }
@@ -412,6 +433,10 @@ public:
 
   int getRotationRadioButtonState() {
     return rotationRadioButtonState;
+  }
+
+  Window* getWindow() {
+    return window;
   }
 
 };

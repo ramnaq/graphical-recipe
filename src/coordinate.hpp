@@ -10,14 +10,16 @@ private:
   double y;
   double xvp; /*! ViewPort coordinates. */
   double yvp;
+  double xns;
+  double yns;
 
 public:
-	Coordinate(double x, double y) {
+  Coordinate(double x, double y) {
     this->x = x;
     this->y = y;
   }
 
-	~Coordinate() {}
+  ~Coordinate() {}
 
   void setX(double x) {
     this->x = x;
@@ -49,6 +51,22 @@ public:
 
   double getYvp() const {
     return this->yvp;
+  }
+
+  double getXns() {
+    return this->xns;
+  }
+
+  double getYns() {
+    return this->yns;
+  }
+
+  double setXns(double xns) {
+    this->xns = xns;
+  }
+
+  double setYns(double yns) {
+    this->yns = yns;
   }
 
 };

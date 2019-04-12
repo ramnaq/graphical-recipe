@@ -177,6 +177,25 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_centralize(){
   }
 }
 
+//! Connected to signal "clicked" of element "btnRotateLeft".
+extern "C" G_MODULE_EXPORT void on_btnRotateLeft_clicked(){
+  try {
+    controller->changeWindow(11);
+  } catch (...) {
+
+  }
+}
+
+
+//! Connected to signal "clicked" of element "btnRotateRight".
+extern "C" G_MODULE_EXPORT void on_btnRotateRight_clicked(){
+  try {
+    controller->changeWindow(12);
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnEditObject".
 extern "C" G_MODULE_EXPORT void on_btnEditObject_clicked(){
   try {

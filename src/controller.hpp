@@ -1,8 +1,8 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include <iostream>
 #include <stdexcept>
+#include <iostream>
 
 #include "enum.hpp"
 #include "view.hpp"
@@ -12,6 +12,7 @@
 #include "displayFile.hpp"
 #include "ObjectTransformation.hpp"
 
+#define WINDOW_ORIGINAL_POSITION 10
 
 /*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
 
@@ -49,9 +50,9 @@ public:
 
         vector<Coordinate*> pointCoordinate = {new Coordinate(x1, y1)};
         Point* p = new Point(name, pointCoordinate);
+
         display.insert(p);
         view.insertIntoListBox(*p, "PONTO");
-        view.drawNewPoint(p);
 
         break;
      }
@@ -65,11 +66,10 @@ public:
         Coordinate* a = new Coordinate(x1, y1);
         Coordinate* b = new Coordinate(x2, y2);
         vector<Coordinate*> linesCoordinate = {a, b};
-
         Line* line = new Line(name, linesCoordinate);
+
         display.insert(line);
         view.insertIntoListBox(*line, "LINHA");
-        view.drawNewLine(line);
 
         break;
       }
@@ -90,6 +90,7 @@ public:
         break;
       }
     }
+    updateDrawScreen();
   }
 
   //! Changes an object position through translation, scaling or rotation.
@@ -187,9 +188,11 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double step = view.getStep();
+    double changeFactor;
+    if (op != WINDOW_ORIGINAL_POSITION)
+      changeFactor =  (op < 10) ? view.getStep() : view.getAngleRotateWindow();
     try {
-      view.updateWindow(step, op);
+      view.updateWindow(changeFactor, op);
     } catch (int e) {
       view.logWarning("Passo do zoom acima do limite!\n");
     }
@@ -204,18 +207,30 @@ public:
   void updateDrawScreen() {
     Elemento<GraphicObject*>* nextElement = display.getHead();
     view.clear_surface();
+
+    // Update window coordinates
+    Window* window = view.getWindow();
+    Coordinate* windowCoord = window->getCoordinates().back();
+    Coordinate geometriCenter = window->getGeometricCenter();
+    double currentAngle = window->getAngle();
+    Coordinate windowScalingFactor(1,1);
+    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
+
+    view.transformSCN(window, &geometriCenter, &windowScalingFactor, currentAngle);
+
     while (nextElement != NULL) {
-    	GraphicObject* element = nextElement->getInfo();
-    	switch (element->getType()) {
-    		case POINT: {
-    				view.drawNewPoint(element);
-            break;
-    		} case LINE: {
-    				view.drawNewLine(element);
-            break;
-    		} case POLYGON: {
-            view.drawNewPolygon(element);
-            break;
+      GraphicObject* element = nextElement->getInfo();
+      view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
+      switch (element->getType()) {
+        case POINT: {
+          view.drawNewPoint(element);
+          break;
+        } case LINE: {
+          view.drawNewLine(element);
+          break;
+        } case POLYGON: {
+          view.drawNewPolygon(element);
+          break;
         }
       }
       nextElement = nextElement->getProximo();
