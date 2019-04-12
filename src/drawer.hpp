@@ -59,8 +59,8 @@ public:
 		cairo_stroke(c);
 	}
 
-	void drawLine(Coordinate* coordIn, Coordinate* coordFin, cairo_t* cr = NULL) {
-		cairo_t* crl = (cr == NULL) ?  cairo_create (surface) : cr;
+	void drawLine(Coordinate* coordIn, Coordinate* coordFin) {
+		cairo_t* crl = cairo_create (surface);
 
 		cairo_move_to(crl, coordIn->getXvp(), coordIn->getYvp());
 		cairo_line_to(crl, coordFin->getXvp(), coordFin->getYvp());
@@ -71,13 +71,16 @@ public:
 		cairo_t* cr = cairo_create (surface);
 		int end = polygonPoints.size();
 
+		cairo_move_to(cr, polygonPoints[0]->getXvp(), polygonPoints[1]->getYvp());
+
 		// Draws polygon's edges two by two points. The last edge is the segment
 		// polygonPoints[end]|polygonPoints[0].
 		for (int i = 0; i < end; i++) {
-			drawLine(polygonPoints[i], polygonPoints[(i+1) % end], cr);
+			cairo_line_to(cr, polygonPoints[i]->getXvp(), polygonPoints[(i+1) % end]->getYvp());
 		}
 
 		cairo_close_path(cr);
+		cairo_stroke_preserve(cr);
 		if (fill)
 			cairo_fill(cr);
 	}
