@@ -3,6 +3,8 @@
 
 #include "ObjectTransformation.hpp"
 
+/*! Transform world coordinates to normalized system coordinates. */
+
 class Scn {
   public:
     Scn () {}
@@ -11,7 +13,7 @@ class Scn {
 
   void transformation(GraphicObject* obj, Coordinate* geometriCenter, Coordinate* factor, double angle) {
     double radians = (angle*M_PI)/180;
-    Coordinate negCoord(-geometriCenter->getX(), -geometriCenter->getY()); // TODO Constructor que recebe o objeto coordenada
+    Coordinate negCoord(-geometriCenter->getX(), -geometriCenter->getY());
 
     Matrix translationMatrix(ObjectTransformation::translationVectorToMatrix(&negCoord));
     Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(radians));

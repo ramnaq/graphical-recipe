@@ -10,7 +10,7 @@ private:
   double y;
   double xvp; /*! ViewPort coordinates. */
   double yvp;
-  double xns;
+  double xns; /*! Window coordinates. */
   double yns;
 
 public:

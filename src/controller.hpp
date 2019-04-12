@@ -65,9 +65,7 @@ public:
         x2 = view.getEntryLineX2();
         y2 = view.getEntryLineY2();
 
-        Coordinate* a = new Coordinate(x1, y1);
-        Coordinate* b = new Coordinate(x2, y2);
-        vector<Coordinate*> linesCoordinate = {a, b};
+        vector<Coordinate*> linesCoordinate = {new Coordinate(x1, y1), new Coordinate(x2, y2)};
         Line* line = new Line(name, linesCoordinate);
 
         display.insert(line);
@@ -84,7 +82,9 @@ public:
           polygon = new Polygon(name, pointsForPolygon, view.getCheckBtnState());
 
           display.insert(polygon);
-          view.newPolygon(polygon);
+          view.insertIntoListBox(*polygon, "POLIGONO");
+          view.removeAllPolygonCoordinates();
+          view.clearPolygonCoordEntries();
 
           pointsForPolygon.clear();
         } catch(const std::runtime_error& e) {
@@ -123,13 +123,11 @@ public:
         Coordinate* reference;
         if (radioBtnChosen == 1) {
           reference = new Coordinate(0,0);
-        }else if (radioBtnChosen == 2) {
+        } else if (radioBtnChosen == 2) {
           Coordinate tmp = obj->getGeometricCenter();
           reference = new Coordinate(tmp.getX(), tmp.getY());
         } else {
-          double x = view.getEntryRotationX();
-          double y = view.getEntryRotationY();
-          reference = new Coordinate(x, y);
+          reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY());
         }
         ObjectTransformation::rotation(obj, angle, reference);
 
@@ -180,9 +178,7 @@ public:
    * to a Polygon which is being created.
    */
   void addNewLineForPolygon() {
-    double x = view.getEntryPolygonX();
-    double y = view.getEntryPolygonY();
-    Coordinate* c = new Coordinate(x, y);
+    Coordinate* c = new Coordinate(view.getEntryPolygonX(), view.getEntryPolygonY());
     pointsForPolygon.push_back(c);
     view.insertCoordPolygonList();
   }
@@ -235,21 +231,21 @@ public:
       GraphicObject* element = nextElement->getInfo();
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
       switch (element->getType()) {
-        case POINT: {
+        case POINT:
           clipping.pointClipping(element);
           if (element->isVisible()) {
             view.transform(element);
             view.drawNewPoint(element);
           }
           break;
-        } case LINE: {
+        case LINE:
             clipping.lineClipping(element, chosenAlgorithm);
             if (element->isVisible()) {
               view.transform(element);
               view.drawNewLine(element);
             }
             break;
-        } case POLYGON: {
+        case POLYGON: {
             bool fill = static_cast<Polygon*>(element)->fill();
             view.transform(element);
             view.drawNewPolygon(element, fill);

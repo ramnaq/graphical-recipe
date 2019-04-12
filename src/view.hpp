@@ -142,9 +142,17 @@ public:
     vector<Coordinate*> windowCoord = {wCoordMin, wCoordMax};
 
     window = new Window(windowCoord);
-    viewPort = new ViewPort(vpCoord, window); // TODO PQ Não centrado em 0,0 ?
+    viewPort = new ViewPort(vpCoord, window);
 
     drawViewPortArea();
+  }
+
+  void openAddObjectWindow() {
+    gtk_widget_show(addObjectWindow);
+  }
+
+  void openEditObjectWindow() {
+    gtk_widget_show(editObjectWindow);
   }
 
   void clear_surface() {
@@ -164,14 +172,6 @@ public:
     drawer->drawViewPortArea(getViewPortCoord().back(), VIEWPORT_MARGIN);
   }
 
-  void openAddObjectWindow() {
-    gtk_widget_show(addObjectWindow);
-  }
-
-  void openEditObjectWindow() {
-    gtk_widget_show(editObjectWindow);
-  }
-
   void drawNewPoint(GraphicObject* obj) {
     drawer->drawPoint(obj->getCoordinates().front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
@@ -182,16 +182,6 @@ public:
     Coordinate* c2 = obj->getCoordinates().back();
     drawer->drawLine(c1, c2);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-  }
-
-  //! Draws a Polygon and properly clears elements in the "New Polygon window"
-  /*!
-   * @param obj The object to be drawn.
-   */
-  void newPolygon(GraphicObject* obj) {
-  	insertIntoListBox(*obj, "POLIGONO");
-  	removeAllPolygonCoordinates();
-  	clearPolygonCoordEntries();
   }
 
   void drawNewPolygon(GraphicObject* obj, bool fill) {
@@ -208,6 +198,18 @@ public:
     gtk_widget_show_all((GtkWidget*) objectsListBox);
   }
 
+  void insertCoordPolygonList() {
+    string coordX = gtk_entry_get_text(entryPolygonX);
+    string coordY = gtk_entry_get_text(entryPolygonY);
+    string name = "Coordenada: (" + coordX + " , " + coordY + ")";
+
+    GtkWidget* row = gtk_list_box_row_new();
+    GtkWidget* label = gtk_label_new(name.c_str());
+
+    gtk_container_add((GtkContainer*) listCoordPolygon, label);
+    gtk_widget_show_all((GtkWidget*) listCoordPolygon);
+  }
+
   //! Removes the selected element in GtkListBox
   /*!
    * @return The index of the removed element
@@ -222,18 +224,6 @@ public:
       gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
     }
     return index;
-  }
-
-  void insertCoordPolygonList() {
-    string coordX = gtk_entry_get_text(entryPolygonX);
-    string coordY = gtk_entry_get_text(entryPolygonY);
-    string name = "Coordenada: (" + coordX + " , " + coordY + ")";
-
-    GtkWidget* row = gtk_list_box_row_new();
-    GtkWidget* label = gtk_label_new(name.c_str());
-
-    gtk_container_add((GtkContainer*) listCoordPolygon, label);
-    gtk_widget_show_all((GtkWidget*) listCoordPolygon);
   }
 
   int removeFromCoordPolygonList() {
@@ -273,48 +263,47 @@ public:
     checkFillButtonState = !checkFillButtonState;
   }
 
-  void updateWindow(double step, int isZoomIn) {
-    switch (isZoomIn) {
-      case 0: {
+  void updateWindow(double step, int op) {
+    switch (op) {
+      case 0:
         this->window->zoomIn(step);
         break;
-      } case 1: {
+      case 1:
         this->window->zoomOut(step);
         break;
-      } case 2: {
+      case 2:
         this->window->goRight(step/100);
         break;
-      } case 3: {
+      case 3:
         this->window->goLeft(step/100);
         break;
-      } case 4: {
+      case 4:
         this->window->goUp(step/100);
         break;
-      } case 5: {
+      case 5:
         this->window->goDown(step/100);
         break;
-      } case 6: {
+      case 6:
         this->window->goUpLeft(step/100);
         break;
-      } case 7: {
+      case 7:
         this->window->goUpRight(step/100);
         break;
-      } case 8: {
+      case 8:
         this->window->goDownLeft(step/100);
         break;
-      } case 9: {
+      case 9:
         this->window->goDownRight(step/100);
         break;
-      } case 10: {
+      case 10:
         this->window->goCenter();
         break;
-      } case 11: {
+      case 11:
         this->window->setAngle(-step);
         break;
-      } case 12: {
+      case 12:
         this->window->setAngle(step);
         break;
-      }
     }
   }
 
@@ -325,15 +314,13 @@ public:
    */
   void transform(GraphicObject* object) {
     switch (object->getType()) {
-      case POINT: {
+      case POINT:
         viewPort->transformation(object->getCoordinates().front());
         break;
-      }
-      case LINE: {
+      case LINE:
         viewPort->transformation(object->getCoordinates().front());
         viewPort->transformation(object->getCoordinates().back());
         break;
-      }
       case POLYGON: {
         vector<Coordinate*> polygonPoints = object->getCoordinates();
         vector<Coordinate*>::iterator it;

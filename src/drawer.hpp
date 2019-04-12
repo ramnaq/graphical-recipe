@@ -4,7 +4,6 @@
 #include <math.h>
 #include "graphicObject.hpp"
 
-
 static cairo_surface_t *surface = NULL;
 
 class Drawer {

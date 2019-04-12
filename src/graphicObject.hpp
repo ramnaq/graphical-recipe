@@ -18,6 +18,7 @@ private:
 	vector<Coordinate*> coordinateList;
 	double cx, cy;
 	bool visible;
+
 public:
 	GraphicObject(string name,  Type type, vector<Coordinate*> &coordinateList) {
 		this->name = name;

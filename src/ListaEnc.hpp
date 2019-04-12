@@ -43,7 +43,7 @@ class ListaEnc {
 	}
 
 	void adicionaNaPosicao(const T& dado, int pos) {
-	    if (pos > size + 1) throw -1;
+      if (pos > size + 1) throw -1;
 	    if (pos == 0) {
 	        adicionaNoInicio(dado);
 	    } else {
