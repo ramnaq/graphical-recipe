@@ -1,111 +1,142 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <iostream>
-
-
 //! Window is the visible area of a graphical world.
 /*!
  * The graphical world moves (horizontally, vertically, diagonally) and the window
  * shows a limited area of it.
  */
-
-class Window {
+class Window: public GraphicObject{
   private:
-    Coordinate *coordMin;
-    Coordinate *coordMax;
+    double angle;
     Coordinate const *defaultCoordMin;
     Coordinate const *defaultCoordMax;
-
   public:
-  	Window(double xMin, double yMin, double xMax, double yMax) {
-      coordMin = new Coordinate(xMin, yMin);
-      coordMax = new Coordinate(xMax, yMax);
-      this->defaultCoordMin = new Coordinate(xMin, yMin);
-      this->defaultCoordMax = new Coordinate(xMax, yMax);
+    Window(vector<Coordinate*> &windowCoordinates) :
+      GraphicObject("Window", WINDOW, windowCoordinates) {
+      this->angle = 0;
+
+      Coordinate* coordMin = windowCoordinates.front();
+      Coordinate* coordMax = windowCoordinates.back();
+      this->defaultCoordMin = new Coordinate(coordMin->getX(), coordMin->getY());
+      this->defaultCoordMax = new Coordinate(coordMax->getX(), coordMax->getY());
     }
 
     ~Window() {
-      delete this->coordMin;
-      delete this->coordMax;
+      delete this->defaultCoordMax;
+      delete this->defaultCoordMin;
     }
 
-    Coordinate* getCoordMin() {
-      return coordMin;
+    double getAngle() {
+      return this->angle;
     }
 
-    Coordinate* getCoordMax() {
-      return coordMax;
+    void setAngle(double angle) {
+      this->angle += angle;
     }
 
-    void zoomIn(double step) {
-      if (not validZoomStep(step)) throw -1;
-      coordMin->setX( coordMin->getX() + step);
-      coordMin->setY( coordMin->getY() + step);
-      coordMax->setX( coordMax->getX() - step);
-      coordMax->setY( coordMax->getY() - step);
+    void zoomIn(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() + passo);
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setX( coordMax->getX() - passo);
+      coordMax->setY( coordMax->getY() - passo);
     }
 
-    void zoomOut(double step) {
-      coordMin->setX( coordMin->getX() - step);
-      coordMin->setY( coordMin->getY() - step);
-      coordMax->setX( coordMax->getX() + step);
-      coordMax->setY( coordMax->getY() + step);
+    void zoomOut(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() - passo);
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setX( coordMax->getX() + passo);
+      coordMax->setY( coordMax->getY() + passo);
     }
 
-    void goRight(double step) {
-      coordMin->setX( coordMin->getX() + step);
-      coordMax->setX( coordMax->getX() + step);
+    void goRight(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() + passo);
+      coordMax->setX( coordMax->getX() + passo);
     }
 
-    void goLeft(double step) {
-      coordMin->setX( coordMin->getX() - step);
-      coordMax->setX( coordMax->getX() - step);
+    void goLeft(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() - passo);
+      coordMax->setX( coordMax->getX() - passo);
     }
 
-    void goUp(double step) {
-      coordMin->setY( coordMin->getY() + step);
-      coordMax->setY( coordMax->getY() + step);
+    void goUp(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setY( coordMax->getY() + passo);
     }
 
-    void goDown(double step) {
-      coordMin->setY( coordMin->getY() - step);
-      coordMax->setY( coordMax->getY() - step);
+    void goDown(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setY( coordMax->getY() - passo);
     }
 
-    void goUpLeft(double step) {
-      coordMin->setX( coordMin->getX() - step);
-      coordMin->setY( coordMin->getY() + step);
-      coordMax->setX( coordMax->getX() - step);
-      coordMax->setY( coordMax->getY() + step);
+    void goUpLeft(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() - passo);
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setX( coordMax->getX() - passo);
+      coordMax->setY( coordMax->getY() + passo);
     }
 
-    void goUpRight(double step) {
-      coordMin->setX( coordMin->getX() + step);
-      coordMin->setY( coordMin->getY() + step);
-      coordMax->setX( coordMax->getX() + step);
-      coordMax->setY( coordMax->getY() + step);
+    void goUpRight(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() + passo);
+      coordMin->setY( coordMin->getY() + passo);
+      coordMax->setX( coordMax->getX() + passo);
+      coordMax->setY( coordMax->getY() + passo);
     }
 
-    void goDownLeft(double step) {
-      coordMin->setX( coordMin->getX() - step);
-      coordMin->setY( coordMin->getY() - step);
-      coordMax->setX( coordMax->getX() - step);
-      coordMax->setY( coordMax->getY() - step);
+    void goDownLeft(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() - passo);
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setX( coordMax->getX() - passo);
+      coordMax->setY( coordMax->getY() - passo);
     }
 
-    void goDownRight(double step) {
-      coordMin->setX( coordMin->getX() + step);
-      coordMin->setY( coordMin->getY() - step);
-      coordMax->setX( coordMax->getX() + step);
-      coordMax->setY( coordMax->getY() - step);
+    void goDownRight(double passo) {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
+      coordMin->setX( coordMin->getX() + passo);
+      coordMin->setY( coordMin->getY() - passo);
+      coordMax->setX( coordMax->getX() + passo);
+      coordMax->setY( coordMax->getY() - passo);
     }
 
     void goCenter() {
+      Coordinate* coordMin = getCoordinates().front();
+      Coordinate* coordMax = getCoordinates().back();
+
       coordMin->setX(defaultCoordMin->getX());
       coordMin->setY(defaultCoordMin->getY());
       coordMax->setX(defaultCoordMax->getX());
       coordMax->setY(defaultCoordMax->getY());
+
+      this->angle = 0;
     }
 
 	//! Checks if 'step' for a zoom-in ist within the limits.
@@ -117,8 +148,8 @@ class Window {
 	 * @return true if 'step' doesn't exceeds the limits or false otherwise.
 	 */
 	bool validZoomStep(double step) {
-	  double newXMin = coordMin->getX() + step;
-	  double newXMax = coordMax->getX() - step;
+	  double newXMin = getCoordinates().front()->getX() + step;
+	  double newXMax = getCoordinates().back()->getX() - step;
 	  return (newXMin < newXMax);
 	}
 

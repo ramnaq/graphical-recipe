@@ -8,7 +8,7 @@ class Line: public GraphicObject {
 
 public:
 	Line(string name,  vector<Coordinate*> &lineCoordinates) :
-    GraphicObject(name, LINE, lineCoordinates) {}
+		GraphicObject(name, LINE, lineCoordinates) {}
 };
 
 #endif

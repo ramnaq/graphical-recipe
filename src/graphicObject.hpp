@@ -23,7 +23,7 @@ public:
 		this->type = type;
 		this->coordinateList = coordinateList;
 		computeGeometricCenter();
-  }
+	}
 
 	~GraphicObject() {
 		vector<Coordinate*>::iterator it;
