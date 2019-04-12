@@ -70,18 +70,19 @@ public:
 		cairo_t* cr = cairo_create (surface);
 		int end = polygonPoints.size();
 
-		cairo_move_to(cr, polygonPoints[0]->getXvp(), polygonPoints[1]->getYvp());
+		cairo_move_to(cr, polygonPoints[0]->getXvp(), polygonPoints[0]->getYvp());
 
 		// Draws polygon's edges two by two points. The last edge is the segment
 		// polygonPoints[end]|polygonPoints[0].
-		for (int i = 0; i < end; i++) {
-			cairo_line_to(cr, polygonPoints[i]->getXvp(), polygonPoints[(i+1) % end]->getYvp());
+		for (int i = 1; i < end; i++) {
+			cairo_line_to(cr, polygonPoints[i]->getXvp(), polygonPoints[i]->getYvp());
 		}
 
 		cairo_close_path(cr);
-		cairo_stroke_preserve(cr);
 		if (fill)
 			cairo_fill(cr);
+
+		cairo_stroke(cr);
 	}
 
 };
