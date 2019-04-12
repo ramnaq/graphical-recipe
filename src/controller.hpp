@@ -238,7 +238,7 @@ public:
         case POINT: {
           clipping.pointClipping(element);
           if (element->isVisible()) {
-            view.transform(element); // TODO Need refactoring
+            view.transform(element);
             view.drawNewPoint(element);
           }
           break;
@@ -251,8 +251,8 @@ public:
             break;
         } case POLYGON: {
             bool fill = static_cast<Polygon*>(element)->fill();
-            view.drawNewPolygon(element, fill);
             view.transform(element);
+            view.drawNewPolygon(element, fill);
           break;
         }
       }
