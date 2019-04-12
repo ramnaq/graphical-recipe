@@ -41,9 +41,9 @@ class ViewPort {
       double xvpMin = vpCoord.front()->getX();
       double yvpMin = vpCoord.front()->getY();
 
-      double x = ( (coord->getXns() - xnsMin) / (xnsMax - xnsMin) ) * (xvpMax - xvpMin);
-      double y = (1 - (coord->getYns() - ynsMin)/ (ynsMax - ynsMin) ) * (yvpMax - yvpMin);
-
+      double x = (( (coord->getXns() - xnsMin) / (xnsMax - xnsMin) ) * (xvpMax - xvpMin)) + xvpMin;
+      double y = ((1 - (coord->getYns() - ynsMin)/ (ynsMax - ynsMin) ) * (yvpMax - yvpMin)) + yvpMin;
+      
       coord->setXvp(x);
       coord->setYvp(y);
     }
