@@ -22,7 +22,7 @@ class Controller {
 private:
   View view;
   DisplayFile display;
-  Clipping* clipping;
+  Clipping clipping;
   vector<Coordinate*> pointsForPolygon;
 
 public:
@@ -159,8 +159,6 @@ public:
 
   void initializeWindowViewPort() {
     view.initializeWindowViewPort();
-
-    clipping = new Clipping(view.getViewPortCoord()); // TODO Talvez colocar ele em um local melhor?
   }
 
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
@@ -236,21 +234,25 @@ public:
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
-      view.transform(element);
       switch (element->getType()) {
         case POINT: {
-          clipping->pointClipping(element);
-          if (element->isVisible())
+          clipping.pointClipping(element);
+          if (element->isVisible()) {
+            view.transform(element); // TODO Need refactoring
             view.drawNewPoint(element);
+          }
           break;
         } case LINE: {
-          clipping->lineClipping(element, chosenAlgorithm);
-          if (element->isVisible())
-            view.drawNewLine(element);
-          break;
+            clipping.lineClipping(element, chosenAlgorithm);
+            if (element->isVisible()) {
+              view.transform(element);
+              view.drawNewLine(element);
+            }
+            break;
         } case POLYGON: {
-          bool fill = static_cast<Polygon*>(element)->fill();
-          view.drawNewPolygon(element, fill);
+            bool fill = static_cast<Polygon*>(element)->fill();
+            view.drawNewPolygon(element, fill);
+            view.transform(element);
           break;
         }
       }

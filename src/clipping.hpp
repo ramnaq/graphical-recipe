@@ -8,37 +8,39 @@
 
 class Clipping {
 private:
-  vector<Coordinate*> vpCoord;
+  vector<Coordinate*> wCoord;
 
 public:
-  Clipping(vector<Coordinate*> vpCoord) {
-    this->vpCoord = vpCoord;
+  Clipping() {
+    this->wCoord = {new Coordinate(-1,-1), new Coordinate(1,1)};
   }
 
-  ~Clipping() {}
+  ~Clipping() {
+    delete this->wCoord.front();
+    delete this->wCoord.back();
+  }
 
   void pointClipping(GraphicObject* point) {
     Coordinate* pc = point->getCoordinates().front();
 
-    if (pc->getXvp() < vpCoord.front()->getX() || pc->getXvp() > vpCoord.back()->getX())
+    if (pc->getXns() < wCoord.front()->getX() || pc->getXns() > wCoord.back()->getX())
       point->setVisibility(false);
-    else if (pc->getYvp() < vpCoord.front()->getY() || pc->getYvp() > vpCoord.back()->getY())
+    else if (pc->getYns() < wCoord.front()->getY() || pc->getYns() > wCoord.back()->getY())
       point->setVisibility(false);
     else
       point->setVisibility(true);
   }
 
-
   bitset<4> generateRegionCode(Coordinate* coord) {
     bitset<4> rg(0000);
 
-    if (coord->getYvp() > vpCoord.back()->getY())
-      rg[2] = 1; // Topo
-    if (coord->getYvp() < vpCoord.front()->getY())
+    if (coord->getYns() < wCoord.front()->getY())
       rg[3] = 1; // Fundo
-    if (coord->getXvp() > vpCoord.back()->getX())
+    if (coord->getYns() > wCoord.back()->getY())
+      rg[2] = 1; // Topo
+    if (coord->getXns() > wCoord.back()->getX())
       rg[1] = 1; // Direita
-    if (coord->getXvp() < vpCoord.front()->getX())
+    if (coord->getXns() < wCoord.front()->getX())
       rg[0] = 1; // Esquerda
 
     return rg;
@@ -88,23 +90,9 @@ public:
     Coordinate* coordMin = line->getCoordinates().front();
     Coordinate* coordMax = line->getCoordinates().back();
 
-    cout << "X min " << coordMin->getXvp() << endl;
-    cout << "Y min " << coordMin->getYvp() << endl;
-
-    cout << "X max " << coordMax->getXvp() << endl;
-    cout << "X max " << coordMax->getYvp() << endl;
-
-    cout << vpCoord.back()->getX() << endl;
-    cout << vpCoord.back()->getY() << endl;
-
-    cout << vpCoord.front()->getX() << endl;
-    cout << vpCoord.front()->getY() << endl;
-
     // Coefficient
-    double m = (coordMax->getYvp() - coordMin->getYvp()) / (coordMax->getXvp() - coordMin->getXvp());
+    double m = (coordMax->getYns() - coordMin->getYns()) / (coordMax->getXns() - coordMin->getXns());
 
-    cout << "M " << m << endl;
-    cout << "OP " << op << endl;
     if (op == 3) {
       computeNewCoordinates(coordMin, rgMin, m);
     } else if (op == 4) {
@@ -115,25 +103,23 @@ public:
     }
   }
 
-  void computeNewCoordinates(Coordinate* coord, bitset<4> rg, int m) {
-    cout << "RG " << rg << endl;
-    cout << "-------" << endl;
+  void computeNewCoordinates(Coordinate* coord, bitset<4> rg, double m) {
     if (rg[0]) {
-      double y_xe = m * (vpCoord.front()->getX() - coord->getXvp()) + coord->getYvp();
-      coord->setYvp(y_xe);
-      coord->setXvp(vpCoord.front()->getX());
+      double y_xe = m * (wCoord.front()->getX() - coord->getXns()) + coord->getYns();
+      coord->setYns(y_xe);
+      coord->setXns(wCoord.front()->getX());
     } if (rg[1]) {
-      double y_xd = m * (vpCoord.back()->getX() - coord->getXvp()) + coord->getYvp();
-      coord->setYvp(y_xd);
-      coord->setXvp(vpCoord.back()->getX());
+      double y_xd = m * (wCoord.back()->getX() - coord->getXns()) + coord->getYns();
+      coord->setYns(y_xd);
+      coord->setXns(wCoord.back()->getX());
     } if (rg[2]) {
-      double x_yt =  coord->getXvp() + (1/m) * (vpCoord.back()->getY() - coord->getYvp());
-      coord->setXvp(x_yt);
-      coord->setYvp(vpCoord.back()->getY());
+      double x_yt =  coord->getXns() + (1/m) * (wCoord.back()->getY() - coord->getYns());
+      coord->setXns(x_yt);
+      coord->setYns(wCoord.back()->getY());
     } if (rg[3]) {
-      double x_yf = coord->getXvp() + (1/m) * (vpCoord.front()->getY() - coord->getYvp());
-      coord->setXvp(x_yf);
-      coord->setYvp(vpCoord.front()->getY());
+      double x_yf = coord->getXns() + (1/m) * (wCoord.front()->getY() - coord->getYns());
+      coord->setXns(x_yf);
+      coord->setYns(wCoord.front()->getY());
     }
   }
 

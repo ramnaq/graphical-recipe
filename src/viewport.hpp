@@ -20,8 +20,8 @@ class ViewPort {
       delete this->vpCoord.back();
     }
 
-    vector<Coordinate*> getCoordinates() {
-      return this->vpCoord;
+    vector<Coordinate*> getCoordinates () {
+      return vpCoord;
     }
 
 	//! The viewport (coordinates system) transformation
