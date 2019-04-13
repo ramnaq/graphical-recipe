@@ -7,19 +7,21 @@
 class ViewPort {
   private:
     Window *window;
-    Coordinate* coordMin;
-    Coordinate* coordMax;
+    vector<Coordinate*> vpCoord;
 
   public:
-    ViewPort (double x, double y, Window *window) {
-      this->coordMin = new Coordinate(1, 1);
-      this->coordMax = new Coordinate(x, y);
+    ViewPort (vector<Coordinate*> vpCoord, Window *window) {
+      this->vpCoord = vpCoord;
       this->window = window;
     }
 
     ~ViewPort () {
-      delete this->coordMin;
-      delete this->coordMax;
+      delete this->vpCoord.front();
+      delete this->vpCoord.back();
+    }
+
+    vector<Coordinate*> getCoordinates () {
+      return vpCoord;
     }
 
 	//! The viewport (coordinates system) transformation
@@ -34,14 +36,14 @@ class ViewPort {
       double xnsMin = -1;
       double ynsMin = -1;
 
-      double xvpMax = coordMax->getX();
-      double yvpMax = coordMax->getY();
-      double xvpMin = coordMin->getX();
-      double yvpMin = coordMin->getY();
+      double xvpMax = vpCoord.back()->getX();
+      double yvpMax = vpCoord.back()->getY();
+      double xvpMin = vpCoord.front()->getX();
+      double yvpMin = vpCoord.front()->getY();
 
-      double x = ( (coord->getXns() - xnsMin) / (xnsMax - xnsMin) ) * (xvpMax - xvpMin);
-      double y = (1 - (coord->getYns() - ynsMin)/ (ynsMax - ynsMin) ) * (yvpMax - yvpMin);
-
+      double x = (( (coord->getXns() - xnsMin) / (xnsMax - xnsMin) ) * (xvpMax - xvpMin)) + xvpMin;
+      double y = ((1 - (coord->getYns() - ynsMin)/ (ynsMax - ynsMin) ) * (yvpMax - yvpMin)) + yvpMin;
+      
       coord->setXvp(x);
       coord->setYvp(y);
     }

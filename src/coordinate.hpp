@@ -10,7 +10,7 @@ private:
   double y;
   double xvp; /*! ViewPort coordinates. */
   double yvp;
-  double xns;
+  double xns; /*! Window coordinates. */
   double yns;
 
 public:
@@ -61,11 +61,11 @@ public:
     return this->yns;
   }
 
-  double setXns(double xns) {
+  void setXns(double xns) {
     this->xns = xns;
   }
 
-  double setYns(double yns) {
+  void setYns(double yns) {
     this->yns = yns;
   }
 

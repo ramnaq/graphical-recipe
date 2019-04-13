@@ -240,3 +240,30 @@ extern "C" G_MODULE_EXPORT void on_radiobtnPoint_clicked(){
 
   }
 }
+
+//! Connected to signal "clicked" of element "radiobtnCS".
+extern "C" G_MODULE_EXPORT void on_radiobtnCS_clicked(){
+  try {
+    controller->updateClippingRadioButtonState(1);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "radiobtnLB".
+extern "C" G_MODULE_EXPORT void on_radiobtnLB_clicked(){
+  try {
+    controller->updateClippingRadioButtonState(2);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnFillPolygon".
+extern "C" G_MODULE_EXPORT void on_checkbtnFillPolygon_clicked(){
+  try {
+    controller->updateCheckBtnState();
+  } catch (...) {
+
+  }
+}

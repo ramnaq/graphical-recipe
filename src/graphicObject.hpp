@@ -17,11 +17,14 @@ private:
 	Type type;
 	vector<Coordinate*> coordinateList;
 	double cx, cy;
+	bool visible;
+
 public:
 	GraphicObject(string name,  Type type, vector<Coordinate*> &coordinateList) {
 		this->name = name;
 		this->type = type;
 		this->coordinateList = coordinateList;
+		this->visible = true;
 		computeGeometricCenter();
 	}
 
@@ -38,6 +41,14 @@ public:
 
 	Type getType() {
 		return this->type;
+	}
+
+	bool isVisible() {
+		return this->visible;
+	}
+
+	void setVisibility(bool updateVisibility) {
+		this->visible = updateVisibility;
 	}
 
 	vector<Coordinate*> getCoordinates() {

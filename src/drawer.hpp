@@ -4,7 +4,6 @@
 #include <math.h>
 #include "graphicObject.hpp"
 
-
 static cairo_surface_t *surface = NULL;
 
 class Drawer {
@@ -31,6 +30,19 @@ public:
 	  clear_surface();
 	}
 
+	void drawViewPortArea(Coordinate* vpcoord, int margin) {
+		cairo_t *cr = cairo_create (surface);
+		cairo_set_source_rgb (cr, 1, 0, 0);
+
+		cairo_move_to(cr, margin, margin);
+		cairo_line_to(cr, vpcoord->getX(), margin);
+		cairo_line_to(cr, vpcoord->getX(), vpcoord->getY());
+		cairo_line_to(cr, margin, vpcoord->getY());
+		cairo_close_path(cr);
+
+		cairo_stroke(cr);
+	}
+
 	void draw(cairo_t *cr) {
 		cairo_set_source_surface(cr, surface, 0, 0);
 	  cairo_paint(cr);
@@ -47,11 +59,28 @@ public:
 	}
 
 	void drawLine(Coordinate* coordIn, Coordinate* coordFin) {
-		cairo_t* cr = cairo_create (surface);
+		cairo_t* crl = cairo_create (surface);
 
-		cairo_move_to(cr, coordIn->getXvp(), coordIn->getYvp());
-		cairo_line_to(cr, coordFin->getXvp(), coordFin->getYvp());
-		cairo_stroke(cr);
+		cairo_move_to(crl, coordIn->getXvp(), coordIn->getYvp());
+		cairo_line_to(crl, coordFin->getXvp(), coordFin->getYvp());
+		cairo_stroke(crl);
+	}
+
+	void drawPolygon(vector<Coordinate*> polygonPoints, bool fill) {
+		cairo_t* cr = cairo_create (surface);
+		int end = polygonPoints.size();
+
+		cairo_move_to(cr, polygonPoints[0]->getXvp(), polygonPoints[0]->getYvp());
+
+		// Draws polygon's edges two by two points. The last edge is the segment
+		// polygonPoints[end]|polygonPoints[0].
+		for (int i = 1; i < end; i++) {
+			cairo_line_to(cr, polygonPoints[i]->getXvp(), polygonPoints[i]->getYvp());
+		}
+
+		cairo_close_path(cr);
+		if (fill)
+			cairo_fill(cr);
 
 		cairo_stroke(cr);
 	}
