@@ -47,7 +47,7 @@ public:
 		return this->visible;
 	}
 
-	bool setVisibility(bool updateVisibility) {
+	void setVisibility(bool updateVisibility) {
 		this->visible = updateVisibility;
 	}
 

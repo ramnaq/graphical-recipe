@@ -61,11 +61,11 @@ public:
     return this->yns;
   }
 
-  double setXns(double xns) {
+  void setXns(double xns) {
     this->xns = xns;
   }
 
-  double setYns(double yns) {
+  void setYns(double yns) {
     this->yns = yns;
   }
 
