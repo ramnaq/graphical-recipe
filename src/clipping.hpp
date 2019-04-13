@@ -4,6 +4,7 @@
 /*! Clipping methods. */
 
 #include <bitset>
+#include <algorithm>
 
 #define LEFT 0
 #define RIGHT 1
@@ -42,13 +43,13 @@ public:
   }
 
   void lineClipping(GraphicObject* line, int chosenAlgorithm) {
-    if (chosenAlgorithm)
-      csClipping(line); // Cohen-Sutherland Clipping
+    if (chosenAlgorithm == 1)
+      cohenSutherland(line);
     else
-      lbClipping(line); // Liang-Barsky Clipping
+      liangBarsky(line);
   }
 
-  void csClipping(GraphicObject* line) {
+  void cohenSutherland(GraphicObject* line) {
     Coordinate* coordMin = line->getCoordinates().front();
     Coordinate* coordMax = line->getCoordinates().back();
 
@@ -67,15 +68,16 @@ public:
         line->setVisibility(true);
 
         // Coefficient
-        double m = (coordMax->getYns() - coordMin->getYns()) / (coordMax->getXns() - coordMin->getXns());
+        double m = (coordMax->getYns() - coordMin->getYns())
+                        / (coordMax->getXns() - coordMin->getXns());
 
         if (op == MINOUT) {
-          computeNewCoordinates(coordMin, rgMin, m);
+          computeNewCoordsCS(coordMin, rgMin, m);
         } else if (op == MAXOUT) {
-          computeNewCoordinates(coordMax, rgMax, m);
+          computeNewCoordsCS(coordMax, rgMax, m);
         } else {
-          computeNewCoordinates(coordMin, rgMin, m);
-          computeNewCoordinates(coordMax, rgMax, m);
+          computeNewCoordsCS(coordMin, rgMin, m);
+          computeNewCoordsCS(coordMax, rgMax, m);
 
           rgMin = generateRegionCode(coordMin);
           rgMax = generateRegionCode(coordMax);
@@ -119,7 +121,7 @@ public:
     }
   }
 
-  void computeNewCoordinates(Coordinate* coord, bitset<4> rg, double m) {
+  void computeNewCoordsCS(Coordinate* coord, bitset<4> rg, double m) {
     if (rg[LEFT]) {
       double y_xe = m * (wCoord.front()->getX() - coord->getXns()) + coord->getYns();
 
@@ -160,10 +162,69 @@ public:
     }
   }
 
-  void lbClipping(GraphicObject* line) {
+  void liangBarsky(GraphicObject* line) {
     Coordinate* coordMin = line->getCoordinates().front();
     Coordinate* coordMax = line->getCoordinates().back();
 
+    double x0 = coordMin->getXns();
+    double y0 = coordMin->getYns();
+    double x1 = coordMax->getXns();
+    double y1 = coordMax->getYns();
+
+    double dX = (x1 - x0);
+    double dY = (y1 - y0);
+
+    /* `p` or `q` = [left, right, bottom, top] */
+    vector<double> p = {-dX, dX, -dY, dY};
+    vector<double> q = {x0+1, 1-x0, y0+1, 1-y0};
+
+    vector<double> negativeArr, positiveArr;
+    negativeArr.push_back(0);
+    positiveArr.push_back(1);
+
+    /* line parallel to and out of the view */
+    if ((p[0] == 0 && q[0] < 0) || (p[2] == 0 && q[2] < 0)) {
+      line->setVisibility(false);
+      return;
+    }
+
+    if (p[0] != 0) {
+      double r0 = q[0] / p[0];
+      double r1 = q[1] / p[1];
+      if (p[0] < 0) {
+        negativeArr.push_back(r0);
+        positiveArr.push_back(r1);
+      } else {
+        negativeArr.push_back(r1);
+        positiveArr.push_back(r0);
+      }
+    }
+    if (p[2] != 0) {
+      double r2 = q[2] / p[2];
+      double r3 = q[3] / p[3];
+      if (p[2] < 0) {
+        negativeArr.push_back(r2);
+        positiveArr.push_back(r3);
+      } else {
+        negativeArr.push_back(r3);
+        positiveArr.push_back(r2);
+      }
+    }
+
+    double rn0 = *std::max_element(std::begin(negativeArr), std::end(negativeArr));
+    double rn1 = *std::min_element(std::begin(positiveArr), std::end(positiveArr));
+
+    if (rn0 > rn1) {
+      line->setVisibility(false);
+      return;
+    }
+
+    coordMin->setXns(x0 + p[1]*rn0);
+    coordMin->setYns(y0 + p[3]*rn0); // computing new points
+
+    coordMax->setXns(x0 + p[1]*rn1);
+    coordMax->setYns(y0 + p[3]*rn1);
+    line->setVisibility(true);
   }
 
 };
