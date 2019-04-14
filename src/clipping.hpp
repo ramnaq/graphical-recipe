@@ -77,15 +77,12 @@ public:
    */
   void clip(Polygon& polygon, Coordinate& c1, Coordinate& c2) {
     const vector<Coordinate*> points = polygon.getCoordinates();
-	vector<int> indexesOfPointsToUpdate;
-	vector<Coordinate*> toUpdatePoints;
     vector<Coordinate*> new_points;
     double x1 = c1.getX();
     double y1 = c1.getY();
     double x2 = c2.getX();
     double y2 = c2.getY();
 
-	int j = 0;
     for (int i = 0; i < points.size(); i++) {
       int k = (i + 1) % points.size();
       Coordinate* a = points[i];
@@ -106,24 +103,17 @@ public:
       /* Only second point is added */
       if (a_pos >= 0  && b_pos >= 0) {
         new_points.push_back(b_copy);
-		j++;
 
         /* When only first point is outside the window */
       } else if (a_pos < 0  && b_pos >= 0) {
         /* Point of intersection and second point */
         new_points.push_back(intersection(c1, c2, a, b, 1));
-		j++;
         new_points.push_back(b_copy);
-		toUpdatePoints.push_back(a);
-		indexesOfPointsToUpdate.push_back(j++);
 
         /* When only second point is outside the window */
 	  } else if (a_pos >= 0  && b_pos < 0) {
 		/* Only point of intersection with edge is added */
 		new_points.push_back(intersection(c1, c2, a, b, 2));
-		j++;
-		toUpdatePoints.push_back(b);
-		indexesOfPointsToUpdate.push_back(j++);
 
 		/* When both points are outside */
 	  } else {
@@ -140,11 +130,6 @@ public:
 	  }
 	  polygon.setVisibility(false);
 	} else {
-      for (int i = 0; i < toUpdatePoints.size(); i++) {
-		Coordinate* toBeUpdated = toUpdatePoints.at(i);
-        Coordinate* updated = new_points.at(indexesOfPointsToUpdate[i]);
-		toBeUpdated = updated;
-	  }
 	  polygon.updateWindowPoints(new_points);
 	  polygon.setVisibility(true);
 	}
