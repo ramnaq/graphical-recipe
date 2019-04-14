@@ -102,13 +102,13 @@ public:
 
       /* Only second point is added */
       if (a_pos >= 0  && b_pos >= 0) {
-        new_points.push_back(b_copy);
+        new_points.push_back(b);
 
         /* When only first point is outside the window */
       } else if (a_pos < 0  && b_pos >= 0) {
         /* Point of intersection and second point */
         new_points.push_back(intersection(c1, c2, a, b, 1));
-        new_points.push_back(b_copy);
+        new_points.push_back(b);
 
         /* When only second point is outside the window */
 	  } else if (a_pos >= 0  && b_pos < 0) {
