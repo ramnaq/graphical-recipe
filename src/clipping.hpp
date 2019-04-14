@@ -23,6 +23,8 @@
 class Clipping {
 private:
   vector<Coordinate*> wCoord;
+  double savedXns;
+  double savedYns;
 
 public:
   Clipping() {
@@ -74,13 +76,16 @@ public:
    * @param c2 A point of a window edge (same edge as c1)
    */
   void clip(Polygon& polygon, Coordinate& c1, Coordinate& c2) {
-    vector<Coordinate*> points = polygon.getCoordinates();
+    const vector<Coordinate*> points = polygon.getCoordinates();
+	vector<int> indexesOfPointsToUpdate;
+	vector<Coordinate*> toUpdatePoints;
     vector<Coordinate*> new_points;
     double x1 = c1.getX();
     double y1 = c1.getY();
     double x2 = c2.getX();
     double y2 = c2.getY();
 
+	int j = 0;
     for (int i = 0; i < points.size(); i++) {
       int k = (i + 1) % points.size();
       Coordinate* a = points[i];
@@ -94,20 +99,31 @@ public:
       double a_pos = (x2-x1)*(ay-y1) - (y2-y1)*(ax-x1);
       double b_pos = (x2-x1)*(by-y1) - (y2-y1)*(bx-x1);
 
+	  Coordinate* b_copy = new Coordinate(bx, by);
+	  b_copy->setXns(b->getXns());
+	  b_copy->setYns(b->getYns());
+
       /* Only second point is added */
       if (a_pos >= 0  && b_pos >= 0) {
-        new_points.push_back(b);
+        new_points.push_back(b_copy);
+		j++;
 
         /* When only first point is outside the window */
       } else if (a_pos < 0  && b_pos >= 0) {
         /* Point of intersection and second point */
-        new_points.push_back(intersection(c1, c2, *a, *b, 1));
-        new_points.push_back(b);
+        new_points.push_back(intersection(c1, c2, a, b, 1));
+		j++;
+        new_points.push_back(b_copy);
+		toUpdatePoints.push_back(a);
+		indexesOfPointsToUpdate.push_back(j++);
 
         /* When only second point is outside the window */
 	  } else if (a_pos >= 0  && b_pos < 0) {
 		/* Only point of intersection with edge is added */
-		new_points.push_back(intersection(c1, c2, *a, *b, 2));
+		new_points.push_back(intersection(c1, c2, a, b, 2));
+		j++;
+		toUpdatePoints.push_back(b);
+		indexesOfPointsToUpdate.push_back(j++);
 
 		/* When both points are outside */
 	  } else {
@@ -124,7 +140,12 @@ public:
 	  }
 	  polygon.setVisibility(false);
 	} else {
-	  polygon.updatePoints(new_points);
+      for (int i = 0; i < toUpdatePoints.size(); i++) {
+		Coordinate* toBeUpdated = toUpdatePoints.at(i);
+        Coordinate* updated = new_points.at(indexesOfPointsToUpdate[i]);
+		toBeUpdated = updated;
+	  }
+	  polygon.updateWindowPoints(new_points);
 	  polygon.setVisibility(true);
 	}
   }
@@ -136,17 +157,17 @@ public:
    * @param point Indicates which Coordinate (p3 or p4) is outside the window.
    * @return the point (Coordinate) of intersection.
    */
-  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate& p3,
-	  Coordinate& p4, int point) {
+  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate* p3,
+	  Coordinate* p4, int point) {
     double x1 = p1.getX();
     double x2 = p2.getX();
-    double x3 = p3.getXns();
-    double x4 = p4.getXns();
+    double x3 = p3->getXns();
+    double x4 = p4->getXns();
 
     double y1 = p1.getY();
     double y2 = p2.getY();
-    double y3 = p3.getYns();
-    double y4 = p4.getYns();
+    double y3 = p3->getYns();
+    double y4 = p4->getYns();
 
     /* Resulting point */
     double x = 0;
@@ -162,11 +183,11 @@ public:
 	if (point == 1) {
 	  /* p3 is outside the window, so the default values of c are the same as
 	   * the default values of p3 */
-	  c = new Coordinate(p3.getX(), p3.getY());
+	  c = new Coordinate(p3->getX(), p3->getY());
 	} else {
 	  /* p4 is outside the window, so the default values of c are the same as
 	   * the default values of p4 */
-	  c = new Coordinate(p4.getX(), p4.getY());
+	  c = new Coordinate(p4->getX(), p4->getY());
     }
 
     c->setXns(x);

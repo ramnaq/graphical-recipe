@@ -16,6 +16,7 @@ private:
 	string name;
 	Type type;
 	vector<Coordinate*> coordinateList;
+	vector<Coordinate*> windowPoints;
 	double cx, cy;
 	bool visible;
 
@@ -24,6 +25,7 @@ public:
 		this->name = name;
 		this->type = type;
 		this->coordinateList = coordinateList;
+		this->windowPoints = {};
 		this->visible = true;
 		computeGeometricCenter();
 	}
@@ -56,8 +58,12 @@ public:
 		return coordinateList;
 	}
 
-	void updatePoints(vector<Coordinate*> newPoints) {
-		this->coordinateList = newPoints;
+	vector<Coordinate*> getWindowPoints() {
+		return windowPoints;
+	}
+
+	void updateWindowPoints(vector<Coordinate*> newPoints) {
+		this->windowPoints = newPoints;
 	}
 
 
