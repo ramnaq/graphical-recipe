@@ -67,6 +67,12 @@ public:
     }
   }
 
+  //! Clips each edge of polygon over the window edge c1c2
+  /**
+   * @param polygon The polygon being cliped
+   * @param c1 A point of a window edge
+   * @param c2 A point of a window edge (same edge as c1)
+   */
   void clip(Polygon& polygon, Coordinate& c1, Coordinate& c2) {
     vector<Coordinate*> points = polygon.getCoordinates();
     vector<Coordinate*> new_points;
@@ -80,26 +86,26 @@ public:
       Coordinate* a = points[i];
       Coordinate* b = points[k];
 
-      double ix = a->getXns();
-      double iy = a->getYns();
-      double kx = b->getXns();
-      double ky = b->getYns();
+      double ax = a->getXns();
+      double ay = a->getYns();
+      double bx = b->getXns();
+      double by = b->getYns();
 
-      double i_pos = (x2-x1)*(iy-y1) - (y2-y1)*(ix-x1);
-      double k_pos = (x2-x1)*(ky-y1) - (y2-y1)*(kx-x1);
+      double a_pos = (x2-x1)*(ay-y1) - (y2-y1)*(ax-x1);
+      double b_pos = (x2-x1)*(by-y1) - (y2-y1)*(bx-x1);
 
       /* Only second point is added */
-      if (i_pos >= 0  && k_pos >= 0) {
+      if (a_pos >= 0  && b_pos >= 0) {
         new_points.push_back(b);
 
-        /* When only first point is outside */
-      } else if (i_pos < 0  && k_pos >= 0) {
+        /* When only first point is outside the window */
+      } else if (a_pos < 0  && b_pos >= 0) {
         /* Point of intersection and second point */
         new_points.push_back(intersection(c1, c2, *a, *b, 1));
         new_points.push_back(b);
 
         /* When only second point is outside the window */
-	  } else if (i_pos >= 0  && k_pos < 0) {
+	  } else if (a_pos >= 0  && b_pos < 0) {
 		/* Only point of intersection with edge is added */
 		new_points.push_back(intersection(c1, c2, *a, *b, 2));
 
@@ -123,7 +129,15 @@ public:
 	}
   }
 
-  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate& p3, Coordinate& p4, int point) {
+  //! Calculates the intersection of the line segments p1p2 and p3p4.
+  /**
+   * p1p2 is an edge of the window. p2p3 is a line segment which it wants the
+   * intersection between it and p1p2.
+   * @param point Indicates which Coordinate (p3 or p4) is outside the window.
+   * @return the point (Coordinate) of intersection.
+   */
+  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate& p3,
+	  Coordinate& p4, int point) {
     double x1 = p1.getX();
     double x2 = p2.getX();
     double x3 = p3.getXns();
@@ -138,20 +152,26 @@ public:
     double x = 0;
     double y = 0;
 
-    x  = (x1*y2 - y1*x2) * (x3 - x4) - (x1 - x2) * (x3*y4 - y3*x4);
-    x /= (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    x  = (x1*y2 - y1*x2)*(x3 - x4) - (x1 - x2)*(x3*y4 - y3*x4);
+    x /= (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4);
 
-    y  = (x1*y2 - y1*x2) * (y3 - y4) - (y1 - y2) * (x3*y4 - y3*x4);
-    y /= (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    y  = (x1*y2 - y1*x2)*(y3 - y4) - (y1 - y2)*(x3*y4 - y3*x4);
+    y /= (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4);
 
     Coordinate* c;
-	if (point == 1)
+	if (point == 1) {
+	  /* p3 is outside the window, so the default values of c are the same as
+	   * the default values of p3 */
 	  c = new Coordinate(p3.getX(), p3.getY());
-	else
+	} else {
+	  /* p4 is outside the window, so the default values of c are the same as
+	   * the default values of p4 */
 	  c = new Coordinate(p4.getX(), p4.getY());
+    }
 
     c->setXns(x);
     c->setYns(y);
+
     return c;
   }
 
