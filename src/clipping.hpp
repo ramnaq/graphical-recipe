@@ -95,13 +95,13 @@ public:
         /* When only first point is outside */
       } else if (i_pos < 0  && k_pos >= 0) {
         /* Point of intersection and second point */
-        new_points.push_back(intersection(c1, c2, *a, *b));
+        new_points.push_back(intersection(c1, c2, *a, *b, 1));
         new_points.push_back(b);
 
         /* When only second point is outside the window */
 	  } else if (i_pos >= 0  && k_pos < 0) {
 		/* Only point of intersection with edge is added */
-		new_points.push_back(intersection(c1, c2, *a, *b));
+		new_points.push_back(intersection(c1, c2, *a, *b, 2));
 
 		/* When both points are outside */
 	  } else {
@@ -118,7 +118,7 @@ public:
 	}
   }
 
-  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate& p3, Coordinate& p4) {
+  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate& p3, Coordinate& p4, int point) {
     double x1 = p1.getX();
     double x2 = p2.getX();
     double x3 = p3.getXns();
@@ -139,7 +139,12 @@ public:
     y  = (x1*y2 - y1*x2) * (y3 - y4) - (y1 - y2) * (x3*y4 - y3*x4);
     y /= (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
-    Coordinate* c = new Coordinate(p3.getX(), p3.getY());  // TODO attention! architectural problem? Normal coordinates values are loose
+    Coordinate* c;
+	if (point == 1)
+	  c = new Coordinate(p3.getX(), p3.getY());
+	else
+	  c = new Coordinate(p4.getX(), p4.getY());
+
     c->setXns(x);
     c->setYns(y);
     return c;
