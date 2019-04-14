@@ -107,13 +107,13 @@ public:
         /* When only first point is outside the window */
       } else if (a_pos < 0  && b_pos >= 0) {
         /* Point of intersection and second point */
-        new_points.push_back(intersection(c1, c2, a, b, 1));
+        new_points.push_back(intersection(c1, c2, a, b));
         new_points.push_back(b);
 
         /* When only second point is outside the window */
 	  } else if (a_pos >= 0  && b_pos < 0) {
 		/* Only point of intersection with edge is added */
-		new_points.push_back(intersection(c1, c2, a, b, 2));
+		new_points.push_back(intersection(c1, c2, a, b));
 
 		/* When both points are outside */
 	  } else {
@@ -143,7 +143,7 @@ public:
    * @return the point (Coordinate) of intersection.
    */
   Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate* p3,
-	  Coordinate* p4, int point) {
+	  Coordinate* p4) {
     double x1 = p1.getX();
     double x2 = p2.getX();
     double x3 = p3->getXns();
@@ -164,17 +164,7 @@ public:
     y  = (x1*y2 - y1*x2)*(y3 - y4) - (y1 - y2)*(x3*y4 - y3*x4);
     y /= (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4);
 
-    Coordinate* c;
-	if (point == 1) {
-	  /* p3 is outside the window, so the default values of c are the same as
-	   * the default values of p3 */
-	  c = new Coordinate(p3->getX(), p3->getY());
-	} else {
-	  /* p4 is outside the window, so the default values of c are the same as
-	   * the default values of p4 */
-	  c = new Coordinate(p4->getX(), p4->getY());
-    }
-
+    Coordinate* c = new Coordinate(0, 0);
     c->setXns(x);
     c->setYns(y);
 
