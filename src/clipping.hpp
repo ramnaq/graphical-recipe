@@ -6,6 +6,9 @@
 #include <bitset>
 #include <algorithm>
 
+#include "line.hpp"
+#include "polygon.hpp"
+
 #define LEFT 0
 #define RIGHT 1
 #define BOTTOM 2
@@ -47,6 +50,99 @@ public:
       cohenSutherland(line);
     else
       liangBarsky(line);
+  }
+
+  void polygonClipping(GraphicObject* polygon, int chosenAlgorithm) {
+    vector<Coordinate> clp {
+            Coordinate(-1, -1),
+            Coordinate(1, -1),
+            Coordinate(1, 1),
+            Coordinate(-1, 1),
+        };
+
+    for (int i = 0; i < clp.size(); i++) {
+      int k = (i + 1) % clp.size();
+      Coordinate c1(clp[i]), c2(clp[k]);
+      clip(static_cast<Polygon&>(*polygon), c1, c2);
+    }
+  }
+
+  void clip(Polygon& polygon, Coordinate& c1, Coordinate& c2) {
+    vector<Coordinate*> points = polygon.getCoordinates();
+    vector<Coordinate*> new_points;
+    double x1 = c1.getX();
+    double y1 = c1.getY();
+    double x2 = c2.getX();
+    double y2 = c2.getY();
+
+    for (int i = 0; i < points.size(); i++) {
+      int k = (i + 1) % points.size();
+      Coordinate* a = points[i];
+      Coordinate* b = points[k];
+
+      double ix = a->getXns();
+      double iy = a->getYns();
+      double kx = b->getXns();
+      double ky = b->getYns();
+
+      double i_pos = (x2-x1) * (iy-y1) - (y2-y1) * (ix-x1);
+      double k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1);
+
+      /* Only second point is added */
+      if (i_pos >= 0  && k_pos >= 0) {
+        new_points.push_back(b);
+
+        /* When only first point is outside */
+      } else if (i_pos < 0  && k_pos >= 0) {
+        /* Point of intersection and second point */
+        new_points.push_back(intersection(c1, c2, *a, *b));
+        new_points.push_back(b);
+
+        /* When only second point is outside the window */
+	  } else if (i_pos >= 0  && k_pos < 0) {
+		/* Only point of intersection with edge is added */
+		new_points.push_back(intersection(c1, c2, *a, *b));
+
+		/* When both points are outside */
+	  } else {
+		//no points are added
+	  }
+	}
+
+	/* Updating polygon points */
+	if(new_points.size() == 0) {
+	  polygon.setVisibility(false);
+	} else {
+	  polygon.updatePoints(new_points);
+	  polygon.setVisibility(true);
+	}
+  }
+
+  Coordinate* intersection(Coordinate& p1, Coordinate& p2, Coordinate& p3, Coordinate& p4) {
+    double x1 = p1.getX();
+    double x2 = p2.getX();
+    double x3 = p3.getXns();
+    double x4 = p4.getXns();
+
+    double y1 = p1.getY();
+    double y2 = p2.getY();
+    double y3 = p3.getYns();
+    double y4 = p4.getYns();
+
+    /* Resulting point */
+    double x = 0;
+    double y = 0;
+
+    x  = (x1*y2 - y1*x2) * (x3 - x4) - (x1 - x2) * (x3*y4 - y3*x4);
+    x /= (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+    y  = (x1*y2 - y1*x2) * (y3 - y4) - (y1 - y2) * (x3*y4 - y3*x4);
+    y /= (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+    Coordinate* c = new Coordinate(p3.getX(), p3.getY());  // TODO attention! architectural problem? Normal coordinates values are loose
+    c->setXns(x);
+    c->setYns(y);
+    return c;
   }
 
   void cohenSutherland(GraphicObject* line) {

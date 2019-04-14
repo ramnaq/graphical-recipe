@@ -56,6 +56,11 @@ public:
 		return coordinateList;
 	}
 
+	void updatePoints(vector<Coordinate*> newPoints) {
+		this->coordinateList = newPoints;
+	}
+
+
 	Coordinate getGeometricCenter() {
 		return Coordinate(cx, cy);
 	}
