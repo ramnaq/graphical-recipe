@@ -85,8 +85,8 @@ public:
       double kx = b->getXns();
       double ky = b->getYns();
 
-      double i_pos = (x2-x1) * (iy-y1) - (y2-y1) * (ix-x1);
-      double k_pos = (x2-x1) * (ky-y1) - (y2-y1) * (kx-x1);
+      double i_pos = (x2-x1)*(iy-y1) - (y2-y1)*(ix-x1);
+      double k_pos = (x2-x1)*(ky-y1) - (y2-y1)*(kx-x1);
 
       /* Only second point is added */
       if (i_pos >= 0  && k_pos >= 0) {
@@ -111,6 +111,11 @@ public:
 
 	/* Updating polygon points */
 	if(new_points.size() == 0) {
+	  /* Clear polygon window points */
+	  for (int i = 0; i < points.size(); ++i) {
+        points.at(i)->setXns(0);
+        points.at(i)->setYns(0);
+	  }
 	  polygon.setVisibility(false);
 	} else {
 	  polygon.updatePoints(new_points);
