@@ -13,6 +13,7 @@
 
 using namespace std;
 
+
 #define VIEWPORT_MARGIN 20
 
 class View {
