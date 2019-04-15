@@ -55,13 +55,14 @@ public:
   }
 
   void polygonClipping(GraphicObject* polygon, int chosenAlgorithm) {
-    vector<Coordinate> clp {
+    const vector<Coordinate> clp {
             Coordinate(-1, -1),
             Coordinate(1, -1),
             Coordinate(1, 1),
             Coordinate(-1, 1),
         };
 
+    polygon->updateWindowPoints(polygon->getCoordinates());
     for (int i = 0; i < clp.size(); i++) {
       int k = (i + 1) % clp.size();
       Coordinate c1(clp[i]), c2(clp[k]);
@@ -76,7 +77,7 @@ public:
    * @param c2 A point of a window edge (same edge as c1)
    */
   void clip(Polygon& polygon, Coordinate& c1, Coordinate& c2) {
-    const vector<Coordinate*> points = polygon.getCoordinates();
+    const vector<Coordinate*> points = polygon.getWindowPoints();
     vector<Coordinate*> new_points;
     double x1 = c1.getX();
     double y1 = c1.getY();
