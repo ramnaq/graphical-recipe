@@ -186,7 +186,7 @@ public:
   }
 
   void drawNewPolygon(GraphicObject* obj, bool fill) {
-    vector<Coordinate*> polygonPoints = obj->getCoordinates();
+    vector<Coordinate*> polygonPoints = obj->getWindowPoints();
     drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
@@ -323,7 +323,7 @@ public:
         viewPort->transformation(object->getCoordinates().back());
         break;
       case POLYGON: {
-        vector<Coordinate*> polygonPoints = object->getCoordinates();
+        vector<Coordinate*> polygonPoints = object->getWindowPoints();
         vector<Coordinate*>::iterator it;
         for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
           viewPort->transformation(*it);

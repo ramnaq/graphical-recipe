@@ -246,10 +246,14 @@ public:
             }
             break;
         case POLYGON: {
-            bool fill = static_cast<Polygon*>(element)->fill();
-            view.transform(element);
-            view.drawNewPolygon(element, fill);
-          break;
+            clipping.polygonClipping(element, chosenAlgorithm);
+            Polygon* p = static_cast<Polygon*>(element);
+            if (p->isVisible()) {
+              bool fill = p->fill();
+              view.transform(p);
+              view.drawNewPolygon(p, fill);
+            }
+            break;
         }
       }
       nextElement = nextElement->getProximo();
