@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="mainWindow">
@@ -9,6 +9,9 @@
     <property name="window_position">center</property>
     <signal name="configure-event" handler="on_mainWindow_configure_event" swapped="no"/>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="boxMainWindow">
         <property name="visible">True</property>
@@ -117,6 +120,23 @@
                                         <property name="fill">True</property>
                                         <property name="position">2</property>
                                       </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="btnCreateFromFile">
+                                        <property name="label" translatable="yes">.obj</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <signal name="clicked" handler="on_btnCreateFromFile_clicked" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                   <packing>
@@ -229,8 +249,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -244,8 +262,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -259,8 +275,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -274,8 +288,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -289,8 +301,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -304,8 +314,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -319,8 +327,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -334,8 +340,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -349,8 +353,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                               </object>
@@ -792,6 +794,9 @@
     <property name="title" translatable="yes">Transformações de objetos</property>
     <property name="window_position">center</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box12">
         <property name="visible">True</property>
@@ -1362,6 +1367,9 @@
     <property name="title" translatable="yes">Adicionar novo objeto</property>
     <property name="window_position">center</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -2033,7 +2041,7 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -2071,7 +2079,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
