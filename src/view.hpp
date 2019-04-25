@@ -45,6 +45,7 @@ private:
   GtkEntry *entryAngle;
   GtkEntry *entryRotationX;
   GtkEntry *entryRotationY;
+  GtkEntry *entryObjWorldFile;
   GtkEntry *entryAngleRotateWindow;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
@@ -103,6 +104,7 @@ public:
     entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
     entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
+    entryObjWorldFile = GTK_ENTRY(gtk_builder_get_object(builder, "entryObjWorldFile"));
     entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
@@ -185,10 +187,20 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
+  //! Draws a Polygon and properly clears elements in the "New Polygon window"
+  /*!
+   * @param obj The object to be drawn.
+   */
+  void newPolygon(GraphicObject* obj, bool fill) {
+    drawNewPolygon(obj, fill);
+  }
+
   void drawNewPolygon(GraphicObject* obj, bool fill) {
     vector<Coordinate*> polygonPoints = obj->getWindowPoints();
     drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllPolygonCoordinates();
+    clearPolygonCoordEntries();
   }
 
   void insertIntoListBox(GraphicObject& obj, string tipo) {
@@ -333,6 +345,31 @@ public:
     }
   }
 
+  string chooseFile() {
+    string fileName;
+    GtkWidget *dialog;
+    GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+    gint res;
+
+    dialog = gtk_file_chooser_dialog_new("Open File",
+        GTK_WINDOW (gtkWindow),
+        action,
+        "_Cancel",
+        GTK_RESPONSE_CANCEL,
+        "_Open",
+        GTK_RESPONSE_ACCEPT,
+        NULL);
+
+    res = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (res == GTK_RESPONSE_ACCEPT) {
+      GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+      fileName = gtk_file_chooser_get_filename(chooser);
+    }
+
+    gtk_widget_destroy(dialog);
+    return fileName;
+  }
+
   void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
     scn->transformation(elem, geometriCenter, factor, angle);
   }
@@ -343,6 +380,10 @@ public:
 
   void logError(string err) {
     logger->logError(err);
+  }
+
+  void clearSaveWorldFile() {
+  	gtk_entry_set_text(entryObjWorldFile, "");
   }
 
   ///
@@ -452,6 +493,10 @@ public:
 
   Window* getWindow() {
     return window;
+  }
+  
+  string getFileToSaveWorld() {
+    return gtk_entry_get_text(entryObjWorldFile);
   }
 
   vector<Coordinate*> getViewPortCoord() {

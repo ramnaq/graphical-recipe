@@ -1,17 +1,19 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 #include "enum.hpp"
 #include "view.hpp"
-#include "clipping.hpp"
-#include "point.hpp"
 #include "line.hpp"
+#include "point.hpp"
 #include "polygon.hpp"
+#include "clipping.hpp"
 #include "displayFile.hpp"
+#include "ObjDescriptor.hpp"
 #include "ObjectTransformation.hpp"
+
 
 #define WINDOW_ORIGINAL_POSITION 10
 
@@ -82,10 +84,7 @@ public:
           polygon = new Polygon(name, pointsForPolygon, view.getCheckBtnState());
 
           display.insert(polygon);
-          view.insertIntoListBox(*polygon, "POLIGONO");
-          view.removeAllPolygonCoordinates();
-          view.clearPolygonCoordEntries();
-
+		  view.insertIntoListBox(*polygon, "POLIGONO");
           pointsForPolygon.clear();
         } catch(const std::runtime_error& e) {
           std::cout << "[ERROR] " << e.what() << std::endl;
@@ -95,6 +94,42 @@ public:
       }
     }
     updateDrawScreen();
+  }
+
+  void createObjectsFromFile() {
+    string fileName = view.chooseFile();
+    ObjDescriptor od;
+    vector<GraphicObject*> objs = od.read(fileName);
+    for (int i = 0; i < objs.size(); ++i) {
+      display.insert(objs[i]);
+      showObjectIntoView(objs[i]);
+    }
+	updateDrawScreen();
+  }
+
+  void saveWorldToFile() {
+    string fileName = view.getFileToSaveWorld();
+    ObjDescriptor od;
+    od.write(display.getObjs(), fileName);
+	view.clearSaveWorldFile();
+  }
+
+  void showObjectIntoView(GraphicObject* gobj) {
+    switch (gobj->getType()) {
+      case POINT: {
+        view.insertIntoListBox(*gobj, "PONTO");
+        break;
+      }
+      case LINE: {
+        view.insertIntoListBox(*gobj, "LINHA");
+        break;
+      }
+      case POLYGON: {
+        view.insertIntoListBox(*gobj, "POLIGONO");
+        pointsForPolygon.clear();
+        break;
+      }
+    }
   }
 
   //! Changes an object position through translation, scaling or rotation.
