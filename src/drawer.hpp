@@ -72,15 +72,32 @@ public:
 
 		cairo_move_to(cr, polygonPoints[0]->getXvp(), polygonPoints[0]->getYvp());
 
+		printf("Polygon: \n");
 		// Draws polygon's edges two by two points. The last edge is the segment
 		// polygonPoints[end]|polygonPoints[0].
 		for (int i = 1; i < end; i++) {
 			cairo_line_to(cr, polygonPoints[i]->getXvp(), polygonPoints[i]->getYvp());
+			printf("%d %d\n", polygonPoints[i]->getXvp(), polygonPoints[i]->getYvp());
+			printf("%d %d\n\n", polygonPoints[i]->getX(), polygonPoints[i]->getY());
 		}
 
 		cairo_close_path(cr);
 		if (fill)
 			cairo_fill(cr);
+
+		cairo_stroke(cr);
+	}
+
+	void drawCurve(vector<Coordinate*> curvePoints) {
+		cairo_t* cr = cairo_create (surface);
+		int end = curvePoints.size();
+
+		printf("Curve: \n");
+		for (int i = 0; i < end-1; i++) {
+		    drawLine(curvePoints[i], curvePoints[i+1]);
+			printf("%d %d\n", curvePoints[i+1]->getXvp(), curvePoints[i+1]->getYvp());
+			printf("%d %d\n\n", curvePoints[i+1]->getX(), curvePoints[i+1]->getY());
+		}
 
 		cairo_stroke(cr);
 	}

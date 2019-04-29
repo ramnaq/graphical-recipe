@@ -10,6 +10,7 @@
 #include "point.hpp"
 #include "polygon.hpp"
 #include "clipping.hpp"
+#include "BezierCurve.hpp"
 #include "displayFile.hpp"
 #include "ObjDescriptor.hpp"
 #include "ObjectTransformation.hpp"
@@ -26,6 +27,7 @@ private:
   DisplayFile display;
   Clipping clipping;
   vector<Coordinate*> pointsForPolygon;
+  vector<Coordinate*> pointsForCurve;
 
 public:
   Controller() {
@@ -41,7 +43,7 @@ public:
   //! Creates an instance of a Graphical Object and asks 'view' to draw it.
   /*!
    * Uses information from 'view' to create Coordinates, instantiate a type of
-   * GraphicalObject and then sends this instance to 'view' to be drawn.
+   * GraphicObject and then sends this instance to 'view' to be drawn.
    */
   void createObject() {
     int currentPage = view.getCurrentPage();
@@ -91,6 +93,26 @@ public:
           view.logError("Pontos insuficientes para criação de polígono.\n");
         }
         break;
+      }
+      case CURVE: {
+        //GraphicObject* curve;  //TODO
+		  try {
+			if (pointsForCurve.size() < 4) {
+			  throw std::runtime_error("Cannot create a curve without at least 4 points!");
+			}
+		if (view.isCheckBtnSplineChecked()) {
+		  //curve = new Spline();
+		} else {
+			BezierCurve* curve = new BezierCurve(name, pointsForCurve);
+			display.insert(curve);
+			view.insertIntoListBox(*curve, "CURVA");
+			pointsForCurve.clear();
+		}
+		  } catch(const std::runtime_error& e) {
+			std::cout << "[ERROR] " << e.what() << std::endl;
+			view.logError("Pontos insuficientes para criação de curva.\n");
+		  }
+		  break;
       }
     }
     updateDrawScreen();
@@ -208,6 +230,13 @@ public:
     }
   }
 
+  void removeFromCoordCurveList() {
+    int index = view.removeFromCoordCurveList();
+    if (index > -1) {
+      pointsForCurve.erase(pointsForCurve.begin() + index);
+    }
+  }
+
   /*!
    * Gets (x, y) from view to create a new Coordinate and then add a new line
    * to a Polygon which is being created.
@@ -216,6 +245,16 @@ public:
     Coordinate* c = new Coordinate(view.getEntryPolygonX(), view.getEntryPolygonY());
     pointsForPolygon.push_back(c);
     view.insertCoordPolygonList();
+  }
+
+  /*!
+   * Gets (x, y) from view to create a new Coordinate and then add it
+   * to a Curve which is being created.
+   */
+  void addNewPointForCurve() {
+    Coordinate* c = new Coordinate(view.getEntryCurveX(), view.getEntryCurveY());
+    pointsForCurve.push_back(c);
+    view.insertCoordCurveList();
   }
 
   //! Changes the visualization window (of type Window) according the op code.
@@ -246,6 +285,10 @@ public:
     view.updateCheckBtnState();
   }
 
+  void updateCheckBtnSpline() {
+    view.updateCheckBtnSpline();
+  }
+
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
     view.clear_surface();
@@ -266,20 +309,22 @@ public:
       GraphicObject* element = nextElement->getInfo();
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
       switch (element->getType()) {
-        case POINT:
+        case POINT: {
           clipping.pointClipping(element);
           if (element->isVisible()) {
             view.transform(element);
             view.drawNewPoint(element);
           }
           break;
-        case LINE:
+        }
+        case LINE: {
             clipping.lineClipping(element, chosenAlgorithm);
             if (element->isVisible()) {
               view.transform(element);
               view.drawNewLine(element);
             }
             break;
+        }
         case POLYGON: {
             clipping.polygonClipping(element, chosenAlgorithm);
             Polygon* p = static_cast<Polygon*>(element);
@@ -289,7 +334,15 @@ public:
               view.drawNewPolygon(p, fill);
             }
             break;
-        }
+         }
+         case CURVE: {
+            //clipping.curveClipping(element);
+            if (element->isVisible()) {
+              view.transform(element);
+              view.drawNewPolygon(element, false);
+            }
+			break;
+         }
       }
       nextElement = nextElement->getProximo();
     }

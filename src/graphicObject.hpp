@@ -12,7 +12,7 @@ using namespace std;
 /*! The generic type of an graphical object (point, line, polygon, etc) */
 
 class GraphicObject {
-private:
+protected:
 	string name;
 	Type type;
 	vector<Coordinate*> coordinateList;
