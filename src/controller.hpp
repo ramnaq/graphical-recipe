@@ -339,7 +339,7 @@ public:
             //clipping.curveClipping(element);
             if (element->isVisible()) {
               view.transform(element);
-              view.drawNewPolygon(element, false);
+              view.drawNewCurve(element);
             }
 			break;
          }

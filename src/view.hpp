@@ -202,7 +202,7 @@ public:
   }
 
   void drawNewPolygon(GraphicObject* obj, bool fill) {
-    vector<Coordinate*> polygonPoints = obj->getCoordinates();//getWindowPoints();
+    vector<Coordinate*> polygonPoints = obj->getWindowPoints();
     drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
     removeAllPolygonCoordinates();
@@ -210,7 +210,7 @@ public:
   }
 
   void drawNewCurve(GraphicObject* obj) {
-    vector<Coordinate*> points = obj->getCoordinates();
+    vector<Coordinate*> points = obj->getCoordinates(); //TODO getWindowPoints();
     drawer->drawCurve(points);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
     removeAllCurveCoordinates();
@@ -390,13 +390,20 @@ public:
         viewPort->transformation(object->getCoordinates().back());
         break;
       case POLYGON: {
-        vector<Coordinate*> polygonPoints = object->getWindowPoints();
-        vector<Coordinate*>::iterator it;
-        for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
-          viewPort->transformation(*it);
-        }
+        multiPointsTransformation(object->getWindowPoints());
         break;
       }
+      case CURVE: {
+        multiPointsTransformation(object->getCoordinates());
+        break;
+      }
+    }
+  }
+
+  void multiPointsTransformation(vector<Coordinate*> points) {
+    vector<Coordinate*>::iterator it;
+    for(it = points.begin(); it != points.end(); it++) {
+      viewPort->transformation(*it);
     }
   }
 
