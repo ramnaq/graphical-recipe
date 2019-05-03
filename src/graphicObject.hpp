@@ -25,8 +25,8 @@ public:
 		this->name = name;
 		this->type = type;
 		this->coordinateList = coordinateList;
-		this->windowPoints = {};
 		this->visible = true;
+		this->windowPoints = {};
 		computeGeometricCenter();
 	}
 

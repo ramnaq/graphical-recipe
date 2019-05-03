@@ -336,7 +336,7 @@ public:
             break;
          }
          case CURVE: {
-            //clipping.curveClipping(element);
+            clipping.curveClipping(element);
             if (element->isVisible()) {
               view.transform(element);
               view.drawNewCurve(element);

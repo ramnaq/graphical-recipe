@@ -210,7 +210,7 @@ public:
   }
 
   void drawNewCurve(GraphicObject* obj) {
-    vector<Coordinate*> points = obj->getCoordinates(); //TODO getWindowPoints();
+    vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
     drawer->drawCurve(points);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
     removeAllCurveCoordinates();
@@ -394,7 +394,7 @@ public:
         break;
       }
       case CURVE: {
-        multiPointsTransformation(object->getCoordinates());
+        multiPointsTransformation(object->getWindowPoints());
         break;
       }
     }

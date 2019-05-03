@@ -69,6 +69,13 @@ public:
     this->yns = yns;
   }
 
+  static Coordinate* newWindowCoordinate(double x, double y) {
+    Coordinate* w = new Coordinate(0, 0);
+    w->setXns(x);
+    w->setYns(y);
+    return w;
+  }
+
 };
 
 #endif  //!< COORDINATE_HPP
