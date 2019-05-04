@@ -26,6 +26,13 @@ private:
   double savedXns;
   double savedYns;
 
+  const vector<Coordinate> clp {
+		  Coordinate(-1, -1),
+		  Coordinate(1, -1),
+		  Coordinate(1, 1),
+		  Coordinate(-1, 1),
+	  };
+
 public:
   Clipping() {
     this->wCoord = {new Coordinate(-1,-1), new Coordinate(1,1)};
@@ -55,19 +62,41 @@ public:
   }
 
   void polygonClipping(GraphicObject* polygon, int chosenAlgorithm) {
-    const vector<Coordinate> clp {
-            Coordinate(-1, -1),
-            Coordinate(1, -1),
-            Coordinate(1, 1),
-            Coordinate(-1, 1),
-        };
-
     polygon->updateWindowPoints(polygon->getCoordinates());
+    vector<Coordinate> clp = this->clp;
     for (int i = 0; i < clp.size(); i++) {
       int k = (i + 1) % clp.size();
       Coordinate c1(clp[i]), c2(clp[k]);
       clip(static_cast<Polygon&>(*polygon), c1, c2);
     }
+  }
+
+  void curveClipping(GraphicObject* curve) {
+    curve->updateWindowPoints(curve->getCoordinates());
+    vector<Coordinate*> points = curve->getWindowPoints();
+    vector<Coordinate*> newPoints = {};
+    for (int i = 0; i < points.size() - 1; ++i) {
+      Coordinate* c1 = points[i];
+      Coordinate* c2 = points[i+1];
+
+      Coordinate* c1_copy = Coordinate::newWindowCoordinate(c1->getXns(), c1->getYns());
+      Coordinate* c2_copy = Coordinate::newWindowCoordinate(c2->getXns(), c2->getYns());
+
+      vector<Coordinate*> l = {c1_copy, c2_copy};
+      bool result = cohenSutherland(new Line("", l));
+      if (result) {
+        newPoints.push_back(c1_copy);
+        if (!equalPoints(*c2, *c2_copy)) {
+          newPoints.push_back(c2_copy);
+        }
+      }
+
+      curve->updateWindowPoints(newPoints);
+    }
+  }
+
+  bool equalPoints(Coordinate& c1, Coordinate& c2) {
+	return (c1.getXns() == c2.getXns()) && (c1.getYns() == c2.getYns());
   }
 
   //! Clips each edge of polygon over the window edge c1c2
@@ -165,14 +194,10 @@ public:
     y  = (x1*y2 - y1*x2)*(y3 - y4) - (y1 - y2)*(x3*y4 - y3*x4);
     y /= (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4);
 
-    Coordinate* c = new Coordinate(0, 0);
-    c->setXns(x);
-    c->setYns(y);
-
-    return c;
+    return Coordinate::newWindowCoordinate(x, y);
   }
 
-  void cohenSutherland(GraphicObject* line) {
+  bool cohenSutherland(GraphicObject* line) {
     Coordinate* coordMin = line->getCoordinates().front();
     Coordinate* coordMax = line->getCoordinates().back();
 
@@ -183,10 +208,10 @@ public:
     switch (op) {
       case IN:
         line->setVisibility(true);
-        break;
+        return true;
       case OUT:
         line->setVisibility(false);
-        break;
+        return false;
       default:
         line->setVisibility(true);
 
@@ -206,11 +231,14 @@ public:
           rgMax = generateRegionCode(coordMax);
 
           int op = verify(rgMin, rgMax);
-          if (op == BOTHOUT)
+          if (op == BOTHOUT) {
             line->setVisibility(false);
-          else
+            return false;
+          } else {
             line->setVisibility(true);
+          }
         }
+        return true;
     }
   }
 

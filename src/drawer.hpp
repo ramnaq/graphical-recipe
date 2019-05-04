@@ -85,6 +85,17 @@ public:
 		cairo_stroke(cr);
 	}
 
+	void drawCurve(vector<Coordinate*> curvePoints) {
+		cairo_t* cr = cairo_create (surface);
+		int end = curvePoints.size();
+
+		for (int i = 0; i < end-1; i++) {
+		    drawLine(curvePoints[i], curvePoints[i+1]);
+		}
+
+		cairo_stroke(cr);
+	}
+
 };
 
 #endif

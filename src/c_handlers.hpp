@@ -51,6 +51,15 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_addCoordinate() {
   }
 }
 
+//! Connected to signal "clicked" of element "btnAddCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_curve() {
+  try {
+    controller->addNewPointForCurve();
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnRemoveObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   try {
@@ -75,6 +84,15 @@ extern "C" G_MODULE_EXPORT void on_btnSaveWorld_clicked() {
 extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_clicked() {
   try {
     controller->removeFromCoordPolygonList();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnRemoveCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_curve() {
+  try {
+    controller->removeFromCoordCurveList();
   } catch (...) {
 
   }
@@ -274,6 +292,15 @@ extern "C" G_MODULE_EXPORT void on_radiobtnLB_clicked(){
 extern "C" G_MODULE_EXPORT void on_checkbtnFillPolygon_clicked(){
   try {
     controller->updateCheckBtnState();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_checkbtnSpline_clicked(){
+  try {
+    controller->updateCheckBtnSpline();
   } catch (...) {
 
   }

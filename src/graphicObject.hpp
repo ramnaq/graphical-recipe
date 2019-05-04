@@ -12,7 +12,7 @@ using namespace std;
 /*! The generic type of an graphical object (point, line, polygon, etc) */
 
 class GraphicObject {
-private:
+protected:
 	string name;
 	Type type;
 	vector<Coordinate*> coordinateList;
@@ -25,8 +25,8 @@ public:
 		this->name = name;
 		this->type = type;
 		this->coordinateList = coordinateList;
-		this->windowPoints = {};
 		this->visible = true;
+		this->windowPoints = {};
 		computeGeometricCenter();
 	}
 

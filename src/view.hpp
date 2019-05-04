@@ -36,6 +36,8 @@ private:
   GtkEntry *entryLineY2;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
+  GtkEntry *entryCurveX;
+  GtkEntry *entryCurveY;
   GtkEntry *entryTranslationX;
   GtkEntry *entryTranslationY;
   GtkEntry *entryScalingX;
@@ -50,11 +52,10 @@ private:
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
+  GtkListBox *listCoordCurve;   //!< shows the coordinates added when creating a curve
 
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
   GtkNotebook *notebookObjectOperations;
-
-  GtkCheckButton* checkbtnFillPolygon;
 
   Drawer* drawer;
   Window* window;
@@ -65,6 +66,7 @@ private:
   int rotationRadioButtonState;
   int clippingRadioButtonState;
   bool checkFillButtonState;
+  bool checkIsSplineState;
 
 public:
   View() {
@@ -96,6 +98,8 @@ public:
     entryLineY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY1"));
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
+    entryCurveX = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveX"));
+    entryCurveY = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveY"));
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
     entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
     entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
@@ -109,6 +113,7 @@ public:
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
+    listCoordCurve = GTK_LIST_BOX(gtk_builder_get_object(builder, "listboxCurveCoords"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
@@ -116,6 +121,7 @@ public:
     rotationRadioButtonState = 1;
     clippingRadioButtonState = 1;
     checkFillButtonState = false;
+    checkIsSplineState = false;
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -203,6 +209,14 @@ public:
     clearPolygonCoordEntries();
   }
 
+  void drawNewCurve(GraphicObject* obj) {
+    vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
+    drawer->drawCurve(points);
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCurveCoordinates();
+    clearCurveCoordEntries();
+  }
+
   void insertIntoListBox(GraphicObject& obj, string tipo) {
     GtkWidget* row = gtk_list_box_row_new();
     GtkWidget* label = gtk_label_new((obj.getObjectName() + " (" + tipo + ")").c_str());
@@ -221,6 +235,18 @@ public:
 
     gtk_container_add((GtkContainer*) listCoordPolygon, label);
     gtk_widget_show_all((GtkWidget*) listCoordPolygon);
+  }
+
+  void insertCoordCurveList() {
+    string coordX = gtk_entry_get_text(entryCurveX);
+    string coordY = gtk_entry_get_text(entryCurveY);
+    string name = "Coordenada: (" + coordX + " , " + coordY + ")";
+
+    GtkWidget* row = gtk_list_box_row_new();
+    GtkWidget* label = gtk_label_new(name.c_str());
+
+    gtk_container_add((GtkContainer*) listCoordCurve, label);
+    gtk_widget_show_all((GtkWidget*) listCoordCurve);
   }
 
   //! Removes the selected element in GtkListBox
@@ -251,6 +277,18 @@ public:
     return index;
   }
 
+  int removeFromCoordCurveList() {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordCurve);
+    int index = -1;
+    if (row == NULL) {
+      logger->logError("Nenhuma coordenada selecionada!\n");
+    } else {
+      gtk_container_remove((GtkContainer*) listCoordCurve, (GtkWidget*) row);
+      index = getCurrentObjectIndex();
+    }
+    return index;
+  }
+
   void removeAllPolygonCoordinates() {
   	do {
   	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
@@ -259,9 +297,22 @@ public:
   	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
   }
 
+  void removeAllCurveCoordinates() {
+  	do {
+  	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordCurve, 0);
+  	  gtk_list_box_select_row(listCoordCurve, row);
+  	  gtk_container_remove((GtkContainer*) listCoordCurve, (GtkWidget*) row);
+  	} while (gtk_list_box_get_row_at_index(listCoordCurve, 0) != NULL);
+  }
+
   void clearPolygonCoordEntries() {
   	gtk_entry_set_text(entryPolygonX, "");
   	gtk_entry_set_text(entryPolygonY, "");
+  }
+
+  void clearCurveCoordEntries() {
+  	gtk_entry_set_text(entryCurveX, "");
+  	gtk_entry_set_text(entryCurveY, "");
   }
 
   void updateRadioButtonState(int newState) {
@@ -274,6 +325,10 @@ public:
 
   void updateCheckBtnState () {
     checkFillButtonState = !checkFillButtonState;
+  }
+
+  void updateCheckBtnSpline() {
+	checkIsSplineState = !checkIsSplineState;
   }
 
   void updateWindow(double step, int op) {
@@ -335,13 +390,20 @@ public:
         viewPort->transformation(object->getCoordinates().back());
         break;
       case POLYGON: {
-        vector<Coordinate*> polygonPoints = object->getWindowPoints();
-        vector<Coordinate*>::iterator it;
-        for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
-          viewPort->transformation(*it);
-        }
+        multiPointsTransformation(object->getWindowPoints());
         break;
       }
+      case CURVE: {
+        multiPointsTransformation(object->getWindowPoints());
+        break;
+      }
+    }
+  }
+
+  void multiPointsTransformation(vector<Coordinate*> points) {
+    vector<Coordinate*>::iterator it;
+    for(it = points.begin(); it != points.end(); it++) {
+      viewPort->transformation(*it);
     }
   }
 
@@ -422,6 +484,14 @@ public:
     return stod(gtk_entry_get_text(entryPolygonY));
   }
 
+  double getEntryCurveX() {
+    return stod(gtk_entry_get_text(entryCurveX));
+  }
+
+  double getEntryCurveY() {
+    return stod(gtk_entry_get_text(entryCurveY));
+  }
+
   double getEntryTranslationX() {
     return stod(gtk_entry_get_text(entryTranslationX));
   }
@@ -489,6 +559,10 @@ public:
 
   bool getCheckBtnState () {
     return checkFillButtonState;
+  }
+
+  bool isCheckBtnSplineChecked() {
+    return checkIsSplineState; 
   }
 
   Window* getWindow() {
