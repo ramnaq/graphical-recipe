@@ -1,7 +1,7 @@
 #ifndef SCN_HPP
 #define SCN_HPP
 
-#include "ObjectTransformation.hpp"
+#include "matrix.hpp"
 
 /*! Transform world coordinates to normalized system coordinates. */
 

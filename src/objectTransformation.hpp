@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-#include "Matrix.hpp"
+#include "matrix.hpp"
 
 /*! Applies translation, scaling or rotation transformations to an object. */
 

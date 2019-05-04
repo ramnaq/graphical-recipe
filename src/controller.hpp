@@ -10,11 +10,11 @@
 #include "point.hpp"
 #include "polygon.hpp"
 #include "clipping.hpp"
-#include "BezierCurve.hpp"
+#include "bezierCurve.hpp"
 #include "bspline.hpp"
 #include "displayFile.hpp"
-#include "ObjDescriptor.hpp"
-#include "ObjectTransformation.hpp"
+#include "objDescriptor.hpp"
+#include "objectTransformation.hpp"
 
 #define WINDOW_ORIGINAL_POSITION 10
 
