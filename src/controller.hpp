@@ -11,10 +11,10 @@
 #include "polygon.hpp"
 #include "clipping.hpp"
 #include "BezierCurve.hpp"
+#include "bspline.hpp"
 #include "displayFile.hpp"
 #include "ObjDescriptor.hpp"
 #include "ObjectTransformation.hpp"
-
 
 #define WINDOW_ORIGINAL_POSITION 10
 
@@ -86,7 +86,7 @@ public:
           polygon = new Polygon(name, pointsForPolygon, view.getCheckBtnState());
 
           display.insert(polygon);
-		  view.insertIntoListBox(*polygon, "POLIGONO");
+          view.insertIntoListBox(*polygon, "POLIGONO");
           pointsForPolygon.clear();
         } catch(const std::runtime_error& e) {
           std::cout << "[ERROR] " << e.what() << std::endl;
@@ -96,23 +96,26 @@ public:
       }
       case CURVE: {
         //GraphicObject* curve;  //TODO
-		  try {
-			if (pointsForCurve.size() < 4) {
-			  throw std::runtime_error("Cannot create a curve without at least 4 points!");
-			}
-		if (view.isCheckBtnSplineChecked()) {
-		  //curve = new Spline();
-		} else {
-			BezierCurve* curve = new BezierCurve(name, pointsForCurve);
-			display.insert(curve);
-			view.insertIntoListBox(*curve, "CURVA");
-			pointsForCurve.clear();
-		}
-		  } catch(const std::runtime_error& e) {
-			std::cout << "[ERROR] " << e.what() << std::endl;
-			view.logError("Pontos insuficientes para criação de curva.\n");
-		  }
-		  break;
+        try {
+          if (pointsForCurve.size() < 4) {
+            throw std::runtime_error("Cannot create a curve without at least 4 points!");
+          }
+          if (view.isCheckBtnSplineChecked()) {
+            BSpline* curve = new BSpline(name, pointsForCurve, view.getDelta());
+            display.insert(curve);
+            view.insertIntoListBox(*curve, "CURVA");
+            pointsForCurve.clear();
+          } else {
+            BezierCurve* curve = new BezierCurve(name, pointsForCurve);
+            display.insert(curve);
+            view.insertIntoListBox(*curve, "CURVA");
+            pointsForCurve.clear();
+          }
+        } catch(const std::runtime_error& e) {
+          std::cout << "[ERROR] " << e.what() << std::endl;
+          view.logError("Pontos insuficientes para criação de curva.\n");
+        }
+        break;
       }
     }
     updateDrawScreen();
@@ -335,14 +338,14 @@ public:
             }
             break;
          }
-         case CURVE: {
-            clipping.curveClipping(element);
-            if (element->isVisible()) {
-              view.transform(element);
-              view.drawNewCurve(element);
-            }
-			break;
-         }
+       case CURVE: {
+          clipping.curveClipping(element);
+          if (element->isVisible()) {
+            view.transform(element);
+            view.drawNewCurve(element);
+          }
+          break;
+       }
       }
       nextElement = nextElement->getProximo();
     }

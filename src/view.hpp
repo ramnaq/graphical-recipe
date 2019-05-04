@@ -49,6 +49,7 @@ private:
   GtkEntry *entryRotationY;
   GtkEntry *entryObjWorldFile;
   GtkEntry *entryAngleRotateWindow;
+  GtkEntry *entryDelta;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
@@ -110,6 +111,7 @@ public:
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
     entryObjWorldFile = GTK_ENTRY(gtk_builder_get_object(builder, "entryObjWorldFile"));
     entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
+    entryDelta = GTK_ENTRY(gtk_builder_get_object(builder, "entryDelta"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
@@ -389,14 +391,12 @@ public:
         viewPort->transformation(object->getCoordinates().front());
         viewPort->transformation(object->getCoordinates().back());
         break;
-      case POLYGON: {
+      case POLYGON:
         multiPointsTransformation(object->getWindowPoints());
         break;
-      }
-      case CURVE: {
+      case CURVE:
         multiPointsTransformation(object->getWindowPoints());
         break;
-      }
     }
   }
 
@@ -528,6 +528,10 @@ public:
     return stod(gtk_entry_get_text(entryAngle));
   }
 
+  double getDelta() {
+    return stod(gtk_entry_get_text(entryDelta));
+  }
+
   string getObjectName() {
     return gtk_entry_get_text(objectName);
   }
@@ -562,13 +566,13 @@ public:
   }
 
   bool isCheckBtnSplineChecked() {
-    return checkIsSplineState; 
+    return checkIsSplineState;
   }
 
   Window* getWindow() {
     return window;
   }
-  
+
   string getFileToSaveWorld() {
     return gtk_entry_get_text(entryObjWorldFile);
   }
