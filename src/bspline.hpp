@@ -4,8 +4,6 @@
 #include <iostream>
 
 class BSpline : public GraphicObject {
-private:
-  vector<Coordinate*> curveCoordinate;
 public:
   BSpline(string name, vector<Coordinate*> &points, double delta)
     : GraphicObject(name, CURVE, points) {
@@ -14,6 +12,8 @@ public:
 
 protected:
   void create_points(vector<Coordinate*> &points, double delta) {
+    vector<Coordinate*> tmp;
+
     // 0 - Define delta, delta2, delta3 and n values
     double delta2 = delta * delta;
     double delta3 = delta2 * delta;
@@ -37,25 +37,26 @@ protected:
 
       // 3 - Call drawCurveFwdDiff
       this->drawCurveFwdDiff(n, d_x.getMatrix()[0][0], d_x.getMatrix()[1][0], d_x.getMatrix()[2][0], d_x.getMatrix()[3][0]
-                              , d_y.getMatrix()[0][0], d_y.getMatrix()[1][0], d_y.getMatrix()[2][0], d_y.getMatrix()[3][0]);
+                              , d_y.getMatrix()[0][0], d_y.getMatrix()[1][0], d_y.getMatrix()[2][0], d_y.getMatrix()[3][0]
+                              , tmp);
     }
 
-    this->coordinateList = this->curveCoordinate;
+    this->coordinateList = tmp;
   }
 
-  void drawCurveFwdDiff(double n, double x, double dx, double d2x, double d3x, double y, double dy, double d2y, double d3y) {
+  void drawCurveFwdDiff(double n, double x, double dx, double d2x, double d3x, double y, double dy, double d2y, double d3y, vector<Coordinate*> &tmp) {
     int i = 0;
     double x_old, y_old;
     x_old = x;
     y_old = y;
 
-    this->curveCoordinate.push_back(new Coordinate(x_old, y_old));
+    tmp.push_back(new Coordinate(x_old, y_old));
     while (i < n) {
       x = x + dx; dx = dx + d2x; d2x = d2x + d3x;
       y = y + dy; dy = dy + d2y; d2y = d2y + d3y;
       x_old = x; y_old = y;
 
-      this->curveCoordinate.push_back(new Coordinate(x_old, y_old));
+      tmp.push_back(new Coordinate(x_old, y_old));
       i++;
     }
   }
