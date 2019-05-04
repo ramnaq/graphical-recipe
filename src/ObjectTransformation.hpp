@@ -10,38 +10,15 @@
 class ObjectTransformation {
 
 public:
-  static std::vector<std::vector<double> > coordinateToMatrix(Coordinate* coord) {
-   return {{coord->getX()},
-           {coord->getY()},
-           {1}};
-  }
-
-  static std::vector<std::vector<double> > translationVectorToMatrix(Coordinate* coord) {
-   return {{1, 0, coord->getX()},
-           {0, 1, coord->getY()},
-           {0, 0 , 1}};
-  }
-
-  static std::vector<std::vector<double> > scalingVectorToMatrix(Coordinate* coord) {
-   return {{coord->getX(), 0, 0},
-           {0, coord->getY(), 0},
-           {0, 0 , 1}};
-  }
-
-  static std::vector<std::vector<double> > rotationVectorToMatrix(double angle) {
-   return {{cos(angle), -sin(angle), 0},
-           {sin(angle), cos(angle), 0},
-           {0, 0 , 1}};
-  }
 
   static void translation(GraphicObject* obj, Coordinate* translationVector) {
-    Matrix translationMatrix(ObjectTransformation::translationVectorToMatrix(translationVector));
+    Matrix translationMatrix(Matrix::translationVectorToMatrix(translationVector));
 
     vector<Coordinate*> coordinates = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
 
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
+      Matrix coord(Matrix::coordinateToMatrix(*it));
 
       Matrix translatedObject = translationMatrix * coord;
 
@@ -54,9 +31,9 @@ public:
     Coordinate objCenter = obj->getGeometricCenter();
     Coordinate negativeObjCenter(-objCenter.getX(), -objCenter.getY());
 
-    Matrix scalingMatrix(ObjectTransformation::scalingVectorToMatrix(scalingVector));
-    Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(&objCenter));
-    Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
+    Matrix scalingMatrix(Matrix::scalingVectorToMatrix(scalingVector));
+    Matrix translationMatrix1(Matrix::translationVectorToMatrix(&objCenter));
+    Matrix translationMatrix2(Matrix::translationVectorToMatrix(&negativeObjCenter));
 
     Matrix scalingOperation = translationMatrix1 * scalingMatrix * translationMatrix2;
 
@@ -64,7 +41,7 @@ public:
     vector<Coordinate*>::iterator it;
 
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
+      Matrix coord(Matrix::coordinateToMatrix(*it));
 
       Matrix scaledObject = scalingOperation * coord;
 
@@ -75,10 +52,10 @@ public:
 
   static void rotation(GraphicObject* obj, double angle, Coordinate* rotationVector) {
     double radians = (angle*M_PI)/180;
-    Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(radians));
-    Matrix translationMatrix1(ObjectTransformation::translationVectorToMatrix(rotationVector));
+    Matrix rotationMatrix(Matrix::rotationVectorToMatrix(radians));
+    Matrix translationMatrix1(Matrix::translationVectorToMatrix(rotationVector));
     Coordinate negativeObjCenter(-rotationVector->getX(), -rotationVector->getY());
-    Matrix translationMatrix2(ObjectTransformation::translationVectorToMatrix(&negativeObjCenter));
+    Matrix translationMatrix2(Matrix::translationVectorToMatrix(&negativeObjCenter));
 
     Matrix rotationOperation = translationMatrix1 * rotationMatrix * translationMatrix2;
 
@@ -86,7 +63,7 @@ public:
     vector<Coordinate*>::iterator it;
 
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
+      Matrix coord(Matrix::coordinateToMatrix(*it));
 
       Matrix scaledObject = rotationOperation * coord;
 

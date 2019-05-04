@@ -15,9 +15,9 @@ class Scn {
     double radians = (angle*M_PI)/180;
     Coordinate negCoord(-geometriCenter->getX(), -geometriCenter->getY());
 
-    Matrix translationMatrix(ObjectTransformation::translationVectorToMatrix(&negCoord));
-    Matrix rotationMatrix(ObjectTransformation::rotationVectorToMatrix(radians));
-    Matrix scalingMatrix(ObjectTransformation::scalingVectorToMatrix(factor));
+    Matrix translationMatrix(Matrix::translationVectorToMatrix(&negCoord));
+    Matrix rotationMatrix(Matrix::rotationVectorToMatrix(radians));
+    Matrix scalingMatrix(Matrix::scalingVectorToMatrix(factor));
 
     Matrix descSCN = translationMatrix * rotationMatrix * scalingMatrix;
 
@@ -25,7 +25,7 @@ class Scn {
     vector<Coordinate*>::iterator it;
 
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(ObjectTransformation::coordinateToMatrix(*it));
+      Matrix coord(Matrix::coordinateToMatrix(*it));
 
       Matrix translatedObject = descSCN * coord;
 

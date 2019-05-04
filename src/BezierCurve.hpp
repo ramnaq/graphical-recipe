@@ -7,6 +7,7 @@ public:
   BezierCurve(string name, vector<Coordinate*> &points)
     : GraphicObject(name, CURVE, points) {
         this->blending_function(points);
+        this->t = 0.05;
   }
 
   void setT(double newt) {
@@ -14,26 +15,10 @@ public:
   }
 
 protected:
-  double t = 0.05;
-
-  const vector<vector<double>> magic() {
-    return {{-1.0,  3.0, -3.0, 1.0},
-            { 3.0, -6.0,  3.0, 0.0},
-            {-3.0,  3.0,  0.0, 0.0},
-            { 1.0,  0.0,  0.0, 0.0}};
-  }
-
-  const vector<double> t_vector(const double tee) {
-    return {
-      tee * tee * tee,
-      tee * tee,
-      tee,
-      1
-    };
-  }
+  double t;
 
   void blending_function(const std::vector<Coordinate*> &v) {
-    Matrix magic(this->magic());
+    Matrix mb = Matrix::mb();
     double temp_t = t;
     this->coordinateList.clear();
 
@@ -49,12 +34,12 @@ protected:
       Matrix y_vector({{p0->getY()}, {p1->getY()}, {p2->getY()}, {p3->getY()}});
 
       while (temp_t <= 1) {
-        Matrix t_vec({t_vector(temp_t)});  // Line matrix
-        Matrix t_magic = t_vec * magic;    // M(1,4) x M(4,4) = t_magic(1,4)
+        Matrix t_vec({Matrix::t_vector(temp_t)});  // Line matrix
+        Matrix t_mb = t_vec * mb;    // M(1,4) x M(4,4) = t_mb(1,4)
 
         // M(1,4) x M(4,1) = M(1,1), so get line 0, column 0 to obtain the double value
-        double x = (t_magic * x_vector).getMatrix().at(0).at(0);
-        double y = (t_magic * y_vector).getMatrix().at(0).at(0);
+        double x = (t_mb * x_vector).getMatrix().at(0).at(0);
+        double y = (t_mb * y_vector).getMatrix().at(0).at(0);
         //const double z = t_magic * z_vector;
 
         this->coordinateList.push_back(new Coordinate(x, y));
@@ -68,4 +53,3 @@ protected:
 };
 
 #endif  // BEZIER_CURVE_H
-

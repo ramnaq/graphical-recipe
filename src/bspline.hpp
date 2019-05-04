@@ -13,35 +13,6 @@ public:
   }
 
 protected:
-  const vector<vector<double>> mbs() {
-    double factor = (double) 1/6;
-    return {{-1*factor,  3*factor,  -3*factor, 1*factor},
-            { 3*factor,  -6*factor, 3*factor,  0.0},
-            {-3*factor,  0.0,       3*factor,  0.0},
-            { 1*factor,  4*factor,  1*factor,  0.0}};
-  }
-
-  const vector<vector<double>> e(double delta, double delta2, double delta3) {
-    return {{ 0.0,      0.0,      0.0,   1.0},
-            { delta3,   delta2,   delta, 0.0},
-            { 6*delta3, 2*delta2, 0.0,   0.0},
-            { 6*delta3, 0.0,      0.0,   0.0}};
-  }
-
-  const vector<vector<double>> gx(vector<Coordinate*> &v) {
-    return {{v[0]->getX()},
-            {v[1]->getX()},
-            {v[2]->getX()},
-            {v[3]->getX()}};
-  }
-
-  const vector<vector<double>> gy(vector<Coordinate*> &v) {
-    return {{v[0]->getY()},
-            {v[1]->getY()},
-            {v[2]->getY()},
-            {v[3]->getY()}};
-  }
-
   void create_points(vector<Coordinate*> &points, double delta) {
     // 0 - Define delta, delta2, delta3 and n values
     double delta2 = delta * delta;
@@ -49,13 +20,13 @@ protected:
     double n = 1/delta;
 
     // 1 - Compute coefficients
-    Matrix mbs = BSpline::mbs();
-    Matrix e = BSpline::e(delta, delta2, delta3);
+    Matrix mbs = Matrix::mbs();
+    Matrix e = Matrix::e(delta, delta2, delta3);
 
     for (int i = 0; i <= points.size()-4; i++ ) {
       vector<Coordinate*> control_points = {points[i], points[i+1], points[i+2], points[i+3]};
-      Matrix gx = BSpline::gx(control_points);
-      Matrix gy = BSpline::gy(control_points);
+      Matrix gx = Matrix::gx(control_points);
+      Matrix gy = Matrix::gy(control_points);
 
       Matrix c_x = mbs * gx;
       Matrix c_y = mbs * gy;
