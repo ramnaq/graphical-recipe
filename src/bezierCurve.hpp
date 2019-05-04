@@ -6,8 +6,8 @@ class BezierCurve : public GraphicObject {
 public:
   BezierCurve(string name, vector<Coordinate*> &points)
     : GraphicObject(name, CURVE, points) {
-        this->blending_function(points);
         this->t = 0.05;
+        this->blending_function(points);
   }
 
   void setT(double newt) {
