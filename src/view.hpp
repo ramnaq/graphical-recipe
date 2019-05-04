@@ -13,7 +13,6 @@
 
 using namespace std;
 
-
 #define VIEWPORT_MARGIN 20
 
 class View {
@@ -166,11 +165,6 @@ public:
     gtk_widget_show(editObjectWindow);
   }
 
-  void clear_surface() {
-    drawer->clear_surface();
-    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-  }
-
   void create_surface(GtkWidget *widget) {
     drawer->create_surface(widget);
   }
@@ -195,14 +189,6 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  //! Draws a Polygon and properly clears elements in the "New Polygon window"
-  /*!
-   * @param obj The object to be drawn.
-   */
-  void newPolygon(GraphicObject* obj, bool fill) {
-    drawNewPolygon(obj, fill);
-  }
-
   void drawNewPolygon(GraphicObject* obj, bool fill) {
     vector<Coordinate*> polygonPoints = obj->getWindowPoints();
     drawer->drawPolygon(polygonPoints, fill);
@@ -217,6 +203,14 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
     removeAllCurveCoordinates();
     clearCurveCoordEntries();
+  }
+
+  //! Draws a Polygon and properly clears elements in the "New Polygon window"
+  /*!
+   * @param obj The object to be drawn.
+   */
+  void newPolygon(GraphicObject* obj, bool fill) {
+    drawNewPolygon(obj, fill);
   }
 
   void insertIntoListBox(GraphicObject& obj, string tipo) {
@@ -307,16 +301,6 @@ public:
     } while (gtk_list_box_get_row_at_index(listCoordCurve, 0) != NULL);
   }
 
-  void clearPolygonCoordEntries() {
-    gtk_entry_set_text(entryPolygonX, "");
-    gtk_entry_set_text(entryPolygonY, "");
-  }
-
-  void clearCurveCoordEntries() {
-    gtk_entry_set_text(entryCurveX, "");
-    gtk_entry_set_text(entryCurveY, "");
-  }
-
   void updateRadioButtonState(int newState) {
     rotationRadioButtonState = newState;
   }
@@ -385,22 +369,17 @@ public:
   void transform(GraphicObject* object) {
     switch (object->getType()) {
       case POINT:
-        viewPort->transformation(object->getCoordinates().front());
-        break;
       case LINE:
-        viewPort->transformation(object->getCoordinates().front());
-        viewPort->transformation(object->getCoordinates().back());
+        this->worldToViewPort(object->getCoordinates());
         break;
       case POLYGON:
-        multiPointsTransformation(object->getWindowPoints());
-        break;
       case CURVE:
-        multiPointsTransformation(object->getWindowPoints());
+        this->worldToViewPort(object->getWindowPoints());
         break;
     }
   }
 
-  void multiPointsTransformation(vector<Coordinate*> points) {
+  void worldToViewPort(vector<Coordinate*> points) {
     vector<Coordinate*>::iterator it;
     for(it = points.begin(); it != points.end(); it++) {
       viewPort->transformation(*it);
@@ -444,8 +423,23 @@ public:
     logger->logError(err);
   }
 
+  void clear_surface() {
+    drawer->clear_surface();
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
   void clearSaveWorldFile() {
   	gtk_entry_set_text(entryObjWorldFile, "");
+  }
+
+  void clearPolygonCoordEntries() {
+    gtk_entry_set_text(entryPolygonX, "");
+    gtk_entry_set_text(entryPolygonY, "");
+  }
+
+  void clearCurveCoordEntries() {
+    gtk_entry_set_text(entryCurveX, "");
+    gtk_entry_set_text(entryCurveY, "");
   }
 
   ///
