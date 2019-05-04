@@ -45,7 +45,7 @@ public:
 
 	void draw(cairo_t *cr) {
 		cairo_set_source_surface(cr, surface, 0, 0);
-	  cairo_paint(cr);
+		cairo_paint(cr);
 	}
 
 	void drawPoint(Coordinate* coord) {

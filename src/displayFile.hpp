@@ -29,7 +29,7 @@ public:
 	}
 
 	ListaEnc<GraphicObject*>* getObjs() {
-        return displayFile;
+		return displayFile;
 	}
 
 	GraphicObject* getElementoNoIndice(int index) {

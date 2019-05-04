@@ -292,29 +292,29 @@ public:
   }
 
   void removeAllPolygonCoordinates() {
-  	do {
-  	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
-  	  gtk_list_box_select_row(listCoordPolygon, row);
-  	  gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-  	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
+    do {
+      GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
+      gtk_list_box_select_row(listCoordPolygon, row);
+      gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
+    } while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
   }
 
   void removeAllCurveCoordinates() {
-  	do {
-  	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordCurve, 0);
-  	  gtk_list_box_select_row(listCoordCurve, row);
-  	  gtk_container_remove((GtkContainer*) listCoordCurve, (GtkWidget*) row);
-  	} while (gtk_list_box_get_row_at_index(listCoordCurve, 0) != NULL);
+    do {
+      GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordCurve, 0);
+      gtk_list_box_select_row(listCoordCurve, row);
+      gtk_container_remove((GtkContainer*) listCoordCurve, (GtkWidget*) row);
+    } while (gtk_list_box_get_row_at_index(listCoordCurve, 0) != NULL);
   }
 
   void clearPolygonCoordEntries() {
-  	gtk_entry_set_text(entryPolygonX, "");
-  	gtk_entry_set_text(entryPolygonY, "");
+    gtk_entry_set_text(entryPolygonX, "");
+    gtk_entry_set_text(entryPolygonY, "");
   }
 
   void clearCurveCoordEntries() {
-  	gtk_entry_set_text(entryCurveX, "");
-  	gtk_entry_set_text(entryCurveY, "");
+    gtk_entry_set_text(entryCurveX, "");
+    gtk_entry_set_text(entryCurveY, "");
   }
 
   void updateRadioButtonState(int newState) {
@@ -330,7 +330,7 @@ public:
   }
 
   void updateCheckBtnSpline() {
-	checkIsSplineState = !checkIsSplineState;
+    checkIsSplineState = !checkIsSplineState;
   }
 
   void updateWindow(double step, int op) {

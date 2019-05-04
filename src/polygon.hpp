@@ -10,7 +10,7 @@ public:
 	Polygon(string name, vector<Coordinate*> &polygonCoordinates, bool filled) :
 		GraphicObject(name, POLYGON, polygonCoordinates) {
 			this->filled = filled;
-		}
+	}
 
 	bool fill() {
 		return filled;
