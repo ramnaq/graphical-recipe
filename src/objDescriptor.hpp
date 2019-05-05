@@ -5,7 +5,9 @@
 #include <sstream>
 #include <vector>
 
-#include "graphicObject.hpp"
+#include "point.hpp"
+#include "line.hpp"
+#include "polygon.hpp"
 
 class ObjDescriptor {
   public:

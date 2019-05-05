@@ -1,8 +1,6 @@
 #ifndef OBJECTTRANSFORMATION_HPP
 #define OBJECTTRANSFORMATION_HPP
 
-#include <math.h>
-
 #include "matrix.hpp"
 
 /*! Applies translation, scaling or rotation transformations to an object. */

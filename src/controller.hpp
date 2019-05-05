@@ -2,6 +2,7 @@
 #define CONTROLLER_HPP
 
 #include <stdexcept>
+#include <iostream>
 
 #include "bezierCurve.hpp"
 #include "bspline.hpp"

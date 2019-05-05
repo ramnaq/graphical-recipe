@@ -2,6 +2,9 @@
 #define MATRIX_HPP
 
 #include <vector>
+#include <math.h>
+
+#include "coordinate.hpp"
 
 using namespace std;
 

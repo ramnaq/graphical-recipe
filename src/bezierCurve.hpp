@@ -1,6 +1,9 @@
 #ifndef BEZIER_CURVE_H
 #define BEZIER_CURVE_H
 
+#include "graphicObject.hpp"
+#include "matrix.hpp"
+
 class BezierCurve : public GraphicObject {
 public:
   BezierCurve(string name, vector<Coordinate*> &points)

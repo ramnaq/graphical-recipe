@@ -2,7 +2,7 @@
 #define DISPLAYFILE_HPP
 
 #include "listEnc.hpp"
-#include "point.hpp"
+#include "graphicObject.hpp"
 
 class DisplayFile {
 private:

@@ -1,6 +1,9 @@
 #ifndef BSPLINE_H
 #define BSPLINE_H
 
+#include "graphicObject.hpp"
+#include "matrix.hpp"
+
 class BSpline : public GraphicObject {
 public:
   BSpline(string name, vector<Coordinate*> &points, double delta)
