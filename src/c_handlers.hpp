@@ -246,7 +246,7 @@ extern "C" G_MODULE_EXPORT void on_btnConfirmEditObject_clicked(){
 //! Connected to signal "clicked" of element "radiobtnOrigin".
 extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
   try {
-    controller->updateRadioButtonState(1);
+    controller->updateRadioBtnState(1);
   } catch (...) {
 
   }
@@ -255,7 +255,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
 //! Connected to signal "clicked" of element "radiobtnCenter".
 extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
   try {
-    controller->updateRadioButtonState(2);
+    controller->updateRadioBtnState(2);
   } catch (...) {
 
   }
@@ -264,7 +264,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
 //! Connected to signal "clicked" of element "radiobtnPoint".
 extern "C" G_MODULE_EXPORT void on_radiobtnPoint_clicked(){
   try {
-    controller->updateRadioButtonState(3);
+    controller->updateRadioBtnState(3);
   } catch (...) {
 
   }
@@ -273,7 +273,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnPoint_clicked(){
 //! Connected to signal "clicked" of element "radiobtnCS".
 extern "C" G_MODULE_EXPORT void on_radiobtnCS_clicked(){
   try {
-    controller->updateClippingRadioButtonState(1);
+    controller->updateClippingRadioBtnState(1);
   } catch (...) {
 
   }
@@ -282,7 +282,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnCS_clicked(){
 //! Connected to signal "clicked" of element "radiobtnLB".
 extern "C" G_MODULE_EXPORT void on_radiobtnLB_clicked(){
   try {
-    controller->updateClippingRadioButtonState(2);
+    controller->updateClippingRadioBtnState(2);
   } catch (...) {
 
   }

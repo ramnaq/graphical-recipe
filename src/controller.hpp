@@ -206,20 +206,20 @@ public:
 
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
   void removeSelectedObject() {
-    int index = view.removeSelectedObject();
+    int index = view.removeFromList(view.getListObj());
     display.remove(index);
     updateDrawScreen();
   }
 
   void removeFromCoordPolygonList() {
-    int index = view.removeFromCoordPolygonList();
+    int index = view.removeFromList(view.getListCoordPolygon());
     if (index > -1) {
       pointsForPolygon.erase(pointsForPolygon.begin() + index);
     }
   }
 
   void removeFromCoordCurveList() {
-    int index = view.removeFromCoordCurveList();
+    int index = view.removeFromList(view.getListCoordCurve());
     if (index > -1) {
       pointsForCurve.erase(pointsForCurve.begin() + index);
     }
@@ -230,9 +230,11 @@ public:
    * to a Polygon which is being created.
    */
   void addNewLineForPolygon() {
-    Coordinate* c = new Coordinate(view.getEntryPolygonX(), view.getEntryPolygonY());
+    double x = view.getEntryPolygonX();
+    double y = view.getEntryPolygonY();
+    Coordinate* c = new Coordinate(x, y);
     pointsForPolygon.push_back(c);
-    view.insertCoordPolygonList();
+    view.insertCoordList(view.getListCoordPolygon(), x, y);
   }
 
   /*!
@@ -240,9 +242,11 @@ public:
    * to a Curve which is being created.
    */
   void addNewPointForCurve() {
-    Coordinate* c = new Coordinate(view.getEntryCurveX(), view.getEntryCurveY());
+    double x = view.getEntryCurveX();
+    double y = view.getEntryCurveY();
+    Coordinate* c = new Coordinate(x, y);
     pointsForCurve.push_back(c);
-    view.insertCoordCurveList();
+    view.insertCoordList(view.getListCoordCurve(), x, y);
   }
 
   //! Changes the visualization window (of type Window) according the op code.
@@ -261,12 +265,12 @@ public:
     updateDrawScreen();
   }
 
-  void updateRadioButtonState(int newState) {
-    view.updateRadioButtonState(newState);
+  void updateRadioBtnState(int newState) {
+    view.updateRadioBtnState(newState);
   }
 
-  void updateClippingRadioButtonState(int newState) {
-    view.updateClippingRadioButtonState(newState);
+  void updateClippingRadioBtnState(int newState) {
+    view.updateClippingRadioBtnState(newState);
   }
 
   void updateCheckBtnState() {
@@ -280,13 +284,12 @@ public:
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
     view.clear_surface();
-    int chosenAlgorithm = view.getLineClippingAlgorithm();
 
     // Update window coordinates
     Window* window = view.getWindow();
+    double currentAngle = window->getAngle();
     Coordinate* windowCoord = window->getCoordinates().back();
     Coordinate geometriCenter = window->getGeometricCenter();
-    double currentAngle = window->getAngle();
     Coordinate windowScalingFactor(1,1);
     Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
 
@@ -306,19 +309,17 @@ public:
           }
           break;
         case LINE:
-          clipping.lineClipping(element, chosenAlgorithm);
+          clipping.lineClipping(element, view.getLineClippingAlgorithm());
           if (element->isVisible()) {
             view.transform(element);
             view.drawNewLine(element);
           }
           break;
         case POLYGON: {
-          clipping.polygonClipping(element, chosenAlgorithm);
-          Polygon* p = static_cast<Polygon*>(element);
-          if (p->isVisible()) {
-          bool fill = p->fill();
-            view.transform(p);
-            view.drawNewPolygon(p, fill);
+          clipping.polygonClipping(element);
+          if (element->isVisible()) {
+            view.transform(element);
+            view.drawNewPolygon(element, static_cast<Polygon*>(element)->fill());
           }
           break;
         }
