@@ -891,8 +891,8 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="label3">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
                             <property name="label" translatable="yes">Z:</property>
                           </object>
                           <packing>
@@ -903,8 +903,8 @@
                         </child>
                         <child>
                           <object class="GtkEntry" id="entryTranslationZ">
+                            <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="no_show_all">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1008,8 +1008,8 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="label6">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
                             <property name="label" translatable="yes">Z:</property>
                           </object>
                           <packing>
@@ -1020,8 +1020,8 @@
                         </child>
                         <child>
                           <object class="GtkEntry" id="entryScalingZ">
+                            <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="no_show_all">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1295,8 +1295,8 @@
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="entryRotationZ">
+                                    <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="no_show_all">True</property>
                                     <property name="width_chars">5</property>
                                   </object>
                                   <packing>
@@ -1504,8 +1504,8 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="labelPointZ">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
                             <property name="label" translatable="yes">Z:</property>
                           </object>
                           <packing>
@@ -1516,8 +1516,8 @@
                         </child>
                         <child>
                           <object class="GtkEntry" id="entryPointZ">
+                            <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="no_show_all">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1626,8 +1626,8 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="labelLineZ">
+                                <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes">Z:</property>
                               </object>
                               <packing>
@@ -1638,8 +1638,8 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="entryLineZ">
+                                <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="no_show_all">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1738,8 +1738,8 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="labelLineZ1">
+                                <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes">Z:</property>
                               </object>
                               <packing>
@@ -1750,8 +1750,8 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="entryLineZ1">
+                                <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="no_show_all">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1871,8 +1871,8 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="labelPolygonZ">
+                                <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
                                 <property name="label" translatable="yes">Z:</property>
                               </object>
                               <packing>
@@ -1883,8 +1883,8 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="entryPolygonZ">
+                                <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="no_show_all">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
