@@ -1,27 +1,25 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include <iostream>
 #include <stdexcept>
 
-#include "enum.hpp"
-#include "view.hpp"
-#include "line.hpp"
-#include "point.hpp"
-#include "polygon.hpp"
-#include "clipping.hpp"
 #include "bezierCurve.hpp"
 #include "bspline.hpp"
+#include "clipping.hpp"
 #include "displayFile.hpp"
-#include "objDescriptor.hpp"
+#include "enum.hpp"
+#include "line.hpp"
 #include "objectTransformation.hpp"
+#include "objDescriptor.hpp"
+#include "point.hpp"
+#include "polygon.hpp"
+#include "view.hpp"
 
 #define WINDOW_ORIGINAL_POSITION 10
 
 /*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
 
 class Controller {
-
 private:
   View view;
   DisplayFile display;

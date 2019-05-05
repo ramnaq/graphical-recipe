@@ -3,7 +3,6 @@
 
 #include "window.hpp"
 
-
 class ViewPort {
   private:
     Window *window;

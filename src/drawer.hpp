@@ -2,6 +2,7 @@
 #define DRAWER_HPP
 
 #include <math.h>
+
 #include "graphicObject.hpp"
 
 static cairo_surface_t *surface = NULL;

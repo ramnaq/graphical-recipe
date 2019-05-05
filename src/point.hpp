@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 
-
 /*! Structures a representation and behavior of a "line segment" */
 
 class Point: public GraphicObject {

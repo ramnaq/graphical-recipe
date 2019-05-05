@@ -4,7 +4,6 @@
 #include "element.hpp"
 
 template<typename T>
-
 class ListaEnc {
 public:
 

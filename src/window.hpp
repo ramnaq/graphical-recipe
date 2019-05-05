@@ -11,6 +11,7 @@ private:
   double angle;
   Coordinate const *defaultCoordMin;
   Coordinate const *defaultCoordMax;
+  
 public:
   Window(vector<Coordinate*> &windowCoordinates) :
     GraphicObject("Window", WINDOW, windowCoordinates) {

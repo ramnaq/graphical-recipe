@@ -1,8 +1,6 @@
 #ifndef BSPLINE_H
 #define BSPLINE_H
 
-#include <iostream>
-
 class BSpline : public GraphicObject {
 public:
   BSpline(string name, vector<Coordinate*> &points, double delta)

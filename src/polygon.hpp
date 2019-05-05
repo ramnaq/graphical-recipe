@@ -6,6 +6,7 @@
 class Polygon: public GraphicObject {
 private:
 	bool filled;
+	
 public:
 	Polygon(string name, vector<Coordinate*> &polygonCoordinates, bool filled) :
 		GraphicObject(name, POLYGON, polygonCoordinates) {

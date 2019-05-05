@@ -1,12 +1,11 @@
 #ifndef OBJDESCRIPTOR_HPP
 #define OBJDESCRIPTOR_HPP
 
-#include <vector>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 #include "graphicObject.hpp"
-
 
 class ObjDescriptor {
   public:
@@ -109,4 +108,3 @@ class ObjDescriptor {
 };
 
 #endif  //!< OBJDESCRIPTOR_HPP
-

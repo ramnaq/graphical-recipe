@@ -1,7 +1,6 @@
 #ifndef BEZIER_CURVE_H
 #define BEZIER_CURVE_H
 
-
 class BezierCurve : public GraphicObject {
 public:
   BezierCurve(string name, vector<Coordinate*> &points)

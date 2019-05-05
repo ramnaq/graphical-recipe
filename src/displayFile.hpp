@@ -4,9 +4,7 @@
 #include "listEnc.hpp"
 #include "point.hpp"
 
-
 class DisplayFile {
-
 private:
 	ListaEnc<GraphicObject*>* displayFile;
 

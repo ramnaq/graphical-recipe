@@ -3,8 +3,8 @@
 
 /*! Clipping methods. */
 
-#include <bitset>
 #include <algorithm>
+#include <bitset>
 
 #include "line.hpp"
 #include "polygon.hpp"
@@ -23,8 +23,6 @@
 class Clipping {
 private:
   vector<Coordinate*> wCoord;
-  double savedXns;
-  double savedYns;
 
   const vector<Coordinate> clp {
 		  Coordinate(-1, -1),

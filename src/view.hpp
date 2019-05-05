@@ -2,14 +2,14 @@
 #define VIEW_HPP
 
 #include <gtk/gtk.h>
+#include <stdio.h>
 #include <string>
 
-#include "logger.hpp"
 #include "drawer.hpp"
+#include "logger.hpp"
 #include "scn.hpp"
-#include "window.hpp"
 #include "viewport.hpp"
-#include <stdio.h>
+#include "window.hpp"
 
 using namespace std;
 
