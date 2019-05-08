@@ -2,6 +2,7 @@
 #define VIEW_HPP
 
 #include <gtk/gtk.h>
+#include <sstream>
 #include <stdio.h>
 #include <string>
 
@@ -49,10 +50,17 @@ private:
   GtkEntry *entryObjWorldFile;
   GtkEntry *entryAngleRotateWindow;
   GtkEntry *entryDelta;
+  GtkEntry *entry3DX1;
+  GtkEntry *entry3DY1;
+  GtkEntry *entry3DZ1;
+  GtkEntry *entry3DX2;
+  GtkEntry *entry3DY2;
+  GtkEntry *entry3DZ2;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
   GtkListBox *listCoordCurve;   //!< shows the coordinates added when creating a curve
+  GtkListBox *listSegment;
 
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
   GtkNotebook *notebookObjectOperations;
@@ -111,10 +119,17 @@ public:
     entryObjWorldFile = GTK_ENTRY(gtk_builder_get_object(builder, "entryObjWorldFile"));
     entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
     entryDelta = GTK_ENTRY(gtk_builder_get_object(builder, "entryDelta"));
+    entry3DX1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DX1"));
+    entry3DY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DY1"));
+    entry3DZ1 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DZ1"));
+    entry3DX2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DX2"));
+    entry3DY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DY2"));
+    entry3DZ2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DZ2"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
     listCoordCurve = GTK_LIST_BOX(gtk_builder_get_object(builder, "listboxCurveCoords"));
+    listSegment = GTK_LIST_BOX(gtk_builder_get_object(builder, "listSegment"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
@@ -203,6 +218,14 @@ public:
     clearCurveCoordEntries();
   }
 
+  void drawNewObject3D(GraphicObject* obj) {
+    //vector<Coordinate*> points = obj->getWindowPoints();
+    //drawer->drawCurve(points);
+    //gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCoordinates(listSegment);
+    clearSegmentCoordEntries();
+  }
+
   //! Draws a Polygon and properly clears elements in the "New Polygon window"
   /*!
    * @param obj The object to be drawn.
@@ -219,17 +242,45 @@ public:
     gtk_widget_show_all((GtkWidget*) objectsListBox);
   }
 
-  void insertCoordList(GtkListBox* list, double x, double y) {
-    string coordX = to_string(x);
-    string coordY = to_string(y);
+  void insertCoordList(GtkListBox* list, double x, double y, double z = 1) {
+    string coordX = to_string_with_precision(x);
+    string coordY = to_string_with_precision(y);
+    string coordZ = to_string_with_precision(z);
 
-    string name = "Coordenada: (" + coordX + " , " + coordY + ")";
+    string name = "Coordenada: (" + coordX + " , " + coordY + " , " + coordZ + ")";
 
     GtkWidget* row = gtk_list_box_row_new();
     GtkWidget* label = gtk_label_new(name.c_str());
 
     gtk_container_add((GtkContainer*) list, label);
     gtk_widget_show_all((GtkWidget*) list);
+  }
+
+  // Try to find a way to create a generic method from this method and the above
+  void insertCoordList(GtkListBox* list, double x, double y, double z, double x1, double y1, double z1) {
+    string coordX = to_string_with_precision(x);
+    string coordY = to_string_with_precision(y);
+    string coordZ = to_string_with_precision(z);
+    string coordX1 = to_string_with_precision(x1);
+    string coordY1 = to_string_with_precision(y1);
+    string coordZ1 = to_string_with_precision(z1);
+
+    string name = "Coordenada: (" + coordX + " , " + coordY + " , " + coordZ + ")";
+    name += " -> ";
+    name += "Coordenada: (" + coordX1 + " , " + coordY1 + " , " + coordZ1 + ")";
+
+    GtkWidget* row = gtk_list_box_row_new();
+    GtkWidget* label = gtk_label_new(name.c_str());
+
+    gtk_container_add((GtkContainer*) list, label);
+    gtk_widget_show_all((GtkWidget*) list);
+  }
+
+  string to_string_with_precision(double number) {
+    ostringstream out;
+    out.precision(2);
+    out << fixed << number;
+    return out.str();
   }
 
   //! Removes the selected element in GtkListBox
@@ -398,6 +449,15 @@ public:
     gtk_entry_set_text(entryCurveY, "");
   }
 
+  void clearSegmentCoordEntries() {
+    gtk_entry_set_text(entry3DX1, "");
+    gtk_entry_set_text(entry3DY1, "");
+    gtk_entry_set_text(entry3DZ1, "");
+    gtk_entry_set_text(entry3DX2, "");
+    gtk_entry_set_text(entry3DY2, "");
+    gtk_entry_set_text(entry3DZ2, "");
+  }
+
   ///
   /// Get methods
   ///
@@ -464,6 +524,30 @@ public:
 
   double getEntryRotationY() {
     return stod(gtk_entry_get_text(entryRotationY));
+  }
+
+  double getEntry3DX1() {
+    return stod(gtk_entry_get_text(entry3DX1));
+  }
+
+  double getEntry3DY1() {
+    return stod(gtk_entry_get_text(entry3DY1));
+  }
+
+  double getEntry3DZ1() {
+    return stod(gtk_entry_get_text(entry3DZ1));
+  }
+
+  double getEntry3DX2() {
+    return stod(gtk_entry_get_text(entry3DX2));
+  }
+
+  double getEntry3DY2() {
+    return stod(gtk_entry_get_text(entry3DY2));
+  }
+
+  double getEntry3DZ2() {
+    return stod(gtk_entry_get_text(entry3DZ2));
   }
 
   double getAngleRotateWindow() {
@@ -541,6 +625,10 @@ public:
 
   GtkListBox* getListObj() {
     return objectsListBox;
+  }
+
+  GtkListBox* getListSegment () {
+    return listSegment;
   }
 
 };

@@ -6,7 +6,6 @@
 #include "coordinate.hpp"
 #include "enum.hpp"
 
-
 using namespace std;
 
 /*! The generic type of an graphical object (point, line, polygon, etc) */
@@ -21,6 +20,13 @@ protected:
 	bool visible;
 
 public:
+	// TODO Temporary
+	GraphicObject(string name,  Type type) {
+		this->name = name;
+		this->type = type;
+		this->visible = true;
+	}
+
 	GraphicObject(string name,  Type type, vector<Coordinate*> &coordinateList) {
 		this->name = name;
 		this->type = type;

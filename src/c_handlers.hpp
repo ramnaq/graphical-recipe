@@ -60,6 +60,15 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_curve() {
   }
 }
 
+//! Connected to signal "clicked" of element "btnAddCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnAddCoord3D_clicked() {
+  try {
+    controller->addNewSegmentForObject3D();
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnRemoveObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   try {
@@ -93,6 +102,15 @@ extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_clicked() {
 extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_curve() {
   try {
     controller->removeFromCoordCurveList();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnAddCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnRemoveCoord3D_clicked() {
+  try {
+    controller->removeFromCoordObject3DList();
   } catch (...) {
 
   }

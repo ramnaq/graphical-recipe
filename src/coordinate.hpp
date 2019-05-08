@@ -7,15 +7,17 @@ class Coordinate {
 private:
   double x;   /*! World coordinates. */
   double y;
+  double z;
   double xvp; /*! ViewPort coordinates. */
   double yvp;
   double xns; /*! Window coordinates. */
   double yns;
 
 public:
-  Coordinate(double x, double y) {
+  Coordinate(double x, double y, double z = 1) {
     this->x = x;
     this->y = y;
+    this->z = z;
   }
 
   ~Coordinate() {}
@@ -28,12 +30,20 @@ public:
     this->y = y;
   }
 
+  void setZ(double z) {
+    this->z = z;
+  }
+
   double getX() const {
     return this->x;
   }
 
   double getY() const {
     return this->y;
+  }
+
+  double getZ() const {
+    return this->z;
   }
 
   void setXvp(double x) {

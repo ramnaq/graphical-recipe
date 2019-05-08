@@ -12,6 +12,7 @@
 #include "line.hpp"
 #include "objectTransformation.hpp"
 #include "objDescriptor.hpp"
+#include "object3D.hpp"
 #include "point.hpp"
 #include "polygon.hpp"
 #include "view.hpp"
@@ -27,6 +28,7 @@ private:
   Clipping clipping;
   vector<Coordinate*> pointsForPolygon;
   vector<Coordinate*> pointsForCurve;
+  vector<Segment*> segmentsForObject3D;
 
 public:
   Controller() {
@@ -98,6 +100,13 @@ public:
           std::cout << "[ERROR] " << e.what() << std::endl;
           view.logError("Pontos insuficientes para criação de curva.\n");
         }
+        break;
+      }
+      case OBJECT3D: {
+          obj = new Object3D(name, segmentsForObject3D);
+          objType = "OBJETO 3D";
+
+          segmentsForObject3D.clear();
         break;
       }
     }
@@ -224,6 +233,13 @@ public:
     }
   }
 
+  void removeFromCoordObject3DList() {
+    int index = view.removeFromList(view.getListSegment());
+    if (index > -1) {
+        segmentsForObject3D.erase(segmentsForObject3D.begin() + index);
+    }
+  }
+
   /*!
    * Gets (x, y) from view to create a new Coordinate and then add a new line
    * to a Polygon which is being created.
@@ -246,6 +262,22 @@ public:
     Coordinate* c = new Coordinate(x, y);
     pointsForCurve.push_back(c);
     view.insertCoordList(view.getListCoordCurve(), x, y);
+  }
+
+  void addNewSegmentForObject3D() {
+    double x1 = view.getEntry3DX1();
+    double y1 = view.getEntry3DY1();
+    double z1 = view.getEntry3DZ1();
+    double x2 = view.getEntry3DX2();
+    double y2 = view.getEntry3DY2();
+    double z2 = view.getEntry3DZ2();
+
+    Coordinate* a = new Coordinate(x1, y1, z1);
+    Coordinate* b = new Coordinate(x2, y2, z2);
+    Segment* s = new Segment(a, b);
+
+    segmentsForObject3D.push_back(s);
+    view.insertCoordList(view.getListSegment(), x1, y1, z1, x2, y2, z2);
   }
 
   //! Changes the visualization window (of type Window) according the op code.
@@ -328,7 +360,10 @@ public:
             view.transform(element);
             view.drawNewCurve(element);
           }
-        break;
+          break;
+        case OBJECT3D:
+          view.drawNewObject3D(element);
+          break;
       }
       nextElement = nextElement->getProximo();
     }
