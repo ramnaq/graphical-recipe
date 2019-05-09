@@ -265,19 +265,53 @@ public:
   }
 
   void addNewSegmentForObject3D() {
-    double x1 = view.getEntry3DX1();
-    double y1 = view.getEntry3DY1();
-    double z1 = view.getEntry3DZ1();
-    double x2 = view.getEntry3DX2();
-    double y2 = view.getEntry3DY2();
-    double z2 = view.getEntry3DZ2();
+    // double x1 = view.getEntry3DX1();
+    // double y1 = view.getEntry3DY1();
+    // double z1 = view.getEntry3DZ1();
+    // double x2 = view.getEntry3DX2();
+    // double y2 = view.getEntry3DY2();
+    // double z2 = view.getEntry3DZ2();
+    //
+    // Coordinate* a = new Coordinate(x1, y1, z1);
+    // Coordinate* b = new Coordinate(x2, y2, z2);
+    // Segment* s = new Segment(a, b);
 
-    Coordinate* a = new Coordinate(x1, y1, z1);
-    Coordinate* b = new Coordinate(x2, y2, z2);
+    Coordinate* a = new Coordinate(0, 0, 0);
+    Coordinate* b = new Coordinate(0, 100, 0);
+    Coordinate* c = new Coordinate(100, 100, 0);
+    Coordinate* d = new Coordinate(100, 0, 0);
+    Coordinate* e = new Coordinate(50, 50, -50);
+    Coordinate* f = new Coordinate(150, 50, -50);
+    Coordinate* g = new Coordinate(50, 150, -50);
+    Coordinate* h = new Coordinate(150, 150, -50);
+
     Segment* s = new Segment(a, b);
+    Segment* s1 = new Segment(a, d);
+    Segment* s2 = new Segment(a, e);
+    Segment* s3 = new Segment(g, b);
+    Segment* s4 = new Segment(g, h);
+    Segment* s5 = new Segment(g, e);
+    Segment* s6 = new Segment(c, b);
+    Segment* s7 = new Segment(c, d);
+    Segment* s8 = new Segment(c, h);
+    Segment* s9 = new Segment(f, h);
+    Segment* s10 = new Segment(f, d);
+    Segment* s11 = new Segment(f, e);
 
     segmentsForObject3D.push_back(s);
-    view.insertCoordList(view.getListSegment(), x1, y1, z1, x2, y2, z2);
+    segmentsForObject3D.push_back(s1);
+    segmentsForObject3D.push_back(s2);
+    segmentsForObject3D.push_back(s3);
+    segmentsForObject3D.push_back(s4);
+    segmentsForObject3D.push_back(s5);
+    segmentsForObject3D.push_back(s6);
+    segmentsForObject3D.push_back(s7);
+    segmentsForObject3D.push_back(s8);
+    segmentsForObject3D.push_back(s9);
+    segmentsForObject3D.push_back(s10);
+    segmentsForObject3D.push_back(s11);
+
+    //view.insertCoordList(view.getListSegment(), x1, y1, z1, x2, y2, z2);
   }
 
   //! Changes the visualization window (of type Window) according the op code.
@@ -318,17 +352,19 @@ public:
 
     // Update window coordinates
     Window* window = view.getWindow();
+    Coordinate geometriCenter = window->getGeometricCenter();
+    view.transformOPP(window, &geometriCenter);
+
     double currentAngle = window->getAngle();
     Coordinate* windowCoord = window->getCoordinates().back();
-    Coordinate geometriCenter = window->getGeometricCenter();
+    Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
     Coordinate windowScalingFactor(1,1);
-    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
-
     view.transformSCN(window, &geometriCenter, &windowScalingFactor, currentAngle);
 
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
+      view.transformOPP(element, &geometriCenter);
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
 
       switch (element->getType()) {
@@ -362,6 +398,13 @@ public:
           }
           break;
         case OBJECT3D:
+          vector<Segment*> segments = static_cast<Object3D*>(element)->getSegmentList();
+          vector<Segment*>::iterator segment;
+          for(segment = segments.begin(); segment != segments.end(); segment++) {
+              vector<Coordinate*> tmp = (*segment)->getCoordinates();
+              (*segment)->setVisibility(clipping.clipping3D(tmp));
+          }
+          view.transform(element);
           view.drawNewObject3D(element);
           break;
       }

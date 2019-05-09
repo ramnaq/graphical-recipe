@@ -29,6 +29,12 @@ public:
            {1}};
   }
 
+  static std::vector<std::vector<double> > coordinateOppToMatrix(Coordinate* coord) {
+   return {{coord->getXop()},
+           {coord->getYop()},
+           {1}};
+  }
+
   static std::vector<std::vector<double> > translationVectorToMatrix(Coordinate* coord) {
    return {{1, 0, coord->getX()},
            {0, 1, coord->getY()},

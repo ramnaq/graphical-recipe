@@ -8,6 +8,7 @@
 
 #include "drawer.hpp"
 #include "logger.hpp"
+#include "orthogonalParallelProjection.hpp"
 #include "scn.hpp"
 #include "viewport.hpp"
 #include "window.hpp"
@@ -70,6 +71,7 @@ private:
   ViewPort* viewPort;
   Scn* scn;
   Logger* logger;
+  Opp* opp;
 
   int rotationRadioButtonState;
   int clippingRadioButtonState;
@@ -81,6 +83,7 @@ public:
     drawer = new Drawer();
     scn = new Scn();
     logger = new Logger();
+    opp = new Opp();
   }
 
   //! Startup the user interface: initiates GTK, creates all graphical elements and runs gtk_main();
@@ -162,8 +165,8 @@ public:
     Coordinate* coordMax = new Coordinate(xMax-VIEWPORT_MARGIN, yMax-VIEWPORT_MARGIN);
     vector<Coordinate*> vpCoord = {coordMin, coordMax};
 
-    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2);
-    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2);
+    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2, 0);
+    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2, 0);
     vector<Coordinate*> windowCoord = {wCoordMin, wCoordMax};
 
     window = new Window(windowCoord);
@@ -219,10 +222,16 @@ public:
   }
 
   void drawNewObject3D(GraphicObject* obj) {
-    //vector<Coordinate*> points = obj->getWindowPoints();
-    //drawer->drawCurve(points);
-    //gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-    removeAllCoordinates(listSegment);
+    vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
+    vector<Segment*>::iterator segment;
+    for(segment = segments.begin(); segment != segments.end(); segment++) {
+      if ((*segment)->isVisible()) {
+        vector<Coordinate*> tmp = (*segment)->getCoordinates();
+        drawer->drawLine(tmp[0], tmp[1]);
+      }
+    }
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCoordinates(listSegment); // TODO Remover isso, só acontece uma vez
     clearSegmentCoordEntries();
   }
 
@@ -383,6 +392,9 @@ public:
       case CURVE:
         this->worldToViewPort(object->getWindowPoints());
         break;
+      case OBJECT3D:
+        this->world3dToViewPort(static_cast<Object3D*>(object)->getSegmentList());
+        break;
     }
   }
 
@@ -390,6 +402,17 @@ public:
     vector<Coordinate*>::iterator it;
     for(it = points.begin(); it != points.end(); it++) {
       viewPort->transformation(*it);
+    }
+  }
+
+  void world3dToViewPort(vector<Segment*> segments) {
+    vector<Segment*>::iterator segment;
+    for(segment = segments.begin(); segment != segments.end(); segment++) {
+      if ((*segment)->isVisible()) {
+        vector<Coordinate*> tmp = (*segment)->getCoordinates();
+        viewPort->transformation(tmp[0]);
+        viewPort->transformation(tmp[1]);
+      }
     }
   }
 
@@ -418,8 +441,33 @@ public:
     return fileName;
   }
 
+  void transformOPP(Window* window, Coordinate* geometriCenter) {
+    opp->computeAngle(window, geometriCenter);
+    opp->transformation(window->getCoordinates(), geometriCenter);
+  }
+
+  void transformOPP(GraphicObject* elem, Coordinate* geometriCenter) {
+    if (elem->getType() != OBJECT3D) {
+      opp->transformation(elem->getCoordinates(), geometriCenter);
+    } else {
+      vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
+      vector<Segment*>::iterator segment;
+      for(segment = segments.begin(); segment != segments.end(); segment++) {
+          opp->transformation((*segment)->getCoordinates(), geometriCenter);
+      }
+    }
+  }
+
   void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
-    scn->transformation(elem, geometriCenter, factor, angle);
+    if (elem->getType() != OBJECT3D) {
+      scn->transformation(elem->getCoordinates(), geometriCenter, factor, angle);
+    } else {
+      vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
+      vector<Segment*>::iterator segment;
+      for(segment = segments.begin(); segment != segments.end(); segment++) {
+          scn->transformation((*segment)->getCoordinates(), geometriCenter, factor, angle);
+      }
+    }
   }
 
   void logWarning(string wrn) {

@@ -7,25 +7,31 @@
 
 class Segment {
 private:
-  Coordinate *a, *b;
+  vector<Coordinate*> pair;
+  bool visible;
 public:
 	Segment(Coordinate* a, Coordinate* b) {
-    this->a = a;
-    this->b = b;
+    this->pair.push_back(a);
+    this->pair.push_back(b);
+    this->visible = true;
 	}
 
   ~Segment() {
-    delete this->a;
-    delete this->b;
+    delete this->pair.front();
+    delete this->pair.back();
   }
 
-  Coordinate* getA() {
-    return this->a;
+  vector<Coordinate*> getCoordinates() {
+    return this->pair;
   }
 
-  Coordinate* getB() {
-    return this->b;
-  }
+  bool isVisible() {
+		return this->visible;
+	}
+
+	void setVisibility(bool updateVisibility) {
+		this->visible = updateVisibility;
+	}
 
 };
 

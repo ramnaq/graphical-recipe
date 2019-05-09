@@ -59,6 +59,20 @@ public:
       liangBarsky(line);
   }
 
+  bool clipping3D(vector<Coordinate*> coord) {
+      Line x("", coord);
+      lineClipping(&x, 1);
+      vector<Coordinate*> tmp3 = x.getCoordinates();
+
+      bool a = x.isVisible();
+      coord[0]->setXns(tmp3[0]->getXns());
+      coord[0]->setYns(tmp3[0]->getYns());
+      coord[1]->setXns(tmp3[1]->getXns());
+      coord[1]->setYns(tmp3[1]->getYns());
+
+      return a;
+  }
+
   void polygonClipping(GraphicObject* polygon) {
     polygon->updateWindowPoints(polygon->getCoordinates());
     vector<Coordinate> clp = this->clp;

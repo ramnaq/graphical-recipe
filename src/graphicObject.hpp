@@ -16,7 +16,7 @@ protected:
 	Type type;
 	vector<Coordinate*> coordinateList;
 	vector<Coordinate*> windowPoints;
-	double cx, cy;
+	double cx, cy, cz;
 	bool visible;
 
 public:
@@ -36,11 +36,12 @@ public:
 		computeGeometricCenter();
 	}
 
+	// TODO descomentar
 	~GraphicObject() {
-		vector<Coordinate*>::iterator it;
-		for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
-			delete *it;
-		}
+		// vector<Coordinate*>::iterator it;
+		// for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
+		// 	delete *it;
+		// }
 	}
 
 	string getObjectName() {
@@ -60,7 +61,6 @@ public:
 	}
 
 	vector<Coordinate*> getCoordinates() {
-		computeGeometricCenter();
 		return coordinateList;
 	}
 
@@ -74,19 +74,23 @@ public:
 
 
 	Coordinate getGeometricCenter() {
-		return Coordinate(cx, cy);
+		computeGeometricCenter();
+		return Coordinate(cx, cy, cz);
 	}
 
 	void computeGeometricCenter() {
 		cx = 0;
 		cy = 0;
+		cz = 0;
 		vector<Coordinate*>::iterator it;
 		for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
 			cx += (*it)->getX();
 			cy += (*it)->getY();
+			cz += (*it)->getZ();
 		}
 		cx = cx / coordinateList.size();
 		cy = cy / coordinateList.size();
+		cz = cz / coordinateList.size();
 	}
 };
 
