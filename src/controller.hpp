@@ -391,8 +391,7 @@ public:
 
       switch (element->getType()) {
         case POINT:
-          clipping.pointClipping(element);
-          if (element->isVisible()) {
+          if (clipping.pointClipping(element->getCoordinates())) {
             view.transform(element);
             view.drawNewPoint(element);
           }

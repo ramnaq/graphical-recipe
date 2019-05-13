@@ -41,15 +41,15 @@ public:
     delete this->wCoord.back();
   }
 
-  void pointClipping(GraphicObject* point) {
-    Coordinate* pc = point->getCoordinates().front();
+  bool pointClipping(vector<Coordinate*> pointCoord) {
+    Coordinate* pc = pointCoord.front();
 
     if (pc->getXns() < wCoord.front()->getX() || pc->getXns() > wCoord.back()->getX())
-      point->setVisibility(false);
+      return false;
     else if (pc->getYns() < wCoord.front()->getY() || pc->getYns() > wCoord.back()->getY())
-      point->setVisibility(false);
+      return false;
     else
-      point->setVisibility(true);
+      return true;
   }
 
   bool lineClipping(vector<Coordinate*> lineCoord, int chosenAlgorithm) {
