@@ -72,9 +72,9 @@ public:
 		this->windowPoints = newPoints;
 	}
 
-
 	Coordinate getGeometricCenter() {
-		computeGeometricCenter();
+		if (type != OBJECT3D)
+			computeGeometricCenter();
 		return Coordinate(cx, cy, cz);
 	}
 

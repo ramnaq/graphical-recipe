@@ -160,13 +160,31 @@ public:
 
     switch (currentPage) {
       case TRANSLATION: {
-        Coordinate translationVector(view.getEntryTranslationX(), view.getEntryTranslationY());
-        ObjectTransformation::translation(obj, &translationVector);
+        Coordinate translationVector(view.getEntryTranslationX(), view.getEntryTranslationY(), view.getEntryTranslationZ());
+        if (obj->getType() != OBJECT3D) {
+          ObjectTransformation::translation(obj->getCoordinates(), &translationVector);
+        } else {
+          vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
+          vector<Segment*>::iterator segment;
+          for(segment = segments.begin(); segment != segments.end(); segment++) {
+              ObjectTransformation::translation((*segment)->getCoordinates(), &translationVector);
+          }
+        }
         break;
       }
       case SCALING: {
         Coordinate scalingVector(view.getEntryScalingX(), view.getEntryScalingY());
-        ObjectTransformation::scaling(obj, &scalingVector);
+        Coordinate objCenter = obj->getGeometricCenter();
+
+        if (obj->getType() != OBJECT3D) {
+          ObjectTransformation::scaling(obj->getCoordinates(), &objCenter, &scalingVector);
+        } else {
+          vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
+          vector<Segment*>::iterator segment;
+          for(segment = segments.begin(); segment != segments.end(); segment++) {
+              ObjectTransformation::scaling((*segment)->getCoordinates(), &objCenter, &scalingVector);
+          }
+        }
         break;
       }
       case ROTATION: {
@@ -182,7 +200,7 @@ public:
         } else {
           reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY());
         }
-        ObjectTransformation::rotation(obj, angle, reference);
+        ObjectTransformation::rotation(obj->getCoordinates(), angle, reference);
 
         delete reference;
         break;

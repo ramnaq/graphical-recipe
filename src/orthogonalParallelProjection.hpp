@@ -40,6 +40,13 @@ public:
            {1}};
   }
 
+  static std::vector<std::vector<double> > scalingVectorToMatrix(Coordinate* coord) {
+   return {{coord->getX(),       0      ,      0       , 0},
+           {    0        , coord->getY(),      0       , 0},
+           {    0        ,       0      , coord->getZ(), 0},
+           {    0        ,       0      ,      0       , 1}};
+  }
+
   void computeAngle(GraphicObject* window, Coordinate* vrp) {
     Coordinate negCoord(-vrp->getX(), -vrp->getY(), -vrp->getZ());
     Matrix trans = Opp::translationVectorToMatrix(&negCoord);

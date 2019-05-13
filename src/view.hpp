@@ -41,8 +41,10 @@ private:
   GtkEntry *entryCurveY;
   GtkEntry *entryTranslationX;
   GtkEntry *entryTranslationY;
+  GtkEntry *entryTranslationZ;
   GtkEntry *entryScalingX;
   GtkEntry *entryScalingY;
+  GtkEntry *entryScalingZ;
   GtkEntry *objectName;
   GtkEntry *entryStep;
   GtkEntry *entryAngle;
@@ -114,8 +116,10 @@ public:
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
     entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
     entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
+    entryTranslationZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationZ"));
     entryScalingX = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingX"));
     entryScalingY = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingY"));
+    entryScalingZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryScalingZ"));
     entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
     entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
@@ -558,12 +562,20 @@ public:
     return stod(gtk_entry_get_text(entryTranslationY));
   }
 
+  double getEntryTranslationZ() {
+    return stod(gtk_entry_get_text(entryTranslationZ));
+  }
+
   double getEntryScalingX() {
     return stod(gtk_entry_get_text(entryScalingX));
   }
 
   double getEntryScalingY() {
     return stod(gtk_entry_get_text(entryScalingY));
+  }
+
+  double getEntryScalingZ() {
+    return stod(gtk_entry_get_text(entryScalingZ));
   }
 
   double getEntryRotationX() {

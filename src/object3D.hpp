@@ -14,6 +14,7 @@ public:
 	Object3D(string name, vector<Segment*> &segmentList) :
 		GraphicObject(name, OBJECT3D) {
       this->segmentList = segmentList;
+      compute3DGeometricCenter();
     }
 
   ~Object3D() {
@@ -25,6 +26,29 @@ public:
 
   vector<Segment*> getSegmentList() {
     return this->segmentList;
+  }
+
+  void compute3DGeometricCenter() {
+    this->cx = 0;
+    this->cy = 0;
+    this->cz = 0;
+    int qtdCoord = 0;
+
+    vector<Segment*>::iterator segment;
+    vector<Coordinate*>::iterator coord;
+    for(segment = segmentList.begin(); segment != segmentList.end(); segment++) {
+      vector<Coordinate*> tmp = (*segment)->getCoordinates();
+      for(coord = tmp.begin(); coord != tmp.end(); coord++) {
+        cx += (*coord)->getX();
+        cy += (*coord)->getY();
+        cz += (*coord)->getZ();
+        qtdCoord++;
+      }
+    }
+
+    this->cx = this->cx / qtdCoord;
+    this->cy = this->cy / qtdCoord;
+    this->cz = this->cz / qtdCoord;
   }
 
 };
