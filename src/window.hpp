@@ -6,7 +6,7 @@
  * The graphical world moves (horizontally, vertically, diagonally) and the window
  * shows a limited area of it.
  */
-class Window: public GraphicObject{
+class Window: public GraphicObject2D {
 private:
   double angle;
   Coordinate const *defaultCoordMin;
@@ -14,7 +14,7 @@ private:
 
 public:
   Window(vector<Coordinate*> &windowCoordinates) :
-    GraphicObject("Window", WINDOW, windowCoordinates) {
+    GraphicObject2D("Window", WINDOW, windowCoordinates) {
     this->angle = 0;
 
     Coordinate* coordMin = windowCoordinates.front();

@@ -1,14 +1,14 @@
 #ifndef BSPLINE_H
 #define BSPLINE_H
 
-#include "graphicObject.hpp"
+#include "curve.hpp"
 #include "matrix.hpp"
 
-class BSpline : public GraphicObject {
+class BSpline : public Curve {
 public:
-  BSpline(string name, vector<Coordinate*> &points, double delta)
-    : GraphicObject(name, CURVE, points) {
-        this->create_points(points, delta);
+  BSpline(string name, vector<Coordinate*> &coordinateList, double delta)
+    : Curve(name, CURVE, coordinateList) {
+        this->create_points(coordinateList, delta);
   }
 
 protected:

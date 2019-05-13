@@ -11,11 +11,11 @@ class ObjectTransformation {
 public:
 
   static void translation(vector<Coordinate*> coordinates, Coordinate* translationVector) {
-    Matrix translationMatrix(Opp::translationVectorToMatrix(translationVector));
+    Matrix translationMatrix(Matrix::translation3DVectorToMatrix(translationVector));
 
     vector<Coordinate*>::iterator it;
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(Opp::coordinateToMatrix(*it));
+      Matrix coord(Matrix::coordinate3DToMatrix(*it));
 
       Matrix translatedObject = translationMatrix * coord;
 
@@ -28,15 +28,15 @@ public:
   static void scaling(vector<Coordinate*> coordinates, Coordinate* objCenter, Coordinate* scalingVector) {
     Coordinate negativeObjCenter(-objCenter->getX(), -objCenter->getY());
 
-    Matrix scalingMatrix(Opp::scalingVectorToMatrix(scalingVector));
-    Matrix translationMatrix1(Opp::translationVectorToMatrix(objCenter));
-    Matrix translationMatrix2(Opp::translationVectorToMatrix(&negativeObjCenter));
+    Matrix scalingMatrix(Matrix::scaling3DVectorToMatrix(scalingVector));
+    Matrix translationMatrix1(Matrix::translation3DVectorToMatrix(objCenter));
+    Matrix translationMatrix2(Matrix::translation3DVectorToMatrix(&negativeObjCenter));
 
     Matrix scalingOperation = translationMatrix1 * scalingMatrix * translationMatrix2;
 
     vector<Coordinate*>::iterator it;
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(Opp::coordinateToMatrix(*it));
+      Matrix coord(Matrix::coordinate3DToMatrix(*it));
 
       Matrix scaledObject = scalingOperation * coord;
 

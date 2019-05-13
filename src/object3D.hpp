@@ -14,7 +14,7 @@ public:
 	Object3D(string name, vector<Segment*> &segmentList) :
 		GraphicObject(name, OBJECT3D) {
       this->segmentList = segmentList;
-      compute3DGeometricCenter();
+      computeGeometricCenter();
     }
 
   ~Object3D() {
@@ -28,7 +28,7 @@ public:
     return this->segmentList;
   }
 
-  void compute3DGeometricCenter() {
+  void computeGeometricCenter() {
     this->cx = 0;
     this->cy = 0;
     this->cz = 0;

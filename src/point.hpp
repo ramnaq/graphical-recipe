@@ -1,17 +1,17 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
-#include <stdio.h>
-
-#include "graphicObject.hpp"
+#include "graphicObject2D.hpp"
 
 /*! Structures a representation and behavior of a "line segment" */
 
-class Point: public GraphicObject {
+class Point: public GraphicObject2D {
 
 public:
   Point(string name, vector<Coordinate*> &pointCoordinate) :
-    GraphicObject(name, POINT, pointCoordinate) {}
+    GraphicObject2D(name, POINT, pointCoordinate) {
+
+		}
 
 };
 

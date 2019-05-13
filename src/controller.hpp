@@ -77,6 +77,7 @@ public:
           objType = "POLIGONO";
 
           pointsForPolygon.clear();
+          view.clearPolygonEntry();
         } catch(const std::runtime_error& e) {
           std::cout << "[ERROR] " << e.what() << std::endl;
           view.logError("Pontos insuficientes para criação de polígono.\n");
@@ -96,6 +97,7 @@ public:
           objType = "CURVA";
 
           pointsForCurve.clear();
+          view.clearCurveEntry();
         } catch(const std::runtime_error& e) {
           std::cout << "[ERROR] " << e.what() << std::endl;
           view.logError("Pontos insuficientes para criação de curva.\n");
@@ -107,6 +109,7 @@ public:
           objType = "OBJETO 3D";
 
           segmentsForObject3D.clear();
+          view.clearObjet3DEntry();
         break;
       }
     }
@@ -162,7 +165,7 @@ public:
       case TRANSLATION: {
         Coordinate translationVector(view.getEntryTranslationX(), view.getEntryTranslationY(), view.getEntryTranslationZ());
         if (obj->getType() != OBJECT3D) {
-          ObjectTransformation::translation(obj->getCoordinates(), &translationVector);
+          ObjectTransformation::translation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), &translationVector);
         } else {
           vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
           vector<Segment*>::iterator segment;
@@ -173,11 +176,11 @@ public:
         break;
       }
       case SCALING: {
-        Coordinate scalingVector(view.getEntryScalingX(), view.getEntryScalingY());
+        Coordinate scalingVector(view.getEntryScalingX(), view.getEntryScalingY(), view.getEntryScalingZ());
         Coordinate objCenter = obj->getGeometricCenter();
 
         if (obj->getType() != OBJECT3D) {
-          ObjectTransformation::scaling(obj->getCoordinates(), &objCenter, &scalingVector);
+          ObjectTransformation::scaling(static_cast<GraphicObject2D*>(obj)->getCoordinates(), &objCenter, &scalingVector);
         } else {
           vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
           vector<Segment*>::iterator segment;
@@ -188,21 +191,21 @@ public:
         break;
       }
       case ROTATION: {
-        int radioBtnChosen = view.getRotationRadioButtonState();
-        double angle = view.getAngle();
-        Coordinate* reference;
-
-        if (radioBtnChosen == 1) {
-          reference = new Coordinate(0,0);
-        } else if (radioBtnChosen == 2) {
-          Coordinate tmp = obj->getGeometricCenter();
-          reference = new Coordinate(tmp.getX(), tmp.getY());
-        } else {
-          reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY());
-        }
-        ObjectTransformation::rotation(obj->getCoordinates(), angle, reference);
-
-        delete reference;
+        // int radioBtnChosen = view.getRotationRadioButtonState();
+        // double angle = view.getAngle();
+        // Coordinate* reference;
+        //
+        // if (radioBtnChosen == 1) {
+        //   reference = new Coordinate(0,0);
+        // } else if (radioBtnChosen == 2) {
+        //   Coordinate tmp = obj->getGeometricCenter();
+        //   reference = new Coordinate(tmp.getX(), tmp.getY());
+        // } else {
+        //   reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY());
+        // }
+        // ObjectTransformation::rotation(obj->getCoordinates(), angle, reference);
+        //
+        // delete reference;
         break;
       }
     }
@@ -408,43 +411,54 @@ public:
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
 
       switch (element->getType()) {
-        case POINT:
-          if (clipping.pointClipping(element->getCoordinates())) {
-            view.transform(element);
-            view.drawNewPoint(element);
-          }
-          break;
-        case LINE:
-          if (clipping.lineClipping(element->getCoordinates(), view.getLineClippingAlgorithm())) {
-            view.transform(element);
-            view.drawNewLine(element);
-          }
-          break;
-        case POLYGON: {
-          clipping.polygonClipping(element);
-          if (element->isVisible()) {
-            view.transform(element);
-            view.drawNewPolygon(element, static_cast<Polygon*>(element)->fill());
+        case POINT: {
+          Point* point = static_cast<Point*>(element);
+          if (clipping.pointClipping(point->getCoordinates()[0])) {
+            view.transform(point);
+            view.drawNewPoint(point);
           }
           break;
         }
-        case CURVE:
-          clipping.curveClipping(element);
-          if (element->isVisible()) {
-            view.transform(element);
-            view.drawNewCurve(element);
+        case LINE: {
+          Line* line = static_cast<Line*>(element);
+          if (clipping.lineClipping(line->getCoordinates(), view.getLineClippingAlgorithm())) {
+            view.transform(line);
+            view.drawNewLine(line);
           }
           break;
-        case OBJECT3D:
-          vector<Segment*> segments = static_cast<Object3D*>(element)->getSegmentList();
+        }
+        case POLYGON: {
+          Polygon* polygon = static_cast<Polygon*>(element);
+          clipping.polygonClipping(polygon);
+          if (polygon->isVisible()) {
+            view.transform(polygon);
+            view.drawNewPolygon(polygon, polygon->fill());
+          }
+          break;
+        }
+        case CURVE: {
+          Curve* curve = static_cast<Curve*>(element);
+          clipping.curveClipping(curve);
+          if (curve->isVisible()) {
+            view.transform(curve);
+            view.drawNewCurve(curve);
+          }
+          break;
+        }
+        case OBJECT3D: { // TODO Fix visibility
+          Object3D* obj3D = static_cast<Object3D*>(element);
+
+          vector<Segment*> segments = obj3D->getSegmentList();
           vector<Segment*>::iterator segment;
           for(segment = segments.begin(); segment != segments.end(); segment++) {
               vector<Coordinate*> tmp = (*segment)->getCoordinates();
               (*segment)->setVisibility(clipping.lineClipping(tmp, 1));
           }
-          view.transform(element);
-          view.drawNewObject3D(element);
+
+          view.transform(obj3D);
+          view.drawNewObject3D(obj3D);
           break;
+        }
       }
       nextElement = nextElement->getProximo();
     }

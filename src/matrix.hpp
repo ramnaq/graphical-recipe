@@ -98,13 +98,48 @@ public:
             {v[3]->getY()}};
   }
 
+  static std::vector<std::vector<double> > translation3DVectorToMatrix(Coordinate* coord) {
+   return {{1, 0,  0, coord->getX()},
+           {0, 1,  0, coord->getY()},
+           {0, 0,  1, coord->getZ()},
+           {0, 0 , 0, 1}};
+  }
+
+  static std::vector<std::vector<double> > rotationXVectorToMatrix(double angle) {
+   return {{1,    0      ,     0      , 0},
+           {0, cos(angle), -sin(angle), 0},
+           {0, sin(angle), cos(angle) , 0},
+           {0,    0      ,     0      , 1}};
+  }
+
+  static std::vector<std::vector<double> > rotationYVectorToMatrix(double angle) {
+   return {{cos(angle) , 0, sin(angle), 0},
+           {    0      , 1,      0    , 0},
+           {-sin(angle), 0, cos(angle), 0},
+           {    0      , 0,      0    , 1}};
+  }
+
+  static std::vector<std::vector<double> > coordinate3DToMatrix(Coordinate* coord) {
+   return {{coord->getX()},
+           {coord->getY()},
+           {coord->getZ()},
+           {1}};
+  }
+
+  static std::vector<std::vector<double> > scaling3DVectorToMatrix(Coordinate* coord) {
+   return {{coord->getX(),       0      ,      0       , 0},
+           {    0        , coord->getY(),      0       , 0},
+           {    0        ,       0      , coord->getZ(), 0},
+           {    0        ,       0      ,      0       , 1}};
+  }
+
   Matrix operator* (Matrix& obj) {
     std::vector<std::vector<double> > newMatrix;
-    std::vector<std::vector<double> > objVector = obj.getMatrix(); // Objeto
+    std::vector<std::vector<double> > objVector = obj.getMatrix();
 
-    newMatrix.resize(matrix.size()); // Linhas
+    newMatrix.resize(matrix.size());
     for(int i = 0; i < matrix.size(); i++) {
-      newMatrix[i].resize(objVector[0].size()); // Colunas
+      newMatrix[i].resize(objVector[0].size());
       for (int k = 0; k < objVector[i].size(); k++) {
         double num = 0;
         for (int j = 0; j < matrix[i].size(); j++) {

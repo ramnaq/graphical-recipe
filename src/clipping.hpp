@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <bitset>
 
+#include "curve.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
 
@@ -41,38 +42,19 @@ public:
     delete this->wCoord.back();
   }
 
-  bool pointClipping(vector<Coordinate*> pointCoord) {
-    Coordinate* pc = pointCoord.front();
-
-    if (pc->getXns() < wCoord.front()->getX() || pc->getXns() > wCoord.back()->getX())
+  bool pointClipping(Coordinate* pointCoord) {
+    if (pointCoord->getXns() < wCoord.front()->getX() || pointCoord->getXns() > wCoord.back()->getX())
       return false;
-    else if (pc->getYns() < wCoord.front()->getY() || pc->getYns() > wCoord.back()->getY())
+    else if (pointCoord->getYns() < wCoord.front()->getY() || pointCoord->getYns() > wCoord.back()->getY())
       return false;
     else
       return true;
   }
 
-  bool lineClipping(vector<Coordinate*> lineCoord, int chosenAlgorithm) {
-    if (chosenAlgorithm == 1)
-      return cohenSutherland(lineCoord);
-    else
-      return liangBarsky(lineCoord);
-  }
-
-  void polygonClipping(GraphicObject* polygon) {
-    polygon->updateWindowPoints(polygon->getCoordinates());
-    vector<Coordinate> clp = this->clp;
-    for (int i = 0; i < clp.size(); i++) {
-      int k = (i + 1) % clp.size();
-      Coordinate c1(clp[i]), c2(clp[k]);
-      clip(static_cast<Polygon&>(*polygon), c1, c2);
-    }
-  }
-
-  void curveClipping(GraphicObject* curve) {
-    curve->updateWindowPoints(curve->getCoordinates());
+  void curveClipping(Curve* curve) {
     vector<Coordinate*> points = curve->getWindowPoints();
     vector<Coordinate*> newPoints = {};
+
     for (int i = 0; i < points.size() - 1; ++i) {
       Coordinate* c1 = points[i];
       Coordinate* c2 = points[i+1];
@@ -95,6 +77,17 @@ public:
 
   bool equalPoints(Coordinate& c1, Coordinate& c2) {
 	   return (c1.getXns() == c2.getXns()) && (c1.getYns() == c2.getYns());
+  }
+
+  void polygonClipping(Polygon* polygon) {
+    polygon->updateWindowPoints(polygon->getCoordinates());
+    vector<Coordinate> clp = this->clp;
+
+    for (int i = 0; i < clp.size(); i++) {
+      int k = (i + 1) % clp.size();
+      Coordinate c1(clp[i]), c2(clp[k]);
+      clip(static_cast<Polygon&>(*polygon), c1, c2);
+    }
   }
 
   //! Clips each edge of polygon over the window edge c1c2
@@ -193,6 +186,13 @@ public:
     y /= (x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4);
 
     return Coordinate::newWindowCoordinate(x, y);
+  }
+
+  bool lineClipping(vector<Coordinate*> lineCoord, int chosenAlgorithm) {
+    if (chosenAlgorithm == 1)
+      return cohenSutherland(lineCoord);
+    else
+      return liangBarsky(lineCoord);
   }
 
   bool cohenSutherland(vector<Coordinate*> lineCoord) {

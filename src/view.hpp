@@ -199,33 +199,40 @@ public:
     drawer->drawViewPortArea(getViewPortCoord().back(), VIEWPORT_MARGIN);
   }
 
-  void drawNewPoint(GraphicObject* obj) {
+  void drawNewPoint(Point* obj) {
     drawer->drawPoint(obj->getCoordinates().front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void drawNewLine(GraphicObject* obj) {
+  void drawNewLine(Line* obj) {
     drawer->drawLine(obj->getCoordinates().front(), obj->getCoordinates().back());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void drawNewPolygon(GraphicObject* obj, bool fill) {
+  void drawNewPolygon(Polygon* obj, bool fill) {
     vector<Coordinate*> polygonPoints = obj->getWindowPoints();
     drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+
+  }
+
+  void clearPolygonEntry() {
     removeAllCoordinates(listCoordPolygon);
     clearPolygonCoordEntries();
   }
 
-  void drawNewCurve(GraphicObject* obj) {
+  void drawNewCurve(Curve* obj) {
     vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
     drawer->drawCurve(points);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
+  void clearCurveEntry() {
     removeAllCoordinates(listCoordCurve);
     clearCurveCoordEntries();
   }
 
-  void drawNewObject3D(GraphicObject* obj) {
+  void drawNewObject3D(Object3D* obj) {
     vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
     vector<Segment*>::iterator segment;
     for(segment = segments.begin(); segment != segments.end(); segment++) {
@@ -235,16 +242,11 @@ public:
       }
     }
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-    removeAllCoordinates(listSegment); // TODO Remover isso, só acontece uma vez
-    clearSegmentCoordEntries();
   }
 
-  //! Draws a Polygon and properly clears elements in the "New Polygon window"
-  /*!
-   * @param obj The object to be drawn.
-   */
-  void newPolygon(GraphicObject* obj, bool fill) {
-    drawNewPolygon(obj, fill);
+  void clearObjet3DEntry() {
+    removeAllCoordinates(listSegment);
+    clearSegmentCoordEntries();
   }
 
   void insertIntoListBox(GraphicObject& obj, string tipo) {
@@ -389,12 +391,16 @@ public:
   void transform(GraphicObject* object) {
     switch (object->getType()) {
       case POINT:
+        this->worldToViewPort(static_cast<GraphicObject2D*>(object)->getCoordinates());
+        break;
       case LINE:
-        this->worldToViewPort(object->getCoordinates());
+        this->worldToViewPort(static_cast<GraphicObject2D*>(object)->getCoordinates());
         break;
       case POLYGON:
+        this->worldToViewPort(static_cast<Polygon*>(object)->getCoordinates());
+        break;
       case CURVE:
-        this->worldToViewPort(object->getWindowPoints());
+        this->worldToViewPort(static_cast<Curve*>(object)->getWindowPoints());
         break;
       case OBJECT3D:
         this->world3dToViewPort(static_cast<Object3D*>(object)->getSegmentList());
@@ -452,7 +458,7 @@ public:
 
   void transformOPP(GraphicObject* elem, Coordinate* geometriCenter) {
     if (elem->getType() != OBJECT3D) {
-      opp->transformation(elem->getCoordinates(), geometriCenter);
+      opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
@@ -464,7 +470,7 @@ public:
 
   void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
     if (elem->getType() != OBJECT3D) {
-      scn->transformation(elem->getCoordinates(), geometriCenter, factor, angle);
+      scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter, factor, angle);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
@@ -490,7 +496,7 @@ public:
   void clearSaveWorldFile() {
   	gtk_entry_set_text(entryObjWorldFile, "");
   }
-
+  // TODO For Z too
   void clearPolygonCoordEntries() {
     gtk_entry_set_text(entryPolygonX, "");
     gtk_entry_set_text(entryPolygonY, "");

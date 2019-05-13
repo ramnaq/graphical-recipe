@@ -1,22 +1,22 @@
 #ifndef BEZIER_CURVE_H
 #define BEZIER_CURVE_H
 
-#include "graphicObject.hpp"
+#include "curve.hpp"
 #include "matrix.hpp"
 
-class BezierCurve : public GraphicObject {
+class BezierCurve : public Curve {
 public:
-  BezierCurve(string name, vector<Coordinate*> &points)
-    : GraphicObject(name, CURVE, points) {
+  BezierCurve(string name, vector<Coordinate*> &coordinateList)
+    : Curve(name, CURVE, coordinateList) {
         this->t = 0.05;
-        this->blending_function(points);
+        this->blending_function(coordinateList);
   }
 
   void setT(double newt) {
     t = newt;
   }
 
-protected:
+private:
   double t;
 
   void blending_function(const std::vector<Coordinate*> &v) {
@@ -42,7 +42,7 @@ protected:
         // M(1,4) x M(4,1) = M(1,1), so get line 0, column 0 to obtain the double value
         double x = (t_mb * x_vector).getMatrix().at(0).at(0);
         double y = (t_mb * y_vector).getMatrix().at(0).at(0);
-        //const double z = t_magic * z_vector;
+        //const double z = t_mb * z_vector;
 
         this->coordinateList.push_back(new Coordinate(x, y));
         temp_t += t;
