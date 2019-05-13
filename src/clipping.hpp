@@ -52,25 +52,11 @@ public:
       point->setVisibility(true);
   }
 
-  void lineClipping(GraphicObject* line, int chosenAlgorithm) {
+  bool lineClipping(vector<Coordinate*> lineCoord, int chosenAlgorithm) {
     if (chosenAlgorithm == 1)
-      cohenSutherland(line);
+      return cohenSutherland(lineCoord);
     else
-      liangBarsky(line);
-  }
-
-  bool clipping3D(vector<Coordinate*> coord) {
-      Line x("", coord);
-      lineClipping(&x, 1);
-      vector<Coordinate*> tmp3 = x.getCoordinates();
-
-      bool a = x.isVisible();
-      coord[0]->setXns(tmp3[0]->getXns());
-      coord[0]->setYns(tmp3[0]->getYns());
-      coord[1]->setXns(tmp3[1]->getXns());
-      coord[1]->setYns(tmp3[1]->getYns());
-
-      return a;
+      return liangBarsky(lineCoord);
   }
 
   void polygonClipping(GraphicObject* polygon) {
@@ -95,7 +81,7 @@ public:
       Coordinate* c2_copy = Coordinate::newWindowCoordinate(c2->getXns(), c2->getYns());
 
       vector<Coordinate*> l = {c1_copy, c2_copy};
-      bool result = cohenSutherland(new Line("", l));
+      bool result = cohenSutherland(l);
       if (result) {
         newPoints.push_back(c1_copy);
         if (!equalPoints(*c2, *c2_copy)) {
@@ -209,9 +195,9 @@ public:
     return Coordinate::newWindowCoordinate(x, y);
   }
 
-  bool cohenSutherland(GraphicObject* line) {
-    Coordinate* coordMin = line->getCoordinates().front();
-    Coordinate* coordMax = line->getCoordinates().back();
+  bool cohenSutherland(vector<Coordinate*> lineCoord) {
+    Coordinate* coordMin = lineCoord.front();
+    Coordinate* coordMax = lineCoord.back();
 
     bitset<4> rgMin = generateRegionCode(coordMin);
     bitset<4> rgMax = generateRegionCode(coordMax);
@@ -219,14 +205,10 @@ public:
     int op = verify(rgMin, rgMax);
     switch (op) {
       case IN:
-        line->setVisibility(true);
         return true;
       case OUT:
-        line->setVisibility(false);
         return false;
       default:
-        line->setVisibility(true);
-
         // Coefficient
         double m = (coordMax->getYns() - coordMin->getYns())
                         / (coordMax->getXns() - coordMin->getXns());
@@ -244,10 +226,9 @@ public:
 
           int op = verify(rgMin, rgMax);
           if (op == BOTHOUT) {
-            line->setVisibility(false);
             return false;
           } else {
-            line->setVisibility(true);
+            return true;
           }
         }
         return true;
@@ -325,9 +306,9 @@ public:
     }
   }
 
-  void liangBarsky(GraphicObject* line) {
-    Coordinate* coordMin = line->getCoordinates().front();
-    Coordinate* coordMax = line->getCoordinates().back();
+  bool liangBarsky(vector<Coordinate*> lineCoord) {
+    Coordinate* coordMin = lineCoord.front();
+    Coordinate* coordMax = lineCoord.back();
 
     double x0 = coordMin->getXns();
     double y0 = coordMin->getYns();
@@ -347,8 +328,7 @@ public:
 
     /* line parallel to and out of the view */
     if ((p[0] == 0 && q[0] < 0) || (p[2] == 0 && q[2] < 0)) {
-      line->setVisibility(false);
-      return;
+      return false;
     }
 
     if (p[0] != 0) {
@@ -378,8 +358,7 @@ public:
     double rn1 = *std::min_element(std::begin(positiveArr), std::end(positiveArr));
 
     if (rn0 > rn1) {
-      line->setVisibility(false);
-      return;
+      return false;
     }
 
     coordMin->setXns(x0 + p[1]*rn0);
@@ -387,7 +366,8 @@ public:
 
     coordMax->setXns(x0 + p[1]*rn1);
     coordMax->setYns(y0 + p[3]*rn1);
-    line->setVisibility(true);
+
+    return true;
   }
 
 };

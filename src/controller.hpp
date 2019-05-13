@@ -277,26 +277,49 @@ public:
     // Segment* s = new Segment(a, b);
 
     Coordinate* a = new Coordinate(0, 0, 0);
+    Coordinate* a1 = new Coordinate(0, 0, 0);
+    Coordinate* a2 = new Coordinate(0, 0, 0);
+
     Coordinate* b = new Coordinate(0, 100, 0);
+    Coordinate* b1 = new Coordinate(0, 100, 0);
+    Coordinate* b2 = new Coordinate(0, 100, 0);
+
     Coordinate* c = new Coordinate(100, 100, 0);
+    Coordinate* c1 = new Coordinate(100, 100, 0);
+    Coordinate* c2 = new Coordinate(100, 100, 0);
+
     Coordinate* d = new Coordinate(100, 0, 0);
+    Coordinate* d1 = new Coordinate(100, 0, 0);
+    Coordinate* d2 = new Coordinate(100, 0, 0);
+
     Coordinate* e = new Coordinate(50, 50, -50);
+    Coordinate* e1 = new Coordinate(50, 50, -50);
+    Coordinate* e2 = new Coordinate(50, 50, -50);
+
     Coordinate* f = new Coordinate(150, 50, -50);
+    Coordinate* f1 = new Coordinate(150, 50, -50);
+    Coordinate* f2 = new Coordinate(150, 50, -50);
+
     Coordinate* g = new Coordinate(50, 150, -50);
+    Coordinate* g1 = new Coordinate(50, 150, -50);
+    Coordinate* g2 = new Coordinate(50, 150, -50);
+
     Coordinate* h = new Coordinate(150, 150, -50);
+    Coordinate* h1 = new Coordinate(150, 150, -50);
+    Coordinate* h2 = new Coordinate(150, 150, -50);
 
     Segment* s = new Segment(a, b);
-    Segment* s1 = new Segment(a, d);
-    Segment* s2 = new Segment(a, e);
-    Segment* s3 = new Segment(g, b);
-    Segment* s4 = new Segment(g, h);
-    Segment* s5 = new Segment(g, e);
-    Segment* s6 = new Segment(c, b);
-    Segment* s7 = new Segment(c, d);
-    Segment* s8 = new Segment(c, h);
+    Segment* s1 = new Segment(a1, d1);
+    Segment* s2 = new Segment(a2, e);
+    Segment* s3 = new Segment(g, b1);
+    Segment* s4 = new Segment(g1, h1);
+    Segment* s5 = new Segment(g2, e1);
+    Segment* s6 = new Segment(c, b2);
+    Segment* s7 = new Segment(c1, d2);
+    Segment* s8 = new Segment(c2, h2);
     Segment* s9 = new Segment(f, h);
-    Segment* s10 = new Segment(f, d);
-    Segment* s11 = new Segment(f, e);
+    Segment* s10 = new Segment(f1, d);
+    Segment* s11 = new Segment(f2, e2);
 
     segmentsForObject3D.push_back(s);
     segmentsForObject3D.push_back(s1);
@@ -310,6 +333,7 @@ public:
     segmentsForObject3D.push_back(s9);
     segmentsForObject3D.push_back(s10);
     segmentsForObject3D.push_back(s11);
+
 
     //view.insertCoordList(view.getListSegment(), x1, y1, z1, x2, y2, z2);
   }
@@ -353,13 +377,11 @@ public:
     // Update window coordinates
     Window* window = view.getWindow();
     Coordinate geometriCenter = window->getGeometricCenter();
-    view.transformOPP(window, &geometriCenter);
+    //view.transformOPP(window, &geometriCenter);
 
     double currentAngle = window->getAngle();
     Coordinate* windowCoord = window->getCoordinates().back();
-    Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
-    Coordinate windowScalingFactor(1,1);
-    view.transformSCN(window, &geometriCenter, &windowScalingFactor, currentAngle);
+    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
 
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
@@ -376,8 +398,7 @@ public:
           }
           break;
         case LINE:
-          clipping.lineClipping(element, view.getLineClippingAlgorithm());
-          if (element->isVisible()) {
+          if (clipping.lineClipping(element->getCoordinates(), view.getLineClippingAlgorithm())) {
             view.transform(element);
             view.drawNewLine(element);
           }
@@ -402,7 +423,7 @@ public:
           vector<Segment*>::iterator segment;
           for(segment = segments.begin(); segment != segments.end(); segment++) {
               vector<Coordinate*> tmp = (*segment)->getCoordinates();
-              (*segment)->setVisibility(clipping.clipping3D(tmp));
+              (*segment)->setVisibility(clipping.lineClipping(tmp, 1));
           }
           view.transform(element);
           view.drawNewObject3D(element);
