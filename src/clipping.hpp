@@ -52,6 +52,7 @@ public:
   }
 
   void curveClipping(Curve* curve) {
+    curve->updateWindowPoints(curve->getCoordinates());
     vector<Coordinate*> points = curve->getWindowPoints();
     vector<Coordinate*> newPoints = {};
 
@@ -133,8 +134,8 @@ public:
 
         /* When only second point is outside the window */
   	  } else if (a_pos >= 0  && b_pos < 0) {
-  		/* Only point of intersection with edge is added */
-  		new_points.push_back(intersection(c1, c2, a, b));
+    		/* Only point of intersection with edge is added */
+    		new_points.push_back(intersection(c1, c2, a, b));
 
   		/* When both points are outside */
   	  } else {

@@ -9,8 +9,7 @@ using namespace std;
 
 class Curve: public GraphicObject2D {
 protected:
-	vector<Coordinate*> coordinateList;
-  vector<Coordinate*> windowPoints;
+	vector<Coordinate*> windowPoints;
   bool visibility;
 
 public:

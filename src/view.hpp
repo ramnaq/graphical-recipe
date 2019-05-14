@@ -213,7 +213,6 @@ public:
     vector<Coordinate*> polygonPoints = obj->getWindowPoints();
     drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-
   }
 
   void clearPolygonEntry() {

@@ -26,7 +26,7 @@ public:
 	}
 
   vector<Coordinate*> getCoordinates() {
-		return coordinateList;
+		return this->coordinateList;
 	}
 
 	Coordinate getGeometricCenter() {
@@ -39,14 +39,14 @@ public:
 		cy = 0;
 		cz = 0;
 		vector<Coordinate*>::iterator it;
-		for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
+		for(it = this->coordinateList.begin(); it != this->coordinateList.end(); it++) {
 			cx += (*it)->getX();
 			cy += (*it)->getY();
 			cz += (*it)->getZ();
 		}
-		cx = cx / coordinateList.size();
-		cy = cy / coordinateList.size();
-		cz = cz / coordinateList.size();
+		cx = cx / this->coordinateList.size();
+		cy = cy / this->coordinateList.size();
+		cz = cz / this->coordinateList.size();
 	}
 };
 

@@ -43,7 +43,7 @@ public:
 	}
 
 	vector<Coordinate*> getWindowPoints() {
-		return windowPoints;
+		return this->windowPoints;
 	}
 
 };
