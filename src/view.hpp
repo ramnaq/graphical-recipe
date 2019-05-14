@@ -396,7 +396,7 @@ public:
         this->worldToViewPort(static_cast<GraphicObject2D*>(object)->getCoordinates());
         break;
       case POLYGON:
-        this->worldToViewPort(static_cast<Polygon*>(object)->getCoordinates());
+        this->worldToViewPort(static_cast<Polygon*>(object)->getWindowPoints());
         break;
       case CURVE:
         this->worldToViewPort(static_cast<Curve*>(object)->getWindowPoints());
