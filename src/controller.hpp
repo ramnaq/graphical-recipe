@@ -407,7 +407,12 @@ public:
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
-      view.transformOPP(element, &geometriCenter);
+
+      if () {
+        view.transformOPP(element, &geometriCenter);
+      } else {
+        view.transformPerspective(element, &geometriCenter);
+      }
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
 
       switch (element->getType()) {

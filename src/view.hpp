@@ -9,6 +9,7 @@
 #include "drawer.hpp"
 #include "logger.hpp"
 #include "orthogonalParallelProjection.hpp"
+#include "perspectiveProjection.hpp"
 #include "scn.hpp"
 #include "viewport.hpp"
 #include "window.hpp"
@@ -74,6 +75,7 @@ private:
   Scn* scn;
   Logger* logger;
   Opp* opp;
+  Perspective* pers;
 
   int rotationRadioButtonState;
   int clippingRadioButtonState;
@@ -86,6 +88,7 @@ public:
     scn = new Scn();
     logger = new Logger();
     opp = new Opp();
+    pers = new Perspective();
   }
 
   //! Startup the user interface: initiates GTK, creates all graphical elements and runs gtk_main();
@@ -456,6 +459,23 @@ public:
   }
 
   void transformOPP(GraphicObject* elem, Coordinate* geometriCenter) {
+    if (elem->getType() != OBJECT3D) {
+      opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter);
+    } else {
+      vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
+      vector<Segment*>::iterator segment;
+      for(segment = segments.begin(); segment != segments.end(); segment++) {
+          opp->transformation((*segment)->getCoordinates(), geometriCenter);
+      }
+    }
+  }
+
+  void transformPerspective(Window* window, Coordinate* geometriCenter, double cop) {
+    opp->computeAngle(window, geometriCenter);
+    opp->transformation(window->getCoordinates(), geometriCenter);
+  }
+
+  void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter) {
     if (elem->getType() != OBJECT3D) {
       opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter);
     } else {
