@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkWindow" id="mainWindow">
@@ -246,8 +246,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -261,8 +259,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -276,8 +272,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -291,8 +285,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -306,8 +298,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -321,8 +311,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -336,8 +324,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -351,8 +337,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -366,8 +350,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                               </object>
@@ -533,12 +515,12 @@
                                                 <property name="margin_top">6</property>
                                                 <property name="margin_bottom">6</property>
                                                 <child>
-                                                  <object class="GtkButton" id="btnRotateLeft">
-                                                    <property name="label" translatable="yes">↶</property>
+                                                  <object class="GtkButton" id="btnRotateX">
+                                                    <property name="label" translatable="yes">X</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btnRotateLeft_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btnRotateX_clicked" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
@@ -547,17 +529,31 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="btnRotateRight">
-                                                    <property name="label" translatable="yes">↷</property>
+                                                  <object class="GtkButton" id="btnRotateY">
+                                                    <property name="label" translatable="yes">Y</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <signal name="clicked" handler="on_btnRotateRight_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_btnRotateY_clicked" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="btnRotateZ">
+                                                    <property name="label" translatable="yes">Z</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <signal name="clicked" handler="on_btnRotateZ_clicked" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
                                                   </packing>
                                                 </child>
                                               </object>
