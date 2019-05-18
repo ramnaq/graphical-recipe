@@ -29,6 +29,7 @@ private:
   vector<Coordinate*> pointsForPolygon;
   vector<Coordinate*> pointsForCurve;
   vector<Segment*> segmentsForObject3D;
+  Coordinate cop = Coordinate(0, 0, 1);
 
 public:
   Controller() {
@@ -391,6 +392,18 @@ public:
     view.updateCheckBtnSpline();
   }
 
+  void updateProjectionState(int newState) {
+    view.updateProjectionBtnState(newState);
+    updateDrawScreen();
+  }
+
+  void updateCOP() {
+    double newValue = view.getNewCOP();
+    if (newValue == 0) newValue = 1;
+    cop.setZ(newValue);
+    updateDrawScreen();
+  }
+
   //! Calls 'view' to (re)drawn all elements in 'displayFile'.
   void updateDrawScreen() {
     view.clear_surface();
@@ -398,7 +411,11 @@ public:
     // Update window coordinates
     Window* window = view.getWindow();
     Coordinate geometriCenter = window->getGeometricCenter();
-    //view.transformOPP(window, &geometriCenter);
+
+    if (view.getProjectionBtnState())
+      view.transformOPP(window, &geometriCenter);
+    else
+      view.transformPerspective(window, &geometriCenter, &cop);
 
     double currentAngle = window->getAngle();
     Coordinate* windowCoord = window->getCoordinates().back();
@@ -408,11 +425,11 @@ public:
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
 
-      if () {
+      if (view.getProjectionBtnState())
         view.transformOPP(element, &geometriCenter);
-      } else {
-        view.transformPerspective(element, &geometriCenter);
-      }
+      else
+        view.transformPerspective(element, &geometriCenter, &cop);
+
       view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
 
       switch (element->getType()) {

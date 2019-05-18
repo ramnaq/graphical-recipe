@@ -331,3 +331,30 @@ extern "C" G_MODULE_EXPORT void on_checkbtnSpline_clicked(){
 
   }
 }
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_scaleValues_change_value(){
+  try {
+    controller->updateCOP();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_parallelProjection_clicked(){
+  try {
+    controller->updateProjectionState(1);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_perspectiveProjection_clicked(){
+  try {
+    controller->updateProjectionState(0);
+  } catch (...) {
+
+  }
+}

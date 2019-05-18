@@ -14,17 +14,18 @@ public:
   Perspective () {}
   ~Perspective () {}
 
-  Coordinate intersection(Coordinate* obj, double cop) {
+  Coordinate intersection(Coordinate* obj, double d) {
     double xp, yp;
 
     xp = obj->getXop() / (obj->getZop() / d);
     yp = obj->getYop() / (obj->getZop() / d);
 
-    return Coordinate(xp, yp, cop);
+    return Coordinate(xp, yp, d);
   }
 
-  void computeAngle(Window* window, Coordinate* vrp) {
-    Coordinate negCoord(-vrp->getX(), -vrp->getY(), -vrp->getZ());
+  // TODO translade COP
+  void computeAngle(Window* window, Coordinate* cop) {
+    Coordinate negCoord(-cop->getX(), -cop->getY(), -cop->getZ());
     Matrix trans = Matrix::translation3DVectorToMatrix(&negCoord);
 
     vector<Coordinate*> coordinates = window->getCoordinates();
@@ -52,9 +53,9 @@ public:
     this->angleY = (x == 0 || z == 0) ? 0 : (atan(x/z)*M_PI)/180;
   }
 
-  void transformation(vector<Coordinate*> coord, double cop) {
+  void transformation(vector<Coordinate*> coord, Coordinate* geometriCenter, Coordinate* cop) {
     // Steps 1,2 e 3
-    Coordinate negCoord(-copCoord->getX(), -copCoord->getY(), -copCoord->getZ());
+    Coordinate negCoord(-cop->getX(), -cop->getY(), -cop->getZ());
 
     Matrix trans = Matrix::translation3DVectorToMatrix(&negCoord);
     Matrix rotx  = Matrix::rotationXVectorToMatrix(this->angleX);
@@ -73,7 +74,7 @@ public:
         (*it)->setZop(translatedObject.getMatrix()[2][0]);
 
         // Compute intersection
-        Coordinate x = intersection(*it, cop);
+        Coordinate x = intersection(*it, cop->getZ());
         (*it)->setXop(x.getX());
         (*it)->setYop(x.getY());
     }

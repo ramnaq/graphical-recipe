@@ -69,6 +69,9 @@ private:
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
   GtkNotebook *notebookObjectOperations;
 
+  GtkScale *scalePerspective;
+  GtkAdjustment *scaleValues;
+
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
@@ -79,6 +82,7 @@ private:
 
   int rotationRadioButtonState;
   int clippingRadioButtonState;
+  int projectionRadioButtonState;
   bool checkFillButtonState;
   bool checkIsSplineState;
 
@@ -144,8 +148,12 @@ public:
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
 
+    scalePerspective = GTK_SCALE(gtk_builder_get_object(GTK_BUILDER(builder), "scaleValues"));
+    scaleValues = GTK_ADJUSTMENT(gtk_builder_get_object(GTK_BUILDER(builder), "adjustment1"));
+
     rotationRadioButtonState = 1;
     clippingRadioButtonState = 1;
+    projectionRadioButtonState = 1;
     checkFillButtonState = false;
     checkIsSplineState = false;
 
@@ -337,6 +345,10 @@ public:
     checkFillButtonState = !checkFillButtonState;
   }
 
+  void updateProjectionBtnState (int newState) {
+    projectionRadioButtonState = newState;
+  }
+
   void updateCheckBtnSpline() {
     checkIsSplineState = !checkIsSplineState;
   }
@@ -470,19 +482,19 @@ public:
     }
   }
 
-  void transformPerspective(Window* window, Coordinate* geometriCenter, double cop) {
-    opp->computeAngle(window, geometriCenter);
-    opp->transformation(window->getCoordinates(), geometriCenter);
+  void transformPerspective(Window* window, Coordinate* geometriCenter, Coordinate* cop) {
+    pers->computeAngle(window, cop);
+    pers->transformation(window->getCoordinates(), geometriCenter, cop);
   }
 
-  void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter) {
+  void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* cop) {
     if (elem->getType() != OBJECT3D) {
-      opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter);
+      pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter, cop);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
       for(segment = segments.begin(); segment != segments.end(); segment++) {
-          opp->transformation((*segment)->getCoordinates(), geometriCenter);
+          pers->transformation((*segment)->getCoordinates(), geometriCenter, cop);
       }
     }
   }
@@ -663,6 +675,10 @@ public:
     return gtk_notebook_get_current_page(notebookObjectOperations);
   }
 
+  double getNewCOP() {
+    return gtk_adjustment_get_value(scaleValues);
+  }
+
   int getCurrentObjectIndex() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
     if (row == NULL) {
@@ -686,6 +702,10 @@ public:
 
   bool isCheckBtnSplineChecked() {
     return checkIsSplineState;
+  }
+
+  int getProjectionBtnState() {
+    return projectionRadioButtonState;
   }
 
   Window* getWindow() {
