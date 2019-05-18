@@ -51,6 +51,7 @@ private:
   GtkEntry *entryAngle;
   GtkEntry *entryRotationX;
   GtkEntry *entryRotationY;
+  GtkEntry *entryRotationZ;
   GtkEntry *entryObjWorldFile;
   GtkEntry *entryAngleRotateWindow;
   GtkEntry *entryDelta;
@@ -83,6 +84,7 @@ private:
   int rotationRadioButtonState;
   int clippingRadioButtonState;
   int projectionRadioButtonState;
+  int objRotateRadioButtonState;
   bool checkFillButtonState;
   bool checkIsSplineState;
 
@@ -130,6 +132,7 @@ public:
     entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
     entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
+    entryRotationZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationZ"));
     entryObjWorldFile = GTK_ENTRY(gtk_builder_get_object(builder, "entryObjWorldFile"));
     entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
     entryDelta = GTK_ENTRY(gtk_builder_get_object(builder, "entryDelta"));
@@ -154,6 +157,7 @@ public:
     rotationRadioButtonState = 1;
     clippingRadioButtonState = 1;
     projectionRadioButtonState = 1;
+    objRotateRadioButtonState = 1;
     checkFillButtonState = false;
     checkIsSplineState = false;
 
@@ -347,6 +351,10 @@ public:
 
   void updateProjectionBtnState (int newState) {
     projectionRadioButtonState = newState;
+  }
+
+  void updateObjRotateBtnState(int newState) {
+    objRotateRadioButtonState = newState;
   }
 
   void updateCheckBtnSpline() {
@@ -623,6 +631,10 @@ public:
     return stod(gtk_entry_get_text(entryRotationY));
   }
 
+  double getEntryRotationZ() {
+    return stod(gtk_entry_get_text(entryRotationZ));
+  }
+
   double getEntry3DX1() {
     return stod(gtk_entry_get_text(entry3DX1));
   }
@@ -706,6 +718,10 @@ public:
 
   int getProjectionBtnState() {
     return projectionRadioButtonState;
+  }
+
+  int getObjRotateBtnState() {
+    return objRotateRadioButtonState;
   }
 
   Window* getWindow() {

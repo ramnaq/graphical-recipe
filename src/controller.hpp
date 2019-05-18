@@ -192,21 +192,22 @@ public:
         break;
       }
       case ROTATION: {
-        // int radioBtnChosen = view.getRotationRadioButtonState();
-        // double angle = view.getAngle();
-        // Coordinate* reference;
-        //
-        // if (radioBtnChosen == 1) {
-        //   reference = new Coordinate(0,0);
-        // } else if (radioBtnChosen == 2) {
-        //   Coordinate tmp = obj->getGeometricCenter();
-        //   reference = new Coordinate(tmp.getX(), tmp.getY());
-        // } else {
-        //   reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY());
-        // }
-        // ObjectTransformation::rotation(obj->getCoordinates(), angle, reference);
-        //
-        // delete reference;
+        int radioBtnChosen = view.getRotationRadioButtonState();
+        int whichAxis = view.getObjRotateBtnState();
+        double angle = view.getAngle();
+        Coordinate* reference;
+
+        if (radioBtnChosen == 1) {
+          reference = new Coordinate(0,0,0);
+        } else if (radioBtnChosen == 2) {
+          Coordinate tmp = obj->getGeometricCenter();
+          reference = new Coordinate(tmp.getX(), tmp.getY(), tmp.getZ());
+        } else {
+          reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY(), view.getEntryRotationZ());
+        }
+        //ObjectTransformation::rotation(obj->getCoordinates(), angle, reference, whichAxis);
+
+        delete reference;
         break;
       }
     }
@@ -374,6 +375,10 @@ public:
       view.logWarning("Passo do zoom acima do limite!\n");
     }
     updateDrawScreen();
+  }
+
+  void updateObjRotateBtnState(int newState) {
+    view.updateObjRotateBtnState(newState);
   }
 
   void updateRadioBtnState(int newState) {

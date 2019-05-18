@@ -358,3 +358,30 @@ extern "C" G_MODULE_EXPORT void on_perspectiveProjection_clicked(){
 
   }
 }
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_objRotateX_clicked(){
+  try {
+    controller->updateObjRotateBtnState(1);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_objRotateY_clicked(){
+  try {
+    controller->updateObjRotateBtnState(2);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_objRotateZ_clicked(){
+  try {
+    controller->updateObjRotateBtnState(3);
+  } catch (...) {
+
+  }
+}

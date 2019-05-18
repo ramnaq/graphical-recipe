@@ -46,23 +46,28 @@ public:
     }
   }
 
-  static void rotation(vector<Coordinate*> coordinates, double angle, Coordinate* rotationVector) {
-    double radians = (angle*M_PI)/180;
-    Matrix rotationMatrix(Matrix::rotationVectorToMatrix(radians));
-    Matrix translationMatrix1(Matrix::translationVectorToMatrix(rotationVector));
-    Coordinate negativeObjCenter(-rotationVector->getX(), -rotationVector->getY());
-    Matrix translationMatrix2(Matrix::translationVectorToMatrix(&negativeObjCenter));
+  static void rotation(vector<Coordinate*> coordinates, double angle, Coordinate* rotationVector, int whichAxis) {
+    // Matrix rotation = getMatrix(whichAxis);
+    // Matrix translation = Matrix::translation3DVectorToMatrix(rotationVector);
+    // Matrix rotationX =
+    // Matrix rotationZ =
+    // Matrix translationInv =
+    // Matrix rotationXinv =
+    // Matrix rotationZinv =
 
-    Matrix rotationOperation = translationMatrix1 * rotationMatrix * translationMatrix2;
+  }
 
-    vector<Coordinate*>::iterator it;
-    for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(Matrix::coordinateToMatrix(*it));
-
-      Matrix scaledObject = rotationOperation * coord;
-
-      (*it)->setX(scaledObject.getMatrix()[0][0]);
-      (*it)->setY(scaledObject.getMatrix()[1][0]);
+  static Matrix getRotationMatrix(double angle, int whichAxis) {
+    switch (whichAxis) {
+      case 1:
+        return Matrix::rotationXVectorToMatrix(angle);
+        break;
+      case 2:
+        return Matrix::rotationYVectorToMatrix(angle);
+        break;
+      case 3:
+        return Matrix::rotationZVectorToMatrix(angle);
+        break;
     }
   }
 

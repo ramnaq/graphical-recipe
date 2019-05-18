@@ -119,6 +119,13 @@ public:
            {    0      , 0,      0    , 1}};
   }
 
+  static std::vector<std::vector<double> > rotationZVectorToMatrix(double angle) {
+   return {{cos(angle), -sin(angle), 0 , 0},
+           {sin(angle), cos(angle) , 0 , 0},
+           {    0     ,     0      , 1 , 0},
+           {    0     ,     0      , 0 , 1}};
+  }
+
   static std::vector<std::vector<double> > coordinate3DToMatrix(Coordinate* coord) {
    return {{coord->getX()},
            {coord->getY()},
