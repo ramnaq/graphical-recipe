@@ -184,8 +184,8 @@ public:
     Coordinate* coordMax = new Coordinate(xMax-VIEWPORT_MARGIN, yMax-VIEWPORT_MARGIN);
     vector<Coordinate*> vpCoord = {coordMin, coordMax};
 
-    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2, 0);
-    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2, 0);
+    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2, 5);
+    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2, 5);
     vector<Coordinate*> windowCoord = {wCoordMin, wCoordMax};
 
     window = new Window(windowCoord);
@@ -490,9 +490,8 @@ public:
     }
   }
 
-  void transformPerspective(Window* window, Coordinate* geometriCenter, Coordinate* cop) {
+  void computeAngle(Window* window, Coordinate* cop) {
     pers->computeAngle(window, cop);
-    pers->transformation(window->getCoordinates(), geometriCenter, cop);
   }
 
   void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* cop) {
