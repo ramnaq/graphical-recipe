@@ -4,9 +4,6 @@
 #include "matrix.hpp"
 #include "window.hpp"
 
-// TODO REMOVE
-#include <iostream>
-
 /*! Transform world coordinates to normalized system coordinates. */
 
 class Perspective {
@@ -54,8 +51,6 @@ public:
     // Angles
     this->angleX = (y == 0 || z == 0) ? 0 : (atan(y/z)*M_PI)/180;
     this->angleY = (x == 0 || z == 0) ? 0 : (atan(x/z)*M_PI)/180;
-
-    cout << "Angulos: X: " << angleX << " Y: " << angleY << endl;
   }
 
   void transformation(vector<Coordinate*> coord, Coordinate* geometriCenter, Coordinate* cop) {

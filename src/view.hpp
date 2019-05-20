@@ -38,8 +38,10 @@ private:
   GtkEntry *entryLineY2;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
+  GtkEntry *entryPolygonZ;
   GtkEntry *entryCurveX;
   GtkEntry *entryCurveY;
+  GtkEntry *entryCurveZ;
   GtkEntry *entryTranslationX;
   GtkEntry *entryTranslationY;
   GtkEntry *entryTranslationZ;
@@ -120,8 +122,10 @@ public:
     entryLineY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY1"));
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
+    entryPolygonZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonZ")); // TODO Insert Z in polygons
     entryCurveX = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveX"));
     entryCurveY = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveY"));
+    entryCurveZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveZ")); // TODO Insert Z in curves
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
     entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
     entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
@@ -156,7 +160,7 @@ public:
 
     rotationRadioButtonState = 1;
     clippingRadioButtonState = 1;
-    projectionRadioButtonState = 0; // TODO Inverter
+    projectionRadioButtonState = 1;
     objRotateRadioButtonState = 1;
     checkFillButtonState = false;
     checkIsSplineState = false;
@@ -236,7 +240,7 @@ public:
   }
 
   void drawNewCurve(Curve* obj) {
-    vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
+    vector<Coordinate*> points = obj->getWindowPoints();
     drawer->drawCurve(points);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
@@ -473,6 +477,22 @@ public:
     return fileName;
   }
 
+  void transformProjection(GraphicObject* obj, Coordinate* cop) {
+    Coordinate geometriCenter = window->getGeometricCenter();
+
+    if (obj->getType() == WINDOW) {
+      if (getProjectionBtnState())
+        transformOPP(static_cast<Window*>(obj), &geometriCenter);
+      else
+        computeAngle(static_cast<Window*>(obj), cop);
+    } else {
+      if (getProjectionBtnState())
+        transformOPP(obj, &geometriCenter);
+      else
+        transformPerspective(obj, &geometriCenter, cop);
+    }
+  }
+
   void transformOPP(Window* window, Coordinate* geometriCenter) {
     opp->computeAngle(window, geometriCenter);
     opp->transformation(window->getCoordinates(), geometriCenter);
@@ -508,14 +528,22 @@ public:
     }
   }
 
-  void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
+  void transformSCN(GraphicObject* elem) {
+    window->computePersGeometricCenter();
+
+    Coordinate* windowCoord = window->getCoordinates().back();
+    Coordinate geometriCenter = window->getGeometricCenter();
+    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
+
+    double angle = window->getAngle();
+
     if (elem->getType() != OBJECT3D) {
-      scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter, factor, angle);
+      scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &geometriCenter, &scalingFactor, angle);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
       for(segment = segments.begin(); segment != segments.end(); segment++) {
-          scn->transformation((*segment)->getCoordinates(), geometriCenter, factor, angle);
+          scn->transformation((*segment)->getCoordinates(), &geometriCenter, &scalingFactor, angle);
       }
     }
   }
@@ -536,15 +564,17 @@ public:
   void clearSaveWorldFile() {
   	gtk_entry_set_text(entryObjWorldFile, "");
   }
-  // TODO For Z too
+
   void clearPolygonCoordEntries() {
     gtk_entry_set_text(entryPolygonX, "");
     gtk_entry_set_text(entryPolygonY, "");
+    gtk_entry_set_text(entryPolygonZ, "");
   }
 
   void clearCurveCoordEntries() {
     gtk_entry_set_text(entryCurveX, "");
     gtk_entry_set_text(entryCurveY, "");
+    gtk_entry_set_text(entryCurveZ, "");
   }
 
   void clearSegmentCoordEntries() {

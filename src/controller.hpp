@@ -413,44 +413,16 @@ public:
   void updateDrawScreen() {
     view.clear_surface();
 
+    // Windows transformation
     Window* window = view.getWindow();
-    Coordinate geometriCenter = window->getGeometricCenter();
-
-    cout << "WINDOW-WC Min: " << window->getCoordinates().back()->getX() << " " << window->getCoordinates().back()->getY() << " " << window->getCoordinates().back()->getZ() << endl;
-    cout << "WINDOW-WC Max: " << window->getCoordinates().front()->getX() << " " << window->getCoordinates().front()->getY() << " " << window->getCoordinates().front()->getZ() << endl;
-    cout << "VPR-WC: " << geometriCenter.getX() << " " << geometriCenter.getY() << " " << geometriCenter.getZ() << endl;
-    cout << "COP-WC: " << cop.getX() << " " << cop.getY() << " " << cop.getZ() << endl;
-
-    if (view.getProjectionBtnState())
-      view.transformOPP(window, &geometriCenter);
-    else
-      view.computeAngle(window, &cop);
-
-    window->computePersGeometricCenter();
-    geometriCenter = window->getGeometricCenter();
-
-    cout << " " << endl;
-    cout << "WINDOW-P Min: " << window->getCoordinates().back()->getXop() << " " << window->getCoordinates().back()->getYop() << " " << window->getCoordinates().back()->getZop() << endl;
-    cout << "WINDOW-P Max: " << window->getCoordinates().front()->getXop() << " " << window->getCoordinates().front()->getYop() << " " << window->getCoordinates().front()->getZop() << endl;
-    cout << "VPR-P: " << geometriCenter.getX() << " " << geometriCenter.getY() << " " << geometriCenter.getZ() << endl;
-
-    double currentAngle = window->getAngle();
-    Coordinate* windowCoord = window->getCoordinates().back();
-    cout << "Fator de escala (SCN): " << 1/windowCoord->getXop() << " " << 1/windowCoord->getYop() << endl;
-    cout << "  " << endl;
-    cout << "  " << endl;
-    Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
+    view.transformProjection(window, &cop);
 
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
 
-      if (view.getProjectionBtnState())
-        view.transformOPP(element, &geometriCenter);
-      else
-        view.transformPerspective(element, &geometriCenter, &cop);
-
-      view.transformSCN(element, &geometriCenter, &scalingFactor, currentAngle);
+      view.transformProjection(element, &cop);
+      view.transformSCN(element);
 
       switch (element->getType()) {
         case POINT: {
