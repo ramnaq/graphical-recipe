@@ -156,7 +156,7 @@ public:
 
     rotationRadioButtonState = 1;
     clippingRadioButtonState = 1;
-    projectionRadioButtonState = 1;
+    projectionRadioButtonState = 0; // TODO Inverter
     objRotateRadioButtonState = 1;
     checkFillButtonState = false;
     checkIsSplineState = false;
@@ -184,8 +184,8 @@ public:
     Coordinate* coordMax = new Coordinate(xMax-VIEWPORT_MARGIN, yMax-VIEWPORT_MARGIN);
     vector<Coordinate*> vpCoord = {coordMin, coordMax};
 
-    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2, 5);
-    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2, 5);
+    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2, 0);
+    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2, 0);
     vector<Coordinate*> windowCoord = {wCoordMin, wCoordMax};
 
     window = new Window(windowCoord);
@@ -491,7 +491,9 @@ public:
   }
 
   void computeAngle(Window* window, Coordinate* cop) {
-    pers->computeAngle(window, cop);
+    Coordinate x = window->getGeometricCenter();
+    pers->computeAngle(&x, cop);
+    pers->transformationW(window->getCoordinates(), &x, cop);
   }
 
   void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* cop) {

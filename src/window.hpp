@@ -154,6 +154,21 @@ public:
     return (newXMin < newXMax);
   }
 
+  void computePersGeometricCenter() {
+    cx = 0;
+    cy = 0;
+    cz = 0;
+    vector<Coordinate*>::iterator it;
+    for(it = this->coordinateList.begin(); it != this->coordinateList.end(); it++) {
+      cx += (*it)->getXop();
+      cy += (*it)->getYop();
+      cz += (*it)->getZop();
+    }
+    cx = cx / this->coordinateList.size();
+    cy = cy / this->coordinateList.size();
+    cz = cz / this->coordinateList.size();
+  }
+
 };
 
 #endif

@@ -299,37 +299,37 @@ public:
     // Coordinate* b = new Coordinate(x2, y2, z2);
     // Segment* s = new Segment(a, b);
 
-    Coordinate* a = new Coordinate(0, 0, 10);
-    Coordinate* a1 = new Coordinate(0, 0, 10);
-    Coordinate* a2 = new Coordinate(0, 0, 10);
+    Coordinate* a = new Coordinate(0, 0, -50);
+    Coordinate* a1 = new Coordinate(0, 0, -50);
+    Coordinate* a2 = new Coordinate(0, 0, -50);
 
-    Coordinate* b = new Coordinate(0, 100, 10);
-    Coordinate* b1 = new Coordinate(0, 100, 10);
-    Coordinate* b2 = new Coordinate(0, 100, 10);
+    Coordinate* b = new Coordinate(0, 100, -50);
+    Coordinate* b1 = new Coordinate(0, 100, -50);
+    Coordinate* b2 = new Coordinate(0, 100, -50);
 
-    Coordinate* c = new Coordinate(100, 100, 10);
-    Coordinate* c1 = new Coordinate(100, 100, 10);
-    Coordinate* c2 = new Coordinate(100, 100, 10);
+    Coordinate* c = new Coordinate(100, 100, -50);
+    Coordinate* c1 = new Coordinate(100, 100, -50);
+    Coordinate* c2 = new Coordinate(100, 100, -50);
 
-    Coordinate* d = new Coordinate(100, 0, 10);
-    Coordinate* d1 = new Coordinate(100, 0, 10);
-    Coordinate* d2 = new Coordinate(100, 0, 10);
+    Coordinate* d = new Coordinate(100, 0, -50);
+    Coordinate* d1 = new Coordinate(100, 0, -50);
+    Coordinate* d2 = new Coordinate(100, 0, -50);
 
-    Coordinate* e = new Coordinate(50, 50, 50);
-    Coordinate* e1 = new Coordinate(50, 50, 50);
-    Coordinate* e2 = new Coordinate(50, 50, 50);
+    Coordinate* e = new Coordinate(50, 50, -10);
+    Coordinate* e1 = new Coordinate(50, 50, -10);
+    Coordinate* e2 = new Coordinate(50, 50, -10);
 
-    Coordinate* f = new Coordinate(150, 50, 50);
-    Coordinate* f1 = new Coordinate(150, 50, 50);
-    Coordinate* f2 = new Coordinate(150, 50, 50);
+    Coordinate* f = new Coordinate(150, 50, -10);
+    Coordinate* f1 = new Coordinate(150, 50, -10);
+    Coordinate* f2 = new Coordinate(150, 50, -10);
 
-    Coordinate* g = new Coordinate(50, 150, 50);
-    Coordinate* g1 = new Coordinate(50, 150, 50);
-    Coordinate* g2 = new Coordinate(50, 150, 50);
+    Coordinate* g = new Coordinate(50, 150, -10);
+    Coordinate* g1 = new Coordinate(50, 150, -10);
+    Coordinate* g2 = new Coordinate(50, 150, -10);
 
-    Coordinate* h = new Coordinate(150, 150, 50);
-    Coordinate* h1 = new Coordinate(150, 150, 50);
-    Coordinate* h2 = new Coordinate(150, 150, 50);
+    Coordinate* h = new Coordinate(150, 150, -10);
+    Coordinate* h1 = new Coordinate(150, 150, -10);
+    Coordinate* h2 = new Coordinate(150, 150, -10);
 
     Segment* s = new Segment(a, b);
     Segment* s1 = new Segment(a1, d1);
@@ -416,14 +416,30 @@ public:
     Window* window = view.getWindow();
     Coordinate geometriCenter = window->getGeometricCenter();
 
+    cout << "WINDOW-WC Min: " << window->getCoordinates().back()->getX() << " " << window->getCoordinates().back()->getY() << " " << window->getCoordinates().back()->getZ() << endl;
+    cout << "WINDOW-WC Max: " << window->getCoordinates().front()->getX() << " " << window->getCoordinates().front()->getY() << " " << window->getCoordinates().front()->getZ() << endl;
+    cout << "VPR-WC: " << geometriCenter.getX() << " " << geometriCenter.getY() << " " << geometriCenter.getZ() << endl;
+    cout << "COP-WC: " << cop.getX() << " " << cop.getY() << " " << cop.getZ() << endl;
+
     if (view.getProjectionBtnState())
       view.transformOPP(window, &geometriCenter);
     else
       view.computeAngle(window, &cop);
 
+    window->computePersGeometricCenter();
+    geometriCenter = window->getGeometricCenter();
+
+    cout << " " << endl;
+    cout << "WINDOW-P Min: " << window->getCoordinates().back()->getXop() << " " << window->getCoordinates().back()->getYop() << " " << window->getCoordinates().back()->getZop() << endl;
+    cout << "WINDOW-P Max: " << window->getCoordinates().front()->getXop() << " " << window->getCoordinates().front()->getYop() << " " << window->getCoordinates().front()->getZop() << endl;
+    cout << "VPR-P: " << geometriCenter.getX() << " " << geometriCenter.getY() << " " << geometriCenter.getZ() << endl;
+
     double currentAngle = window->getAngle();
     Coordinate* windowCoord = window->getCoordinates().back();
-    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
+    cout << "Fator de escala (SCN): " << 1/windowCoord->getXop() << " " << 1/windowCoord->getYop() << endl;
+    cout << "  " << endl;
+    cout << "  " << endl;
+    Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
 
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
