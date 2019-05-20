@@ -26,7 +26,7 @@ public:
   }
 
   static void scaling(vector<Coordinate*> coordinates, Coordinate* objCenter, Coordinate* scalingVector) {
-    Coordinate negativeObjCenter(-objCenter->getX(), -objCenter->getY());
+    Coordinate negativeObjCenter(-objCenter->getX(), -objCenter->getY(), -objCenter->getZ());
 
     Matrix scalingMatrix(Matrix::scaling3DVectorToMatrix(scalingVector));
     Matrix translationMatrix1(Matrix::translation3DVectorToMatrix(objCenter));

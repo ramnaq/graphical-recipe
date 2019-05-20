@@ -513,7 +513,7 @@ public:
   void computeAngle(Window* window, Coordinate* cop) {
     Coordinate x = window->getGeometricCenter();
     pers->computeAngle(&x, cop);
-    pers->transformationW(window->getCoordinates(), &x, cop);
+    pers->transformation(window->getCoordinates(), &x, cop);
   }
 
   void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* cop) {
@@ -533,7 +533,7 @@ public:
 
     Coordinate* windowCoord = window->getCoordinates().back();
     Coordinate geometriCenter = window->getGeometricCenter();
-    Coordinate scalingFactor(1/windowCoord->getX(), 1/windowCoord->getY());
+    Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
 
     double angle = window->getAngle();
 

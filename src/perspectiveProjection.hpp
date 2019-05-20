@@ -80,28 +80,6 @@ public:
         (*it)->setZop(x.getZ());
     }
   }
-
-  void transformationW(vector<Coordinate*> coord, Coordinate* geometriCenter, Coordinate* cop) {
-    // 3 - Rotacione o mundo em torno de X e Y de forma a alinhar VPN com o eixo Z
-    Coordinate negCoord(-cop->getX(), -cop->getY(), -cop->getZ());
-
-    Matrix trans = Matrix::translation3DVectorToMatrix(&negCoord);
-    Matrix rotx  = Matrix::rotationXVectorToMatrix(this->angleX);
-    Matrix roty  = Matrix::rotationYVectorToMatrix(this->angleY);
-
-    Matrix transform = trans * rotx * roty;
-
-    vector<Coordinate*>::iterator it;
-    for(it = coord.begin(); it != coord.end(); it++) {
-        Matrix coord(Matrix::coordinate3DToMatrix((*it)));
-
-        Matrix translatedObject = transform * coord;
-
-        (*it)->setXop(translatedObject.getMatrix()[0][0]);
-        (*it)->setYop(translatedObject.getMatrix()[1][0]);
-        (*it)->setZop(translatedObject.getMatrix()[2][0]);
-    }
-  }
 };
 
 #endif
