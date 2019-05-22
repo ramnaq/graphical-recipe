@@ -60,6 +60,12 @@ public:
 	}
 
 	void drawLine(Coordinate* coordIn, Coordinate* coordFin) {
+		// TODO Specific when X and Y == 0, maybe change that to an operator== in coordinate?
+		if (coordIn->getXvp() == coordFin->getXvp() && coordIn->getYvp() == coordFin->getYvp()) {
+			drawPoint(coordIn);
+			return;
+		}
+
 		cairo_t* crl = cairo_create (surface);
 
 		cairo_move_to(crl, coordIn->getXvp(), coordIn->getYvp());
