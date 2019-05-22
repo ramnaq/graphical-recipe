@@ -236,12 +236,14 @@ public:
 
   void drawNewPolygon(Polygon* obj, bool fill) {
     vector<Coordinate*> polygonPoints = obj->getWindowPoints();
+
     drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewCurve(Curve* obj) {
     vector<Coordinate*> points = obj->getWindowPoints();
+
     drawer->drawCurve(points);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
@@ -318,8 +320,10 @@ public:
 
   string to_string_with_precision(double number) {
     ostringstream out;
+
     out.precision(2);
     out << fixed << number;
+
     return out.str();
   }
 
@@ -330,6 +334,7 @@ public:
   int removeFromList(GtkListBox* list) {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(list);
     int index = -1;
+
     if (row == NULL) {
       string errorType = (list == objectsListBox) ? "Nenhum objeto selecionado!\n" : "Nenhuma coordenada selecionada!\n";
       logger->logError(errorType);
@@ -337,11 +342,13 @@ public:
       index = gtk_list_box_row_get_index(row);
       gtk_container_remove((GtkContainer*) list, (GtkWidget*) row);
     }
+
     return index;
   }
 
   void removeAllCoordinates(GtkListBox* listCoord) {
     GList *children, *iter;
+
     children = gtk_container_get_children(GTK_CONTAINER(listCoord));
     for(iter = children; iter != NULL; iter = g_list_next(iter))
       gtk_widget_destroy(GTK_WIDGET(iter->data));
@@ -439,7 +446,7 @@ public:
         this->worldToViewPort(static_cast<Curve*>(object)->getWindowPoints());
         break;
       case OBJECT3D:
-        this->world3dToViewPort(static_cast<Object3D*>(object)->getSegmentList());
+        this->worldToViewPort(static_cast<Object3D*>(object)->getAllCoord());
         break;
     }
   }
@@ -448,17 +455,6 @@ public:
     vector<Coordinate*>::iterator it;
     for(it = points.begin(); it != points.end(); it++) {
       viewPort->transformation(*it);
-    }
-  }
-
-  void world3dToViewPort(vector<Segment*> segments) {
-    vector<Segment*>::iterator segment;
-    for(segment = segments.begin(); segment != segments.end(); segment++) {
-      if ((*segment)->isVisible()) {
-        vector<Coordinate*> tmp = (*segment)->getCoordinates();
-        viewPort->transformation(tmp[0]);
-        viewPort->transformation(tmp[1]);
-      }
     }
   }
 
@@ -518,11 +514,7 @@ public:
     if (elem->getType() != OBJECT3D) {
       opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), vrp);
     } else {
-      vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
-      vector<Segment*>::iterator segment;
-      for(segment = segments.begin(); segment != segments.end(); segment++) {
-          opp->transformation((*segment)->getCoordinates(), vrp);
-      }
+      opp->transformation(static_cast<Object3D*>(elem)->getAllCoord(), vrp);
     }
   }
 
@@ -530,11 +522,7 @@ public:
     if (elem->getType() != OBJECT3D) {
       pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), cop);
     } else {
-      vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
-      vector<Segment*>::iterator segment;
-      for(segment = segments.begin(); segment != segments.end(); segment++) {
-          pers->transformation((*segment)->getCoordinates(), cop);
-      }
+      pers->transformation(static_cast<Object3D*>(elem)->getAllCoord(), cop);
     }
   }
 
@@ -548,11 +536,7 @@ public:
     if (elem->getType() != OBJECT3D) {
       scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &geometriCenter, &scalingFactor);
     } else {
-      vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
-      vector<Segment*>::iterator segment;
-      for(segment = segments.begin(); segment != segments.end(); segment++) {
-          scn->transformation((*segment)->getCoordinates(), &geometriCenter, &scalingFactor);
-      }
+      scn->transformation(static_cast<Object3D*>(elem)->getAllCoord(), &geometriCenter, &scalingFactor);
     }
   }
 

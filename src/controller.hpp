@@ -17,8 +17,6 @@
 #include "polygon.hpp"
 #include "view.hpp"
 
-#define WINDOW_ORIGINAL_POSITION 10
-
 /*! Representation of the Controller (or Control) module of the MVC (Model, View, Control) architecture */
 
 class Controller {
@@ -123,18 +121,22 @@ public:
   void createObjectsFromFile() {
     string fileName = view.chooseFile();
     ObjDescriptor od;
+
     vector<GraphicObject*> objs = od.read(fileName);
     for (int i = 0; i < objs.size(); ++i) {
       display.insert(objs[i]);
       showObjectIntoView(objs[i]);
     }
+
     updateDrawScreen();
   }
 
   void saveWorldToFile() {
     string fileName = view.getFileToSaveWorld();
+
     ObjDescriptor od;
     od.write(display.getObjs(), fileName);
+
     view.clearSaveWorldFile();
   }
 
@@ -165,14 +167,11 @@ public:
     switch (currentPage) {
       case TRANSLATION: {
         Coordinate translationVector(view.getEntryTranslationX(), view.getEntryTranslationY(), view.getEntryTranslationZ());
+
         if (obj->getType() != OBJECT3D) {
           ObjectTransformation::translation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), &translationVector);
         } else {
-          vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
-          vector<Segment*>::iterator segment;
-          for(segment = segments.begin(); segment != segments.end(); segment++) {
-              ObjectTransformation::translation((*segment)->getCoordinates(), &translationVector);
-          }
+          ObjectTransformation::translation(static_cast<Object3D*>(obj)->getAllCoord(), &translationVector);
         }
         break;
       }
@@ -183,11 +182,7 @@ public:
         if (obj->getType() != OBJECT3D) {
           ObjectTransformation::scaling(static_cast<GraphicObject2D*>(obj)->getCoordinates(), &objCenter, &scalingVector);
         } else {
-          vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
-          vector<Segment*>::iterator segment;
-          for(segment = segments.begin(); segment != segments.end(); segment++) {
-              ObjectTransformation::scaling((*segment)->getCoordinates(), &objCenter, &scalingVector);
-          }
+          ObjectTransformation::scaling(static_cast<Object3D*>(obj)->getAllCoord(), &objCenter, &scalingVector);
         }
         break;
       }
@@ -207,13 +202,9 @@ public:
         }
 
         if (obj->getType() != OBJECT3D) {
-            ObjectTransformation::rotation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), angle, reference, whichAxis);
+          ObjectTransformation::rotation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), angle, reference, whichAxis);
         } else {
-          vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
-          vector<Segment*>::iterator segment;
-          for(segment = segments.begin(); segment != segments.end(); segment++) {
-              ObjectTransformation::rotation((*segment)->getCoordinates(), angle, reference, whichAxis);
-          }
+          ObjectTransformation::rotation(static_cast<Object3D*>(obj)->getAllCoord(), angle, reference, whichAxis);
         }
 
         delete reference;
@@ -247,12 +238,14 @@ public:
   //! Calls View::removeSelectedObject() and updates the screen with updateDrawScreen().
   void removeSelectedObject() {
     int index = view.removeFromList(view.getListObj());
+
     display.remove(index);
     updateDrawScreen();
   }
 
   void removeFromCoordPolygonList() {
     int index = view.removeFromList(view.getListCoordPolygon());
+
     if (index > -1) {
       pointsForPolygon.erase(pointsForPolygon.begin() + index);
     }
@@ -260,6 +253,7 @@ public:
 
   void removeFromCoordCurveList() {
     int index = view.removeFromList(view.getListCoordCurve());
+
     if (index > -1) {
       pointsForCurve.erase(pointsForCurve.begin() + index);
     }
@@ -267,6 +261,7 @@ public:
 
   void removeFromCoordObject3DList() {
     int index = view.removeFromList(view.getListSegment());
+
     if (index > -1) {
         segmentsForObject3D.erase(segmentsForObject3D.begin() + index);
     }
@@ -281,6 +276,7 @@ public:
     double y = view.getEntryPolygonY();
     double z = view.getEntryPolygonZ();
     Coordinate* c = new Coordinate(x, y, z);
+
     pointsForPolygon.push_back(c);
     view.insertCoordList(view.getListCoordPolygon(), x, y, z);
   }
@@ -294,6 +290,7 @@ public:
     double y = view.getEntryCurveY();
     double z = view.getEntryCurveZ();
     Coordinate* c = new Coordinate(x, y, z);
+
     pointsForCurve.push_back(c);
     view.insertCoordList(view.getListCoordCurve(), x, y, z);
   }
@@ -385,6 +382,20 @@ public:
     updateDrawScreen();
   }
 
+  void rotateCamera(GraphicObject* element) {
+      Window* window = view.getWindow();
+
+      double angleX = window->getAngleX();
+      double angleY = window->getAngleY();
+      double angleZ = window->getAngleZ();
+
+      if (element->getType() != OBJECT3D) {
+        ObjectTransformation::cameraRotation(static_cast<GraphicObject2D*>(element)->getCoordinates(), angleX, angleY, angleZ);
+      } else {
+        ObjectTransformation::cameraRotation(static_cast<Object3D*>(element)->getAllCoord(),  angleX, angleY, angleZ);
+      }
+  }
+
   void updateObjRotateBtnState(int newState) {
     view.updateObjRotateBtnState(newState);
   }
@@ -412,32 +423,14 @@ public:
 
   void updateCOP() {
     double newValue = view.getNewCOP();
-    newValue = 100 - newValue;
-    cop.setZ(newValue);
+
+    cop.setZ(100 - newValue);
     updateDrawScreen();
-  }
-
-  void rotateCamera(GraphicObject* element) {
-      Window* window = view.getWindow();
-
-      double angleX = window->getAngleX();
-      double angleY = window->getAngleY();
-      double angleZ = window->getAngleZ();
-
-      if (element->getType() != OBJECT3D) {
-        GraphicObject2D* obj = static_cast<GraphicObject2D*>(element);
-        ObjectTransformation::cameraRotation(obj->getCoordinates(), angleX, angleY, angleZ);
-      } else {
-        vector<Segment*> segments = static_cast<Object3D*>(element)->getSegmentList();
-        vector<Segment*>::iterator segment;
-        for(segment = segments.begin(); segment != segments.end(); segment++) {
-            ObjectTransformation::cameraRotation((*segment)->getCoordinates(),  angleX, angleY, angleZ);
-        }
-      }
   }
 
   void updateWindowAngle(int whichAxis) {
     double angle = view.getAngleRotateWindow();
+
     view.updateWindow(angle, whichAxis);
     updateDrawScreen();
   }
@@ -461,6 +454,7 @@ public:
       switch (element->getType()) {
         case POINT: {
           Point* point = static_cast<Point*>(element);
+
           if (clipping.pointClipping(point->getCoordinates()[0])) {
             view.transform(point);
             view.drawNewPoint(point);
@@ -469,14 +463,16 @@ public:
         }
         case LINE: {
           Line* line = static_cast<Line*>(element);
+
           if (clipping.lineClipping(line->getCoordinates(), view.getLineClippingAlgorithm())) {
             view.transform(line);
             view.drawNewLine(line);
           }
           break;
         }
-        case POLYGON: {
+        case POLYGON: { // TODO Fix visibility
           Polygon* polygon = static_cast<Polygon*>(element);
+
           clipping.polygonClipping(polygon);
           if (polygon->isVisible()) {
             view.transform(polygon);
@@ -484,8 +480,9 @@ public:
           }
           break;
         }
-        case CURVE: {
+        case CURVE: { // TODO Fix visibility
           Curve* curve = static_cast<Curve*>(element);
+
           clipping.curveClipping(curve);
           if (curve->isVisible()) {
             view.transform(curve);

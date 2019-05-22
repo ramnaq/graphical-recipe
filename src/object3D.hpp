@@ -6,15 +6,27 @@
 
 /*! Structures a representation and behavior of a "line segment" */
 
+// TODO Review public/private scopes
+
 class Object3D: public GraphicObject {
 private:
   vector<Segment*> segmentList;
+  vector<Coordinate*> allCoord;
+
+  void storeAllCoord() {
+    vector<Segment*>::iterator segment;
+    for(segment = segmentList.begin(); segment != segmentList.end(); segment++) {
+        vector<Coordinate*> segmentCoord = (*segment)->getCoordinates();
+        allCoord.insert(allCoord.end(), segmentCoord.begin(), segmentCoord.end());
+    }
+  }
 
 public:
 	Object3D(string name, vector<Segment*> &segmentList) :
 		GraphicObject(name, OBJECT3D) {
       this->segmentList = segmentList;
       computeGeometricCenter();
+      storeAllCoord();
     }
 
   ~Object3D() {
@@ -26,6 +38,10 @@ public:
 
   vector<Segment*> getSegmentList() {
     return this->segmentList;
+  }
+
+  vector<Coordinate*> getAllCoord() {
+    return this->allCoord;
   }
 
   void computeGeometricCenter() {

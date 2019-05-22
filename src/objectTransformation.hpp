@@ -48,12 +48,12 @@ public:
 
   static void rotation(vector<Coordinate*> coordinates, double angle, Coordinate* rotationVector, int whichAxis) {
     double radians = (angle*M_PI)/180;
-
-    Coordinate negRotationVector(-rotationVector->getX(), -rotationVector->getY(), -rotationVector->getZ());
     double cx = rotationVector->getX();
     double cy = rotationVector->getY();
     double cz = rotationVector->getZ();
     double d = sqrt((cy*cy) + (cz*cz));
+
+    Coordinate negRotationVector(-rotationVector->getX(), -rotationVector->getY(), -rotationVector->getZ());
 
     Matrix translation(Matrix::translation3DVectorToMatrix(rotationVector));
     Matrix rotationAlpha(Matrix::genericRotationAlpha(cy, cz, d));
@@ -82,9 +82,9 @@ public:
     double radiansY = (angleY*M_PI)/180;
     double radiansZ = (angleZ*M_PI)/180;
 
-    Matrix rotationMatrixX(ObjectTransformation::getRotationMatrix(radiansX, 1));
-    Matrix rotationMatrixY(ObjectTransformation::getRotationMatrix(radiansY, 2));
-    Matrix rotationMatrixZ(ObjectTransformation::getRotationMatrix(radiansZ, 3));
+    Matrix rotationMatrixX(Matrix::rotationXVectorToMatrix(radiansX));
+    Matrix rotationMatrixY(Matrix::rotationYVectorToMatrix(radiansY));
+    Matrix rotationMatrixZ(Matrix::rotationZVectorToMatrix(radiansZ));
 
     Matrix rotationMatrix = rotationMatrixX * rotationMatrixY * rotationMatrixZ;
 
@@ -100,7 +100,6 @@ public:
     }
   }
 
-  // TODO Probably it is better remover this function
   static Matrix getRotationMatrix(double angle, int whichAxis) {
     switch (whichAxis) {
       case 1:
