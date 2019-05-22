@@ -407,6 +407,15 @@ public:
       case 10:
         this->window->goCenter();
         break;
+      case 11:
+        this->window->setAngleX(step);
+        break;
+      case 12:
+        this->window->setAngleY(step);
+        break;
+      case 13:
+        this->window->setAngleZ(step);
+        break;
     }
   }
 

@@ -10,10 +10,17 @@ class Window: public GraphicObject2D {
 private:
   Coordinate const *defaultCoordMin;
   Coordinate const *defaultCoordMax;
+  double angleX;
+  double angleY;
+  double angleZ;
 
 public:
   Window(vector<Coordinate*> &windowCoordinates) :
     GraphicObject2D("Window", WINDOW, windowCoordinates) {
+
+    this->angleX = 0;
+    this->angleY = 0;
+    this->angleZ = 0;
 
     Coordinate* coordMin = windowCoordinates.front();
     Coordinate* coordMax = windowCoordinates.back();
@@ -24,6 +31,30 @@ public:
   ~Window() {
     delete this->defaultCoordMax;
     delete this->defaultCoordMin;
+  }
+
+  void setAngleX(int newAngle) {
+    this->angleX += newAngle;
+  }
+
+  void setAngleY(int newAngle) {
+    this->angleY += newAngle;
+  }
+
+  void setAngleZ(int newAngle) {
+    this->angleZ += newAngle;
+  }
+
+  double getAngleX() {
+    return this->angleX;
+  }
+
+  double getAngleY() {
+    return this->angleY;
+  }
+
+  double getAngleZ() {
+    return this->angleZ;
   }
 
   void zoomIn(double passo) {
@@ -126,6 +157,10 @@ public:
     coordMin->setY(defaultCoordMin->getY());
     coordMax->setX(defaultCoordMax->getX());
     coordMax->setY(defaultCoordMax->getY());
+
+    this->angleX = 0;
+    this->angleY = 0;
+    this->angleZ = 0;
   }
 
   //! Checks if 'step' for a zoom-in ist within the limits.

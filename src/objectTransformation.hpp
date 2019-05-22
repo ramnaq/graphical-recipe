@@ -77,10 +77,16 @@ public:
     }
   }
 
-  static void windowRotation(vector<Coordinate*> coordinates, double angle, int whichAxis) {
-    double radians = (angle*M_PI)/180;
+  static void cameraRotation(vector<Coordinate*> coordinates, double angleX, double angleY, double angleZ) {
+    double radiansX = (angleX*M_PI)/180;
+    double radiansY = (angleY*M_PI)/180;
+    double radiansZ = (angleZ*M_PI)/180;
 
-    Matrix rotationMatrix(ObjectTransformation::getRotationMatrix(radians, whichAxis));
+    Matrix rotationMatrixX(ObjectTransformation::getRotationMatrix(radiansX, 1));
+    Matrix rotationMatrixY(ObjectTransformation::getRotationMatrix(radiansY, 2));
+    Matrix rotationMatrixZ(ObjectTransformation::getRotationMatrix(radiansZ, 3));
+
+    Matrix rotationMatrix = rotationMatrixX * rotationMatrixY * rotationMatrixZ;
 
     vector<Coordinate*>::iterator it;
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
@@ -94,6 +100,7 @@ public:
     }
   }
 
+  // TODO Probably it is better remover this function
   static Matrix getRotationMatrix(double angle, int whichAxis) {
     switch (whichAxis) {
       case 1:

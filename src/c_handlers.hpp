@@ -227,7 +227,7 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_centralize(){
 //! Connected to signal "clicked" of element "rotateX".
 extern "C" G_MODULE_EXPORT void on_btnRotateX_clicked(){
   try {
-    controller->rotateWindow(1);
+    controller->updateWindowAngle(11);
   } catch (...) {
 
   }
@@ -236,7 +236,7 @@ extern "C" G_MODULE_EXPORT void on_btnRotateX_clicked(){
 //! Connected to signal "clicked" of element "rotateY".
 extern "C" G_MODULE_EXPORT void on_btnRotateY_clicked(){
   try {
-    controller->rotateWindow(2);
+    controller->updateWindowAngle(12);
   } catch (...) {
 
   }
@@ -245,7 +245,7 @@ extern "C" G_MODULE_EXPORT void on_btnRotateY_clicked(){
 //! Connected to signal "clicked" of element "rotateZ".
 extern "C" G_MODULE_EXPORT void on_btnRotateZ_clicked(){
   try {
-    controller->rotateWindow(3);
+    controller->updateWindowAngle(13);
   } catch (...) {
 
   }

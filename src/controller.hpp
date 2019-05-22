@@ -417,26 +417,28 @@ public:
     updateDrawScreen();
   }
 
-  void rotateWindow(int whichAxis) {
-    double angle = view.getAngleRotateWindow();
+  void rotateCamera(GraphicObject* element) {
+      Window* window = view.getWindow();
 
-    Elemento<GraphicObject*>* nextElement = display.getHead();
-    while (nextElement != NULL) {
-      GraphicObject* element = nextElement->getInfo();
+      double angleX = window->getAngleX();
+      double angleY = window->getAngleY();
+      double angleZ = window->getAngleZ();
 
       if (element->getType() != OBJECT3D) {
         GraphicObject2D* obj = static_cast<GraphicObject2D*>(element);
-        ObjectTransformation::windowRotation(obj->getCoordinates(), angle, whichAxis);
+        ObjectTransformation::cameraRotation(obj->getCoordinates(), angleX, angleY, angleZ);
       } else {
         vector<Segment*> segments = static_cast<Object3D*>(element)->getSegmentList();
         vector<Segment*>::iterator segment;
         for(segment = segments.begin(); segment != segments.end(); segment++) {
-            ObjectTransformation::windowRotation((*segment)->getCoordinates(),angle, whichAxis);
+            ObjectTransformation::cameraRotation((*segment)->getCoordinates(),  angleX, angleY, angleZ);
         }
       }
+  }
 
-      nextElement = nextElement->getProximo();
-    }
+  void updateWindowAngle(int whichAxis) {
+    double angle = view.getAngleRotateWindow();
+    view.updateWindow(angle, whichAxis);
     updateDrawScreen();
   }
 
@@ -450,6 +452,8 @@ public:
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {
       GraphicObject* element = nextElement->getInfo();
+
+      rotateCamera(element);
 
       view.transformProjection(element, &cop);
       view.transformSCN(element);
