@@ -55,15 +55,15 @@ public:
 
     switch (currentPage) {
      case POINT: {
-        vector<Coordinate*> pointCoordinate = {new Coordinate(view.getEntryPointX(), view.getEntryPointY())};
+        vector<Coordinate*> pointCoordinate = {new Coordinate(view.getEntryPointX(), view.getEntryPointY(), view.getEntryPointZ())};
         obj = new Point(name, pointCoordinate);
         objType = "PONTO";
 
         break;
      }
      case LINE: {
-        vector<Coordinate*> lineCoordinate = {new Coordinate(view.getEntryLineX1(), view.getEntryLineY1()),
-                                               new Coordinate(view.getEntryLineX2(), view.getEntryLineY2())};
+        vector<Coordinate*> lineCoordinate = {new Coordinate(view.getEntryLineX1(), view.getEntryLineY1(), view.getEntryLineZ1()),
+                                               new Coordinate(view.getEntryLineX2(), view.getEntryLineY2(), view.getEntryLineZ2())};
         obj = new Line(name, lineCoordinate);
         objType = "LINHA";
 
@@ -270,9 +270,10 @@ public:
   void addNewLineForPolygon() {
     double x = view.getEntryPolygonX();
     double y = view.getEntryPolygonY();
-    Coordinate* c = new Coordinate(x, y);
+    double z = view.getEntryPolygonZ();
+    Coordinate* c = new Coordinate(x, y, z);
     pointsForPolygon.push_back(c);
-    view.insertCoordList(view.getListCoordPolygon(), x, y);
+    view.insertCoordList(view.getListCoordPolygon(), x, y, z);
   }
 
   /*!
@@ -282,9 +283,10 @@ public:
   void addNewPointForCurve() {
     double x = view.getEntryCurveX();
     double y = view.getEntryCurveY();
-    Coordinate* c = new Coordinate(x, y);
+    double z = view.getEntryCurveZ();
+    Coordinate* c = new Coordinate(x, y, z);
     pointsForCurve.push_back(c);
-    view.insertCoordList(view.getListCoordCurve(), x, y);
+    view.insertCoordList(view.getListCoordCurve(), x, y, z);
   }
 
   void addNewSegmentForObject3D() {

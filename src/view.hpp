@@ -32,10 +32,13 @@ private:
   /*! Entries for parameters of GraphicalObjects to be futher created */
   GtkEntry *entryPointX;
   GtkEntry *entryPointY;
+  GtkEntry *entryPointZ;
   GtkEntry *entryLineX1;
   GtkEntry *entryLineY1;
+  GtkEntry *entryLineZ1;
   GtkEntry *entryLineX2;
   GtkEntry *entryLineY2;
+  GtkEntry *entryLineZ2;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
   GtkEntry *entryPolygonZ;
@@ -115,17 +118,20 @@ public:
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
     entryPointY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointY"));
+    entryPointZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointZ"));
     objectName = GTK_ENTRY(gtk_builder_get_object(builder, "entryNovoObjeto"));
     entryLineX1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineX"));
     entryLineY1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY"));
+    entryLineZ1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineZ"));
     entryLineX2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineX1"));
     entryLineY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY1"));
+    entryLineZ2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineZ1"));
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
-    entryPolygonZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonZ")); // TODO Insert Z in polygons
+    entryPolygonZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonZ"));
     entryCurveX = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveX"));
     entryCurveY = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveY"));
-    entryCurveZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveZ")); // TODO Insert Z in curves
+    entryCurveZ = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveZ"));
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
     entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
     entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
@@ -156,7 +162,7 @@ public:
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
 
     scalePerspective = GTK_SCALE(gtk_builder_get_object(GTK_BUILDER(builder), "scaleValues"));
-    scaleValues = GTK_ADJUSTMENT(gtk_builder_get_object(GTK_BUILDER(builder), "adjustment1"));
+    scaleValues = GTK_ADJUSTMENT(gtk_builder_get_object(GTK_BUILDER(builder), "adjustment2"));
 
     rotationRadioButtonState = 1;
     clippingRadioButtonState = 1;
@@ -275,7 +281,7 @@ public:
     gtk_widget_show_all((GtkWidget*) objectsListBox);
   }
 
-  void insertCoordList(GtkListBox* list, double x, double y, double z = 1) {
+  void insertCoordList(GtkListBox* list, double x, double y, double z) {
     string coordX = to_string_with_precision(x);
     string coordY = to_string_with_precision(y);
     string coordZ = to_string_with_precision(z);
@@ -598,12 +604,20 @@ public:
     return stod(gtk_entry_get_text(entryPointY));
   }
 
+  double getEntryPointZ() {
+    return stod(gtk_entry_get_text(entryPointZ));
+  }
+
   double getEntryLineX1() {
     return stod(gtk_entry_get_text(entryLineX1));
   }
 
   double getEntryLineY1() {
     return stod(gtk_entry_get_text(entryLineY1));
+  }
+
+  double getEntryLineZ1() {
+    return stod(gtk_entry_get_text(entryLineZ1));
   }
 
   double getEntryLineX2() {
@@ -614,6 +628,10 @@ public:
     return stod(gtk_entry_get_text(entryLineY2));
   }
 
+  double getEntryLineZ2() {
+    return stod(gtk_entry_get_text(entryLineZ2));
+  }
+
   double getEntryPolygonX() {
     return stod(gtk_entry_get_text(entryPolygonX));
   }
@@ -622,12 +640,20 @@ public:
     return stod(gtk_entry_get_text(entryPolygonY));
   }
 
+  double getEntryPolygonZ() {
+    return stod(gtk_entry_get_text(entryPolygonZ));
+  }
+
   double getEntryCurveX() {
     return stod(gtk_entry_get_text(entryCurveX));
   }
 
   double getEntryCurveY() {
     return stod(gtk_entry_get_text(entryCurveY));
+  }
+
+  double getEntryCurveZ() {
+    return stod(gtk_entry_get_text(entryCurveZ));
   }
 
   double getEntryTranslationX() {
