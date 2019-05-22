@@ -47,14 +47,51 @@ public:
   }
 
   static void rotation(vector<Coordinate*> coordinates, double angle, Coordinate* rotationVector, int whichAxis) {
-    // Matrix rotation = getMatrix(whichAxis);
-    // Matrix translation = Matrix::translation3DVectorToMatrix(rotationVector);
-    // Matrix rotationX =
-    // Matrix rotationZ =
-    // Matrix translationInv =
-    // Matrix rotationXinv =
-    // Matrix rotationZinv =
+    double radians = (angle*M_PI)/180;
 
+    Coordinate negRotationVector(-rotationVector->getX(), -rotationVector->getY(), -rotationVector->getZ());
+    double cx = rotationVector->getX();
+    double cy = rotationVector->getY();
+    double cz = rotationVector->getZ();
+    double d = sqrt((cy*cy) + (cz*cz));
+
+    Matrix translation(Matrix::translation3DVectorToMatrix(rotationVector));
+    Matrix rotationAlpha(Matrix::genericRotationAlpha(cy, cz, d));
+    Matrix rotationBeta(Matrix::genericRotationBeta(cx, d));
+    Matrix rotationMatrix(ObjectTransformation::getRotationMatrix(radians, whichAxis));
+    Matrix rotationAlphainv(Matrix::genericRotationAlpha(cy, cz, -d));
+    Matrix rotationBetainv(Matrix::genericRotationBeta(-cx, -d));
+    Matrix translationInv(Matrix::translation3DVectorToMatrix(&negRotationVector));
+
+    Matrix result = translation * rotationAlpha * rotationBeta * rotationMatrix * rotationAlphainv * rotationBetainv * translationInv;
+
+    vector<Coordinate*>::iterator it;
+    for(it = coordinates.begin(); it != coordinates.end(); it++) {
+      Matrix coord(Matrix::coordinate3DToMatrix(*it));
+
+      Matrix rotatedObject = result * coord;
+
+      (*it)->setX(rotatedObject.getMatrix()[0][0]);
+      (*it)->setY(rotatedObject.getMatrix()[1][0]);
+      (*it)->setZ(rotatedObject.getMatrix()[2][0]);
+    }
+  }
+
+  static void windowRotation(vector<Coordinate*> coordinates, double angle, int whichAxis) {
+    double radians = (angle*M_PI)/180;
+
+    Matrix rotationMatrix(ObjectTransformation::getRotationMatrix(radians, whichAxis));
+
+    vector<Coordinate*>::iterator it;
+    for(it = coordinates.begin(); it != coordinates.end(); it++) {
+      Matrix coord(Matrix::coordinate3DToMatrix(*it));
+
+      Matrix rotatedObject = rotationMatrix * coord;
+
+      (*it)->setX(rotatedObject.getMatrix()[0][0]);
+      (*it)->setY(rotatedObject.getMatrix()[1][0]);
+      (*it)->setZ(rotatedObject.getMatrix()[2][0]);
+    }
   }
 
   static Matrix getRotationMatrix(double angle, int whichAxis) {

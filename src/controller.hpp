@@ -205,7 +205,16 @@ public:
         } else {
           reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY(), view.getEntryRotationZ());
         }
-        //ObjectTransformation::rotation(obj->getCoordinates(), angle, reference, whichAxis);
+
+        if (obj->getType() != OBJECT3D) {
+            ObjectTransformation::rotation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), angle, reference, whichAxis);
+        } else {
+          vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
+          vector<Segment*>::iterator segment;
+          for(segment = segments.begin(); segment != segments.end(); segment++) {
+              ObjectTransformation::rotation((*segment)->getCoordinates(), angle, reference, whichAxis);
+          }
+        }
 
         delete reference;
         break;
@@ -405,6 +414,29 @@ public:
     double newValue = view.getNewCOP();
     newValue = 100 - newValue;
     cop.setZ(newValue);
+    updateDrawScreen();
+  }
+
+  void rotateWindow(int whichAxis) {
+    double angle = view.getAngleRotateWindow();
+
+    Elemento<GraphicObject*>* nextElement = display.getHead();
+    while (nextElement != NULL) {
+      GraphicObject* element = nextElement->getInfo();
+
+      if (element->getType() != OBJECT3D) {
+        GraphicObject2D* obj = static_cast<GraphicObject2D*>(element);
+        ObjectTransformation::windowRotation(obj->getCoordinates(), angle, whichAxis);
+      } else {
+        vector<Segment*> segments = static_cast<Object3D*>(element)->getSegmentList();
+        vector<Segment*>::iterator segment;
+        for(segment = segments.begin(); segment != segments.end(); segment++) {
+            ObjectTransformation::windowRotation((*segment)->getCoordinates(),angle, whichAxis);
+        }
+      }
+
+      nextElement = nextElement->getProximo();
+    }
     updateDrawScreen();
   }
 

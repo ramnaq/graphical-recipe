@@ -38,19 +38,19 @@ public:
   static std::vector<std::vector<double> > translationVectorToMatrix(Coordinate* coord) {
    return {{1, 0, coord->getX()},
            {0, 1, coord->getY()},
-           {0, 0 , 1}};
+           {0, 0,      1       }};
   }
 
   static std::vector<std::vector<double> > scalingVectorToMatrix(Coordinate* coord) {
-   return {{coord->getX(), 0, 0},
-           {0, coord->getY(), 0},
-           {0, 0 , 1}};
+   return {{coord->getX(),      0       , 0},
+           {     0       , coord->getY(), 0},
+           {     0       ,      0       , 1}};
   }
 
   static std::vector<std::vector<double> > rotationVectorToMatrix(double angle) {
    return {{cos(angle), -sin(angle), 0},
-           {sin(angle), cos(angle), 0},
-           {0, 0 , 1}};
+           {sin(angle),  cos(angle), 0},
+           {   0      ,      0     , 1}};
   }
 
   static const vector<vector<double>> mb() {
@@ -71,17 +71,17 @@ public:
 
   static const vector<vector<double>> mbs() {
     double factor = (double) 1/6;
-    return {{-1*factor,  3*factor,  -3*factor, 1*factor},
-            { 3*factor,  -6*factor, 3*factor,  0.0},
-            {-3*factor,  0.0,       3*factor,  0.0},
-            { 1*factor,  4*factor,  1*factor,  0.0}};
+    return {{-1*factor,   3*factor, -3*factor, 1*factor},
+            { 3*factor,  -6*factor,  3*factor,   0.0   },
+            {-3*factor,     0.0   ,  3*factor,   0.0   },
+            { 1*factor,   4*factor,  1*factor,   0.0   }};
   }
 
   static const vector<vector<double>> e(double delta, double delta2, double delta3) {
-    return {{ 0.0,      0.0,      0.0,   1.0},
-            { delta3,   delta2,   delta, 0.0},
-            { 6*delta3, 2*delta2, 0.0,   0.0},
-            { 6*delta3, 0.0,      0.0,   0.0}};
+    return {{   0.0   ,     0.0   ,  0.0 , 1.0},
+            {  delta3 ,    delta2 , delta, 0.0},
+            { 6*delta3,   2*delta2,  0.0 , 0.0},
+            { 6*delta3,     0.0   ,  0.0 , 0.0}};
   }
 
   static const vector<vector<double>> gx(vector<Coordinate*> &v) {
@@ -102,18 +102,18 @@ public:
    return {{1, 0,  0, coord->getX()},
            {0, 1,  0, coord->getY()},
            {0, 0,  1, coord->getZ()},
-           {0, 0 , 0, 1}};
+           {0, 0,  0,      1       }};
   }
 
   static std::vector<std::vector<double> > rotationXVectorToMatrix(double angle) {
    return {{1,    0      ,     0      , 0},
            {0, cos(angle), -sin(angle), 0},
-           {0, sin(angle), cos(angle) , 0},
+           {0, sin(angle),  cos(angle), 0},
            {0,    0      ,     0      , 1}};
   }
 
   static std::vector<std::vector<double> > rotationYVectorToMatrix(double angle) {
-   return {{cos(angle) , 0, sin(angle), 0},
+   return {{ cos(angle), 0, sin(angle), 0},
            {    0      , 1,      0    , 0},
            {-sin(angle), 0, cos(angle), 0},
            {    0      , 0,      0    , 1}};
@@ -121,7 +121,7 @@ public:
 
   static std::vector<std::vector<double> > rotationZVectorToMatrix(double angle) {
    return {{cos(angle), -sin(angle), 0 , 0},
-           {sin(angle), cos(angle) , 0 , 0},
+           {sin(angle),  cos(angle), 0 , 0},
            {    0     ,     0      , 1 , 0},
            {    0     ,     0      , 0 , 1}};
   }
@@ -138,6 +138,20 @@ public:
            {    0        , coord->getY(),      0       , 0},
            {    0        ,       0      , coord->getZ(), 0},
            {    0        ,       0      ,      0       , 1}};
+  }
+
+  static std::vector<std::vector<double> > genericRotationAlpha(double cy, double cz, double d) {
+   return {{1,   0  ,  0  , 0},
+           {0,  cz/d, cy/d, 0},
+           {0, -cy/d, cz/d, 0},
+           {0,   0  ,  0  , 1}};
+  }
+
+  static std::vector<std::vector<double> > genericRotationBeta(double cx, double d) {
+   return {{  -d, 0, cx, 0},
+           {  0, 1,  0, 0},
+           {-cx, 0,  -d, 0},
+           {  0, 0,  0, 1}};
   }
 
   Matrix operator* (Matrix& obj) {
