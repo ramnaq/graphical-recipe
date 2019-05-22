@@ -240,20 +240,10 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void clearPolygonEntry() {
-    removeAllCoordinates(listCoordPolygon);
-    clearPolygonCoordEntries();
-  }
-
   void drawNewCurve(Curve* obj) {
     vector<Coordinate*> points = obj->getWindowPoints();
     drawer->drawCurve(points);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-  }
-
-  void clearCurveEntry() {
-    removeAllCoordinates(listCoordCurve);
-    clearCurveCoordEntries();
   }
 
   void drawNewObject3D(Object3D* obj) {
@@ -268,9 +258,20 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
+  void clearPolygonEntry() {
+    removeAllCoordinates(listCoordPolygon);
+    clearCoordEntries(entryPolygonX, entryPolygonY, entryPolygonZ);
+  }
+
+  void clearCurveEntry() {
+    removeAllCoordinates(listCoordCurve);
+    clearCoordEntries(entryCurveX, entryCurveY, entryCurveZ);
+  }
+
   void clearObjet3DEntry() {
     removeAllCoordinates(listSegment);
-    clearSegmentCoordEntries();
+    clearCoordEntries(entry3DX1, entry3DY1, entry3DZ1);
+    clearCoordEntries(entry3DX2, entry3DY2, entry3DZ2);
   }
 
   void insertIntoListBox(GraphicObject& obj, string tipo) {
@@ -406,12 +407,6 @@ public:
       case 10:
         this->window->goCenter();
         break;
-      case 11:
-        this->window->setAngle(-step);
-        break;
-      case 12:
-        this->window->setAngle(step);
-        break;
     }
   }
 
@@ -483,53 +478,53 @@ public:
     return fileName;
   }
 
-  void transformProjection(GraphicObject* obj, Coordinate* cop) {
-    Coordinate geometriCenter = window->getGeometricCenter();
-
-    if (obj->getType() == WINDOW) {
-      if (getProjectionBtnState())
-        transformOPP(static_cast<Window*>(obj), &geometriCenter);
-      else
-        computeAngle(static_cast<Window*>(obj), cop);
+  void computeAngleForProjection(Coordinate* cop) {
+    Coordinate vrp = window->getGeometricCenter();
+    if (getProjectionBtnState()) {
+      paralellAngle(window, &vrp);
     } else {
-      if (getProjectionBtnState())
-        transformOPP(obj, &geometriCenter);
-      else
-        transformPerspective(obj, &geometriCenter, cop);
+      perspectiveAngle(window, &vrp, cop);
     }
   }
 
-  void transformOPP(Window* window, Coordinate* geometriCenter) {
-    opp->computeAngle(window, geometriCenter);
-    opp->transformation(window->getCoordinates(), geometriCenter);
+  void paralellAngle(Window* window, Coordinate* vrp) {
+    opp->computeAngle(window, vrp);
+    opp->transformation(window->getCoordinates(), vrp);
   }
 
-  void transformOPP(GraphicObject* elem, Coordinate* geometriCenter) {
+  void perspectiveAngle(Window* window, Coordinate* vrp, Coordinate* cop) {
+    pers->computeAngle(vrp, cop);
+    pers->transformation(window->getCoordinates(), cop);
+  }
+
+  void transformProjection(GraphicObject* obj, Coordinate* cop) {
+    Coordinate geometriCenter = window->getGeometricCenter();
+    if (getProjectionBtnState())
+      transformOPP(obj, &geometriCenter);
+    else
+      transformPerspective(obj, cop);
+  }
+
+  void transformOPP(GraphicObject* elem, Coordinate* vrp) {
     if (elem->getType() != OBJECT3D) {
-      opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter);
+      opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), vrp);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
       for(segment = segments.begin(); segment != segments.end(); segment++) {
-          opp->transformation((*segment)->getCoordinates(), geometriCenter);
+          opp->transformation((*segment)->getCoordinates(), vrp);
       }
     }
   }
 
-  void computeAngle(Window* window, Coordinate* cop) {
-    Coordinate x = window->getGeometricCenter();
-    pers->computeAngle(&x, cop);
-    pers->transformation(window->getCoordinates(), &x, cop);
-  }
-
-  void transformPerspective(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* cop) {
+  void transformPerspective(GraphicObject* elem, Coordinate* cop) {
     if (elem->getType() != OBJECT3D) {
-      pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), geometriCenter, cop);
+      pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), cop);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
       for(segment = segments.begin(); segment != segments.end(); segment++) {
-          pers->transformation((*segment)->getCoordinates(), geometriCenter, cop);
+          pers->transformation((*segment)->getCoordinates(), cop);
       }
     }
   }
@@ -541,15 +536,13 @@ public:
     Coordinate geometriCenter = window->getGeometricCenter();
     Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
 
-    double angle = window->getAngle();
-
     if (elem->getType() != OBJECT3D) {
-      scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &geometriCenter, &scalingFactor, angle);
+      scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &geometriCenter, &scalingFactor);
     } else {
       vector<Segment*> segments = static_cast<Object3D*>(elem)->getSegmentList();
       vector<Segment*>::iterator segment;
       for(segment = segments.begin(); segment != segments.end(); segment++) {
-          scn->transformation((*segment)->getCoordinates(), &geometriCenter, &scalingFactor, angle);
+          scn->transformation((*segment)->getCoordinates(), &geometriCenter, &scalingFactor);
       }
     }
   }
@@ -571,25 +564,10 @@ public:
   	gtk_entry_set_text(entryObjWorldFile, "");
   }
 
-  void clearPolygonCoordEntries() {
-    gtk_entry_set_text(entryPolygonX, "");
-    gtk_entry_set_text(entryPolygonY, "");
-    gtk_entry_set_text(entryPolygonZ, "");
-  }
-
-  void clearCurveCoordEntries() {
-    gtk_entry_set_text(entryCurveX, "");
-    gtk_entry_set_text(entryCurveY, "");
-    gtk_entry_set_text(entryCurveZ, "");
-  }
-
-  void clearSegmentCoordEntries() {
-    gtk_entry_set_text(entry3DX1, "");
-    gtk_entry_set_text(entry3DY1, "");
-    gtk_entry_set_text(entry3DZ1, "");
-    gtk_entry_set_text(entry3DX2, "");
-    gtk_entry_set_text(entry3DY2, "");
-    gtk_entry_set_text(entry3DZ2, "");
+  void clearCoordEntries(GtkEntry* entry1, GtkEntry* entry2, GtkEntry* entry3) {
+    gtk_entry_set_text(entry1, "");
+    gtk_entry_set_text(entry2, "");
+    gtk_entry_set_text(entry3, "");
   }
 
   ///

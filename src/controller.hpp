@@ -368,11 +368,8 @@ public:
    * @param op The operation to be done on the Window (@see View::updateWindow()).
    */
   void changeWindow(int op) {
-    double changeFactor;
-    if (op != WINDOW_ORIGINAL_POSITION)
-      changeFactor =  (op < 10) ? view.getStep() : view.getAngleRotateWindow();
     try {
-      view.updateWindow(changeFactor, op);
+      view.updateWindow(view.getStep(), op);
     } catch (int e) {
       view.logWarning("Passo do zoom acima do limite!\n");
     }
@@ -415,9 +412,8 @@ public:
   void updateDrawScreen() {
     view.clear_surface();
 
-    // Windows transformation
-    Window* window = view.getWindow();
-    view.transformProjection(window, &cop);
+    // Step 1 and 2 (Both projections) - Translate COP and compute θx e θy
+    view.computeAngleForProjection(&cop);
 
     Elemento<GraphicObject*>* nextElement = display.getHead();
     while (nextElement != NULL) {

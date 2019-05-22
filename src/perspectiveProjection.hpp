@@ -53,9 +53,9 @@ public:
     this->angleY = (x == 0 || z == 0) ? 0 : (atan(x/z)*M_PI)/180;
   }
 
-  void transformation(vector<Coordinate*> coord, Coordinate* geometriCenter, Coordinate* cop) {
+  void transformation(vector<Coordinate*> coord, Coordinate* cop) {
     // 3 - Rotacione o mundo em torno de X e Y de forma a alinhar VPN com o eixo Z
-    Coordinate negCoord(-cop->getX(), -cop->getY(), -cop->getZ()); // USO ESSE VETOR DE TRANSLACAO?
+    Coordinate negCoord(-cop->getX(), -cop->getY(), -cop->getZ());
 
     Matrix trans = Matrix::translation3DVectorToMatrix(&negCoord);
     Matrix rotx  = Matrix::rotationXVectorToMatrix(this->angleX);
