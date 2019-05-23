@@ -307,37 +307,37 @@ public:
     // Coordinate* b = new Coordinate(x2, y2, z2);
     // Segment* s = new Segment(a, b);
 
-    Coordinate* a = new Coordinate(0, 0, -10);
-    Coordinate* a1 = new Coordinate(0, 0, -10);
-    Coordinate* a2 = new Coordinate(0, 0, -10);
+    Coordinate* a = new Coordinate(0, 0, -0);
+    Coordinate* a1 = new Coordinate(0, 0, -0);
+    Coordinate* a2 = new Coordinate(0, 0, -0);
 
-    Coordinate* b = new Coordinate(0, 100, -10);
-    Coordinate* b1 = new Coordinate(0, 100, -10);
-    Coordinate* b2 = new Coordinate(0, 100, -10);
+    Coordinate* b = new Coordinate(0, 100, -0);
+    Coordinate* b1 = new Coordinate(0, 100, -0);
+    Coordinate* b2 = new Coordinate(0, 100, -0);
 
-    Coordinate* c = new Coordinate(100, 100, -10);
-    Coordinate* c1 = new Coordinate(100, 100, -10);
-    Coordinate* c2 = new Coordinate(100, 100, -10);
+    Coordinate* c = new Coordinate(100, 100, -0);
+    Coordinate* c1 = new Coordinate(100, 100, -0);
+    Coordinate* c2 = new Coordinate(100, 100, -0);
 
-    Coordinate* d = new Coordinate(100, 0, -10);
-    Coordinate* d1 = new Coordinate(100, 0, -10);
-    Coordinate* d2 = new Coordinate(100, 0, -10);
+    Coordinate* d = new Coordinate(100, 0, -0);
+    Coordinate* d1 = new Coordinate(100, 0, -0);
+    Coordinate* d2 = new Coordinate(100, 0, -0);
 
-    Coordinate* e = new Coordinate(50, 50, -50);
-    Coordinate* e1 = new Coordinate(50, 50, -50);
-    Coordinate* e2 = new Coordinate(50, 50, -50);
+    Coordinate* e = new Coordinate(0, 0, -100);
+    Coordinate* e1 = new Coordinate(0, 0, -100);
+    Coordinate* e2 = new Coordinate(0, 0, -100);
 
-    Coordinate* f = new Coordinate(150, 50, -50);
-    Coordinate* f1 = new Coordinate(150, 50, -50);
-    Coordinate* f2 = new Coordinate(150, 50, -50);
+    Coordinate* f = new Coordinate(100, 0, -100);
+    Coordinate* f1 = new Coordinate(100, 0, -100);
+    Coordinate* f2 = new Coordinate(100, 0, -100);
 
-    Coordinate* g = new Coordinate(50, 150, -50);
-    Coordinate* g1 = new Coordinate(50, 150, -50);
-    Coordinate* g2 = new Coordinate(50, 150, -50);
+    Coordinate* g = new Coordinate(0, 100, -100);
+    Coordinate* g1 = new Coordinate(0, 100, -100);
+    Coordinate* g2 = new Coordinate(0, 100, -100);
 
-    Coordinate* h = new Coordinate(150, 150, -50);
-    Coordinate* h1 = new Coordinate(150, 150, -50);
-    Coordinate* h2 = new Coordinate(150, 150, -50);
+    Coordinate* h = new Coordinate(100, 100, -100);
+    Coordinate* h1 = new Coordinate(100, 100, -100);
+    Coordinate* h2 = new Coordinate(100, 100, -100);
 
     Segment* s = new Segment(a, b);
     Segment* s1 = new Segment(a1, d1);

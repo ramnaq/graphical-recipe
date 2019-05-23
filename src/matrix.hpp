@@ -141,17 +141,17 @@ public:
   }
 
   static std::vector<std::vector<double> > genericRotationAlpha(double cy, double cz, double d) {
-   return {{1,   0  ,  0  , 0},
-           {0,  cz/d, cy/d, 0},
-           {0, -cy/d, cz/d, 0},
-           {0,   0  ,  0  , 1}};
+   return {{1,   0  ,   0  , 0},
+           {0,  cz/d, -cy/d, 0},
+           {0,  cy/d,  cz/d, 0},
+           {0,   0  ,   0  , 1}};
   }
 
   static std::vector<std::vector<double> > genericRotationBeta(double cx, double d) {
-   return {{  -d, 0, cx, 0},
-           {  0, 1,  0, 0},
-           {-cx, 0,  -d, 0},
-           {  0, 0,  0, 1}};
+   return {{  d, -cx, 0, 0},
+           { cx,  d , 0, 0},
+           {  0,  0 , 1, 0},
+           {  0,  0 , 0, 1}};
   }
 
   Matrix operator* (Matrix& obj) {
