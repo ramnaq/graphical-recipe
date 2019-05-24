@@ -33,6 +33,7 @@ public:
 	}
 
 	Coordinate getGeometricCenter() {
+		computeGeometricCenter();
 		return Coordinate(cx, cy, cz);
 	}
 

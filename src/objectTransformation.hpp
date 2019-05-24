@@ -48,30 +48,18 @@ public:
 
   static void rotation(vector<Coordinate*> coordinates, double angle, Coordinate* rotationVector, int whichAxis) {
     double radians = (angle*M_PI)/180;
-    double cx = rotationVector->getX();
-    double cy = rotationVector->getY();
-    double cz = rotationVector->getZ();
-    double d = sqrt((cy*cy) + (cz*cz));
 
     Coordinate negRotationVector(-rotationVector->getX(), -rotationVector->getY(), -rotationVector->getZ());
 
-    // Matrix translation(Matrix::translation3DVectorToMatrix(&negRotationVector));
-    // Matrix rotationAlpha(Matrix::genericRotationAlpha(cy, cz, d));
-    // Matrix rotationBeta(Matrix::genericRotationBeta(-cx, d));
-    // Matrix rotationMatrix(ObjectTransformation::getRotationMatrix(radians, whichAxis));
-    // Matrix rotationAlphainv(Matrix::genericRotationAlpha(-cy, cz, d));
-    // Matrix rotationBetainv(Matrix::genericRotationBeta(cx, d));
-    // Matrix translationInv(Matrix::translation3DVectorToMatrix(rotationVector));
-
-    Matrix translation(Matrix::translation3DVectorToMatrix(&negRotationVector));
-    Matrix rotationAlpha(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAnguloX(rotationVector), 1));
-    Matrix rotationBeta(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAnguloZ(rotationVector), 3));
+    Matrix translation(Matrix::translation3DVectorToMatrix(rotationVector));
+    Matrix rotationX(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAnguloX(rotationVector), 1));
+    Matrix rotationZ(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAnguloZ(rotationVector), 3));
     Matrix rotationMatrix(ObjectTransformation::getRotationMatrix(radians, whichAxis));
-    Matrix rotationAlphainv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAnguloX(rotationVector), 1));
-    Matrix rotationBetainv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAnguloZ(rotationVector), 3));
-    Matrix translationInv(Matrix::translation3DVectorToMatrix(rotationVector));
+    Matrix rotationZinv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAnguloZ(rotationVector), 3));
+    Matrix rotationXinv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAnguloX(rotationVector), 1));
+    Matrix translationInv(Matrix::translation3DVectorToMatrix(&negRotationVector));
 
-    Matrix result = translation * rotationAlpha * rotationBeta * rotationMatrix * rotationBetainv * rotationAlphainv * translationInv;
+    Matrix result = translation * rotationX * rotationZ * rotationMatrix * rotationZinv * rotationXinv * translationInv;
 
     vector<Coordinate*>::iterator it;
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
@@ -122,36 +110,16 @@ public:
     }
   }
 
-
   static double getAnguloX(Coordinate* coord) {
-  if (coord->getZ() == 0) {
+    if (coord->getZ() == 0) {
       if (coord->getY() > 0) {
-        return 90;
+        return 0;
       } else {
-        return -90;
+        return 0;
       }
     } else {
       double angulo = atan(coord->getY()/coord->getZ());
-      angulo = (angulo * 180.0) / M_PI;
-      return angulo;
-    }
-  }
-
-  //! Método que diz o angulo em que um vetor se encontra em relação ao eixo Y.
-  /*!
-    /param coord é um ponto que indica um vetor
-    /return o angulo entre o vetor e o eixo Y
-  */
-  static double getAnguloY(Coordinate* coord) {
-    if (coord->getZ() == 0) {
-      if (coord->getX() > 0) {
-        return 90;
-      } else {
-        return -90;
-      }
-    } else {
-      double angulo = atan(coord->getX()/coord->getZ());
-      angulo = (angulo * 180.0) / M_PI;
+      angulo = (angulo * M_PI) / 180;
       return angulo;
     }
   }
@@ -164,13 +132,13 @@ public:
   static double getAnguloZ(Coordinate* coord) {
     if (coord->getX() == 0) {
       if (coord->getY() > 0) {
-        return 90;
+        return 0;
       } else {
-        return -90;
+        return 0;
       }
     } else {
       double angulo = atan(coord->getY()/coord->getX());
-      angulo = (angulo * 180.0) / M_PI;
+      angulo = (angulo * M_PI) / 180;
       return angulo;
     }
   }

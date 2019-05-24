@@ -1492,8 +1492,8 @@
                             </child>
                             <child>
                               <object class="GtkBox" id="box24">
+                                <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
                                 <child>
                                   <object class="GtkLabel" id="label11">
                                     <property name="visible">True</property>

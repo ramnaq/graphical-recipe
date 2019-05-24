@@ -29,11 +29,6 @@ public:
 		return this->coordinateList;
 	}
 
-	Coordinate getGeometricCenter() {
-		computeGeometricCenter();
-		return Coordinate(cx, cy, cz);
-	}
-
 	void computeGeometricCenter() {
 		cx = 0;
 		cy = 0;
