@@ -52,11 +52,11 @@ public:
     Coordinate negRotationVector(-rotationVector->getX(), -rotationVector->getY(), -rotationVector->getZ());
 
     Matrix translation(Matrix::translation3DVectorToMatrix(rotationVector));
-    Matrix rotationX(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAnguloX(rotationVector), 1));
+    Matrix rotationX(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAngleX(rotationVector), 1));
     Matrix rotationZ(ObjectTransformation::getRotationMatrix(ObjectTransformation::getAnguloZ(rotationVector), 3));
     Matrix rotationMatrix(ObjectTransformation::getRotationMatrix(radians, whichAxis));
     Matrix rotationZinv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAnguloZ(rotationVector), 3));
-    Matrix rotationXinv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAnguloX(rotationVector), 1));
+    Matrix rotationXinv(ObjectTransformation::getRotationMatrix(-ObjectTransformation::getAngleX(rotationVector), 1));
     Matrix translationInv(Matrix::translation3DVectorToMatrix(&negRotationVector));
 
     Matrix result = translation * rotationX * rotationZ * rotationMatrix * rotationZinv * rotationXinv * translationInv;
@@ -73,16 +73,21 @@ public:
     }
   }
 
-  static void cameraRotation(vector<Coordinate*> coordinates, double angleX, double angleY, double angleZ) {
+  static void cameraRotation(vector<Coordinate*> coordinates, Coordinate* geoCenter, double angleX, double angleY, double angleZ) {
+    Coordinate negRotationVector(-geoCenter->getX(), -geoCenter->getY(), -geoCenter->getZ());
     double radiansX = (angleX*M_PI)/180;
     double radiansY = (angleY*M_PI)/180;
     double radiansZ = (angleZ*M_PI)/180;
+
+    Matrix translation(Matrix::translation3DVectorToMatrix(geoCenter));
 
     Matrix rotationMatrixX(Matrix::rotationXVectorToMatrix(radiansX));
     Matrix rotationMatrixY(Matrix::rotationYVectorToMatrix(radiansY));
     Matrix rotationMatrixZ(Matrix::rotationZVectorToMatrix(radiansZ));
 
-    Matrix rotationMatrix = rotationMatrixX * rotationMatrixY * rotationMatrixZ;
+    Matrix translationInv(Matrix::translation3DVectorToMatrix(&negRotationVector));
+
+    Matrix rotationMatrix = translation * rotationMatrixX * rotationMatrixY * rotationMatrixZ * translationInv;
 
     vector<Coordinate*>::iterator it;
     for(it = coordinates.begin(); it != coordinates.end(); it++) {
@@ -90,9 +95,9 @@ public:
 
       Matrix rotatedObject = rotationMatrix * coord;
 
-      (*it)->setX(rotatedObject.getMatrix()[0][0]);
-      (*it)->setY(rotatedObject.getMatrix()[1][0]);
-      (*it)->setZ(rotatedObject.getMatrix()[2][0]);
+      (*it)->setXop(rotatedObject.getMatrix()[0][0]);
+      (*it)->setYop(rotatedObject.getMatrix()[1][0]);
+      (*it)->setZop(rotatedObject.getMatrix()[2][0]);
     }
   }
 
@@ -110,7 +115,7 @@ public:
     }
   }
 
-  static double getAnguloX(Coordinate* coord) {
+  static double getAngleX(Coordinate* coord) {
     if (coord->getZ() == 0) {
       if (coord->getY() > 0) {
         return 0;
@@ -124,11 +129,6 @@ public:
     }
   }
 
-  //! Método que diz o angulo em que um vetor se encontra em relação ao eixo Z.
-  /*!
-    /param coord é um ponto que indica um vetor
-    /return o angulo entre o vetor e o eixo X
-  */
   static double getAnguloZ(Coordinate* coord) {
     if (coord->getX() == 0) {
       if (coord->getY() > 0) {

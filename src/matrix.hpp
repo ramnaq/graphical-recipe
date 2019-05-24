@@ -133,6 +133,13 @@ public:
            {1}};
   }
 
+  static std::vector<std::vector<double> > coordinate3DToMatrixOp(Coordinate* coord) {
+   return {{coord->getXop()},
+           {coord->getYop()},
+           {coord->getZop()},
+           {1}};
+  }
+
   static std::vector<std::vector<double> > scaling3DVectorToMatrix(Coordinate* coord) {
    return {{coord->getX(),       0      ,      0       , 0},
            {    0        , coord->getY(),      0       , 0},

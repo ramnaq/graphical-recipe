@@ -41,6 +41,10 @@ public:
     // Angles
     this->angleX = (y == 0 || z == 0) ? 0 : (atan(y/z)*M_PI)/180;
     this->angleY = (x == 0 || z == 0) ? 0 : (atan(x/z)*M_PI)/180;
+
+    // TODO Another quick fix, but less ugly
+    w1t->setXop(w1t->getX()); w1t->setYop(w1t->getY()); w1t->setZop(w1t->getZ());
+    w2t->setXop(w2t->getX()); w2t->setYop(w2t->getY()); w2t->setZop(w2t->getZ());
   }
 
   void transformation(vector<Coordinate*> coord, Coordinate* geometriCenter) {
@@ -54,7 +58,7 @@ public:
 
     vector<Coordinate*>::iterator it;
     for(it = coord.begin(); it != coord.end(); it++) {
-        Matrix coord(Matrix::coordinate3DToMatrix((*it)));
+        Matrix coord(Matrix::coordinate3DToMatrixOp((*it)));
 
         Matrix translatedObject = transform * coord;
 

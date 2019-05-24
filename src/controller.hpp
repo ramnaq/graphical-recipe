@@ -389,10 +389,12 @@ public:
       double angleY = window->getAngleY();
       double angleZ = window->getAngleZ();
 
+      Coordinate geoCenter = element->getGeometricCenter();
+
       if (element->getType() != OBJECT3D) {
-        ObjectTransformation::cameraRotation(static_cast<GraphicObject2D*>(element)->getCoordinates(), angleX, angleY, angleZ);
+        ObjectTransformation::cameraRotation(static_cast<GraphicObject2D*>(element)->getCoordinates(), &geoCenter, angleX, angleY, angleZ);
       } else {
-        ObjectTransformation::cameraRotation(static_cast<Object3D*>(element)->getAllCoord(),  angleX, angleY, angleZ);
+        ObjectTransformation::cameraRotation(static_cast<Object3D*>(element)->getAllCoord(), &geoCenter, angleX, angleY, angleZ);
       }
   }
 

@@ -65,7 +65,7 @@ public:
 
     vector<Coordinate*>::iterator it;
     for(it = coord.begin(); it != coord.end(); it++) {
-        Matrix coord(Matrix::coordinate3DToMatrix((*it)));
+        Matrix coord(Matrix::coordinate3DToMatrixOp((*it)));
 
         Matrix translatedObject = transform * coord;
 

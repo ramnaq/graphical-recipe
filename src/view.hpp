@@ -499,6 +499,13 @@ public:
 
   void perspectiveAngle(Window* window, Coordinate* vrp, Coordinate* cop) {
     pers->computeAngle(vrp, cop);
+    // TODO Quick fix - rewrite that (see orthogonalParallelProjection.hpp)
+    Coordinate* w1t = window->getCoordinates()[0];
+    Coordinate* w2t = window->getCoordinates()[1];
+
+    w1t->setXop(w1t->getX()); w1t->setYop(w1t->getY()); w1t->setZop(w1t->getZ());
+    w2t->setXop(w2t->getX()); w2t->setYop(w2t->getY()); w2t->setZop(w2t->getZ());
+
     pers->transformation(window->getCoordinates(), cop);
   }
 
