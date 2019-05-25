@@ -34,6 +34,7 @@ private:
       // Column matrixes
       Matrix x_vector({{p0->getX()}, {p1->getX()}, {p2->getX()}, {p3->getX()}});
       Matrix y_vector({{p0->getY()}, {p1->getY()}, {p2->getY()}, {p3->getY()}});
+      Matrix z_vector({{p0->getZ()}, {p1->getZ()}, {p2->getZ()}, {p3->getZ()}});
 
       while (temp_t <= 1) {
         Matrix t_vec({Matrix::t_vector(temp_t)});  // Line matrix
@@ -42,9 +43,9 @@ private:
         // M(1,4) x M(4,1) = M(1,1), so get line 0, column 0 to obtain the double value
         double x = (t_mb * x_vector).getMatrix().at(0).at(0);
         double y = (t_mb * y_vector).getMatrix().at(0).at(0);
-        //const double z = t_mb * z_vector;
+        double z = (t_mb * z_vector).getMatrix().at(0).at(0);
 
-        this->coordinateList.push_back(new Coordinate(x, y));
+        this->coordinateList.push_back(new Coordinate(x, y, z));
         temp_t += t;
       }
 

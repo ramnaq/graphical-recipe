@@ -98,6 +98,13 @@ public:
             {v[3]->getY()}};
   }
 
+  static const vector<vector<double>> gz(vector<Coordinate*> &v) {
+    return {{v[0]->getZ()},
+            {v[1]->getZ()},
+            {v[2]->getZ()},
+            {v[3]->getZ()}};
+  }
+
   static std::vector<std::vector<double> > translation3DVectorToMatrix(Coordinate* coord) {
    return {{1, 0,  0, coord->getX()},
            {0, 1,  0, coord->getY()},
