@@ -95,22 +95,26 @@ public:
         break;
       }
       case CURVE: {
-        //GraphicObject* curve;  //TODO
         try {
           if (pointsForCurve.size() < 4) {
             throw std::runtime_error("Cannot create a curve without at least 4 points!");
           }
+
+          GraphicObject* curve;
+
           if (view.isCheckBtnSplineChecked()) {
-            BSpline* curve = new BSpline(name, pointsForCurve, view.getDelta());
+            curve = static_cast<BSpline*>(new BSpline(name, pointsForCurve, view.getDelta()));
             display.insert(curve);
             view.insertIntoListBox(*curve, "CURVA");
             pointsForCurve.clear();
           } else {
-            BezierCurve* curve = new BezierCurve(name, pointsForCurve);
-            display.insert(curve);
-            view.insertIntoListBox(*curve, "CURVA");
-            pointsForCurve.clear();
+            curve = static_cast<BezierCurve*>(new BezierCurve(name, pointsForCurve));
           }
+
+          display.insert(curve);
+	      view.insertIntoListBox(*curve, "CURVA");
+	      pointsForCurve.clear();
+
         } catch(const std::runtime_error& e) {
           std::cout << "[ERROR] " << e.what() << std::endl;
           view.logError("Pontos insuficientes para criação de curva.\n");
