@@ -2,6 +2,7 @@
 #define DRAWER_HPP
 
 #include <math.h>
+
 #include "graphicObject.hpp"
 
 static cairo_surface_t *surface = NULL;
@@ -45,7 +46,7 @@ public:
 
 	void draw(cairo_t *cr) {
 		cairo_set_source_surface(cr, surface, 0, 0);
-	  cairo_paint(cr);
+		cairo_paint(cr);
 	}
 
 	void drawPoint(Coordinate* coord) {

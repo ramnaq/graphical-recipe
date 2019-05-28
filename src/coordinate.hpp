@@ -1,7 +1,6 @@
 #ifndef COORDINATE_HPP
 #define COORDINATE_HPP
 
-
 /*! The cartesian coordinate. The number of parameters in the constructor indicates the dimention */
 
 class Coordinate {

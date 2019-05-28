@@ -2,17 +2,16 @@
 #define VIEW_HPP
 
 #include <gtk/gtk.h>
+#include <stdio.h>
 #include <string>
 
-#include "logger.hpp"
 #include "drawer.hpp"
+#include "logger.hpp"
 #include "scn.hpp"
-#include "window.hpp"
 #include "viewport.hpp"
-#include <stdio.h>
+#include "window.hpp"
 
 using namespace std;
-
 
 #define VIEWPORT_MARGIN 20
 
@@ -166,11 +165,6 @@ public:
     gtk_widget_show(editObjectWindow);
   }
 
-  void clear_surface() {
-    drawer->clear_surface();
-    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-  }
-
   void create_surface(GtkWidget *widget) {
     drawer->create_surface(widget);
   }
@@ -189,10 +183,24 @@ public:
   }
 
   void drawNewLine(GraphicObject* obj) {
-    Coordinate* c1 = obj->getCoordinates().front();
-    Coordinate* c2 = obj->getCoordinates().back();
-    drawer->drawLine(c1, c2);
+    drawer->drawLine(obj->getCoordinates().front(), obj->getCoordinates().back());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
+  void drawNewPolygon(GraphicObject* obj, bool fill) {
+    vector<Coordinate*> polygonPoints = obj->getWindowPoints();
+    drawer->drawPolygon(polygonPoints, fill);
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCoordinates(listCoordPolygon);
+    clearPolygonCoordEntries();
+  }
+
+  void drawNewCurve(GraphicObject* obj) {
+    vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
+    drawer->drawCurve(points);
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCoordinates(listCoordCurve);
+    clearCurveCoordEntries();
   }
 
   //! Draws a Polygon and properly clears elements in the "New Polygon window"
@@ -203,22 +211,6 @@ public:
     drawNewPolygon(obj, fill);
   }
 
-  void drawNewPolygon(GraphicObject* obj, bool fill) {
-    vector<Coordinate*> polygonPoints = obj->getWindowPoints();
-    drawer->drawPolygon(polygonPoints, fill);
-    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-    removeAllPolygonCoordinates();
-    clearPolygonCoordEntries();
-  }
-
-  void drawNewCurve(GraphicObject* obj) {
-    vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
-    drawer->drawCurve(points);
-    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-    removeAllCurveCoordinates();
-    clearCurveCoordEntries();
-  }
-
   void insertIntoListBox(GraphicObject& obj, string tipo) {
     GtkWidget* row = gtk_list_box_row_new();
     GtkWidget* label = gtk_label_new((obj.getObjectName() + " (" + tipo + ")").c_str());
@@ -227,101 +219,49 @@ public:
     gtk_widget_show_all((GtkWidget*) objectsListBox);
   }
 
-  void insertCoordPolygonList() {
-    string coordX = gtk_entry_get_text(entryPolygonX);
-    string coordY = gtk_entry_get_text(entryPolygonY);
+  void insertCoordList(GtkListBox* list, double x, double y) {
+    string coordX = to_string(x);
+    string coordY = to_string(y);
+
     string name = "Coordenada: (" + coordX + " , " + coordY + ")";
 
     GtkWidget* row = gtk_list_box_row_new();
     GtkWidget* label = gtk_label_new(name.c_str());
 
-    gtk_container_add((GtkContainer*) listCoordPolygon, label);
-    gtk_widget_show_all((GtkWidget*) listCoordPolygon);
-  }
-
-  void insertCoordCurveList() {
-    string coordX = gtk_entry_get_text(entryCurveX);
-    string coordY = gtk_entry_get_text(entryCurveY);
-    string name = "Coordenada: (" + coordX + " , " + coordY + ")";
-
-    GtkWidget* row = gtk_list_box_row_new();
-    GtkWidget* label = gtk_label_new(name.c_str());
-
-    gtk_container_add((GtkContainer*) listCoordCurve, label);
-    gtk_widget_show_all((GtkWidget*) listCoordCurve);
+    gtk_container_add((GtkContainer*) list, label);
+    gtk_widget_show_all((GtkWidget*) list);
   }
 
   //! Removes the selected element in GtkListBox
   /*!
    * @return The index of the removed element
    */
-  int removeSelectedObject() {
-    GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
+  int removeFromList(GtkListBox* list) {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(list);
     int index = -1;
     if (row == NULL) {
-      logger->logError("Nenhum objeto selecionado!\n");
+      string errorType = (list == objectsListBox) ? "Nenhum objeto selecionado!\n" : "Nenhuma coordenada selecionada!\n";
+      logger->logError(errorType);
     } else {
       index = gtk_list_box_row_get_index(row);
-      gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
+      gtk_container_remove((GtkContainer*) list, (GtkWidget*) row);
     }
     return index;
   }
 
-  int removeFromCoordPolygonList() {
-    GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
-    int index = -1;
-    if (row == NULL) {
-      logger->logError("Nenhuma coordenada selecionada!\n");
-    } else {
-      gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-      index = getCurrentObjectIndex();
-    }
-    return index;
+  void removeAllCoordinates(GtkListBox* listCoord) {
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(listCoord));
+    for(iter = children; iter != NULL; iter = g_list_next(iter))
+      gtk_widget_destroy(GTK_WIDGET(iter->data));
+    g_list_free(children);
   }
 
-  int removeFromCoordCurveList() {
-    GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordCurve);
-    int index = -1;
-    if (row == NULL) {
-      logger->logError("Nenhuma coordenada selecionada!\n");
-    } else {
-      gtk_container_remove((GtkContainer*) listCoordCurve, (GtkWidget*) row);
-      index = getCurrentObjectIndex();
-    }
-    return index;
-  }
-
-  void removeAllPolygonCoordinates() {
-  	do {
-  	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordPolygon, 0);
-  	  gtk_list_box_select_row(listCoordPolygon, row);
-  	  gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-  	} while (gtk_list_box_get_row_at_index(listCoordPolygon, 0) != NULL);
-  }
-
-  void removeAllCurveCoordinates() {
-  	do {
-  	  GtkListBoxRow* row = gtk_list_box_get_row_at_index(listCoordCurve, 0);
-  	  gtk_list_box_select_row(listCoordCurve, row);
-  	  gtk_container_remove((GtkContainer*) listCoordCurve, (GtkWidget*) row);
-  	} while (gtk_list_box_get_row_at_index(listCoordCurve, 0) != NULL);
-  }
-
-  void clearPolygonCoordEntries() {
-  	gtk_entry_set_text(entryPolygonX, "");
-  	gtk_entry_set_text(entryPolygonY, "");
-  }
-
-  void clearCurveCoordEntries() {
-  	gtk_entry_set_text(entryCurveX, "");
-  	gtk_entry_set_text(entryCurveY, "");
-  }
-
-  void updateRadioButtonState(int newState) {
+  void updateRadioBtnState(int newState) {
     rotationRadioButtonState = newState;
   }
 
-  void updateClippingRadioButtonState(int newState) {
+  void updateClippingRadioBtnState(int newState) {
     clippingRadioButtonState = newState;
   }
 
@@ -330,7 +270,7 @@ public:
   }
 
   void updateCheckBtnSpline() {
-	checkIsSplineState = !checkIsSplineState;
+    checkIsSplineState = !checkIsSplineState;
   }
 
   void updateWindow(double step, int op) {
@@ -385,22 +325,17 @@ public:
   void transform(GraphicObject* object) {
     switch (object->getType()) {
       case POINT:
-        viewPort->transformation(object->getCoordinates().front());
-        break;
       case LINE:
-        viewPort->transformation(object->getCoordinates().front());
-        viewPort->transformation(object->getCoordinates().back());
+        this->worldToViewPort(object->getCoordinates());
         break;
       case POLYGON:
-        multiPointsTransformation(object->getWindowPoints());
-        break;
       case CURVE:
-        multiPointsTransformation(object->getWindowPoints());
+        this->worldToViewPort(object->getWindowPoints());
         break;
     }
   }
 
-  void multiPointsTransformation(vector<Coordinate*> points) {
+  void worldToViewPort(vector<Coordinate*> points) {
     vector<Coordinate*>::iterator it;
     for(it = points.begin(); it != points.end(); it++) {
       viewPort->transformation(*it);
@@ -444,8 +379,23 @@ public:
     logger->logError(err);
   }
 
+  void clear_surface() {
+    drawer->clear_surface();
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
   void clearSaveWorldFile() {
   	gtk_entry_set_text(entryObjWorldFile, "");
+  }
+
+  void clearPolygonCoordEntries() {
+    gtk_entry_set_text(entryPolygonX, "");
+    gtk_entry_set_text(entryPolygonY, "");
+  }
+
+  void clearCurveCoordEntries() {
+    gtk_entry_set_text(entryCurveX, "");
+    gtk_entry_set_text(entryCurveY, "");
   }
 
   ///
@@ -579,6 +529,18 @@ public:
 
   vector<Coordinate*> getViewPortCoord() {
     return viewPort->getCoordinates();
+  }
+
+  GtkListBox* getListCoordCurve() {
+    return listCoordCurve;
+  }
+
+  GtkListBox* getListCoordPolygon() {
+    return listCoordPolygon;
+  }
+
+  GtkListBox* getListObj() {
+    return objectsListBox;
   }
 
 };

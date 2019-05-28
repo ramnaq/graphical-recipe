@@ -3,8 +3,8 @@
 
 /*! Clipping methods. */
 
-#include <bitset>
 #include <algorithm>
+#include <bitset>
 
 #include "line.hpp"
 #include "polygon.hpp"
@@ -23,8 +23,6 @@
 class Clipping {
 private:
   vector<Coordinate*> wCoord;
-  double savedXns;
-  double savedYns;
 
   const vector<Coordinate> clp {
 		  Coordinate(-1, -1),
@@ -61,7 +59,7 @@ public:
       liangBarsky(line);
   }
 
-  void polygonClipping(GraphicObject* polygon, int chosenAlgorithm) {
+  void polygonClipping(GraphicObject* polygon) {
     polygon->updateWindowPoints(polygon->getCoordinates());
     vector<Coordinate> clp = this->clp;
     for (int i = 0; i < clp.size(); i++) {
@@ -96,7 +94,7 @@ public:
   }
 
   bool equalPoints(Coordinate& c1, Coordinate& c2) {
-	return (c1.getXns() == c2.getXns()) && (c1.getYns() == c2.getYns());
+	   return (c1.getXns() == c2.getXns()) && (c1.getYns() == c2.getYns());
   }
 
   //! Clips each edge of polygon over the window edge c1c2
@@ -126,9 +124,9 @@ public:
       double a_pos = (x2-x1)*(ay-y1) - (y2-y1)*(ax-x1);
       double b_pos = (x2-x1)*(by-y1) - (y2-y1)*(bx-x1);
 
-	  Coordinate* b_copy = new Coordinate(bx, by);
-	  b_copy->setXns(b->getXns());
-	  b_copy->setYns(b->getYns());
+      Coordinate* b_copy = new Coordinate(bx, by);
+      b_copy->setXns(b->getXns());
+      b_copy->setYns(b->getYns());
 
       /* Only second point is added */
       if (a_pos >= 0  && b_pos >= 0) {
@@ -141,28 +139,28 @@ public:
         new_points.push_back(b);
 
         /* When only second point is outside the window */
-	  } else if (a_pos >= 0  && b_pos < 0) {
-		/* Only point of intersection with edge is added */
-		new_points.push_back(intersection(c1, c2, a, b));
+  	  } else if (a_pos >= 0  && b_pos < 0) {
+  		/* Only point of intersection with edge is added */
+  		new_points.push_back(intersection(c1, c2, a, b));
 
-		/* When both points are outside */
-	  } else {
-		//no points are added
-	  }
-	}
+  		/* When both points are outside */
+  	  } else {
+  		//no points are added
+  	  }
+    }
 
-	/* Updating polygon points */
-	if(new_points.size() == 0) {
-	  /* Clear polygon window points */
-	  for (int i = 0; i < points.size(); ++i) {
+    /* Updating polygon points */
+    if(new_points.size() == 0) {
+      /* Clear polygon window points */
+      for (int i = 0; i < points.size(); ++i) {
         points.at(i)->setXns(0);
         points.at(i)->setYns(0);
-	  }
-	  polygon.setVisibility(false);
-	} else {
-	  polygon.updateWindowPoints(new_points);
-	  polygon.setVisibility(true);
-	}
+      }
+      polygon.setVisibility(false);
+    } else {
+      polygon.updateWindowPoints(new_points);
+      polygon.setVisibility(true);
+    }
   }
 
   //! Calculates the intersection of the line segments p1p2 and p3p4.

@@ -3,7 +3,6 @@
 
 #include "window.hpp"
 
-
 class ViewPort {
   private:
     Window *window;
@@ -43,7 +42,7 @@ class ViewPort {
 
       double x = (( (coord->getXns() - xnsMin) / (xnsMax - xnsMin) ) * (xvpMax - xvpMin)) + xvpMin;
       double y = ((1 - (coord->getYns() - ynsMin)/ (ynsMax - ynsMin) ) * (yvpMax - yvpMin)) + yvpMin;
-      
+
       coord->setXvp(x);
       coord->setYvp(y);
     }

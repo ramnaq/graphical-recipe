@@ -1,12 +1,10 @@
 #ifndef DISPLAYFILE_HPP
 #define DISPLAYFILE_HPP
 
-#include "ListaEnc.hpp"
-#include "point.hpp"
-
+#include "listEnc.hpp"
+#include "graphicObject.hpp"
 
 class DisplayFile {
-
 private:
 	ListaEnc<GraphicObject*>* displayFile;
 
@@ -29,7 +27,7 @@ public:
 	}
 
 	ListaEnc<GraphicObject*>* getObjs() {
-        return displayFile;
+		return displayFile;
 	}
 
 	GraphicObject* getElementoNoIndice(int index) {
