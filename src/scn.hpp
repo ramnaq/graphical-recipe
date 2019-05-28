@@ -11,21 +11,17 @@ class Scn {
 
     ~Scn () {}
 
-  void transformation(GraphicObject* obj, Coordinate* geometriCenter, Coordinate* factor, double angle) {
-    double radians = (angle*M_PI)/180;
+  void transformation(vector<Coordinate*> coordObj, Coordinate* geometriCenter, Coordinate* factor) {
     Coordinate negCoord(-geometriCenter->getX(), -geometriCenter->getY());
 
     Matrix translationMatrix(Matrix::translationVectorToMatrix(&negCoord));
-    Matrix rotationMatrix(Matrix::rotationVectorToMatrix(radians));
     Matrix scalingMatrix(Matrix::scalingVectorToMatrix(factor));
 
-    Matrix descSCN = translationMatrix * rotationMatrix * scalingMatrix;
+    Matrix descSCN = translationMatrix * scalingMatrix;
 
-    vector<Coordinate*> coordinates = obj->getCoordinates();
     vector<Coordinate*>::iterator it;
-
-    for(it = coordinates.begin(); it != coordinates.end(); it++) {
-      Matrix coord(Matrix::coordinateToMatrix(*it));
+    for(it = coordObj.begin(); it != coordObj.end(); it++) {
+      Matrix coord(Matrix::coordinateOppToMatrix(*it));
 
       Matrix translatedObject = descSCN * coord;
 

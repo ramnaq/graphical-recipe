@@ -60,6 +60,15 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_curve() {
   }
 }
 
+//! Connected to signal "clicked" of element "btnAddCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnAddCoord3D_clicked() {
+  try {
+    controller->addNewSegmentForObject3D();
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnRemoveObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   try {
@@ -93,6 +102,15 @@ extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_clicked() {
 extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_curve() {
   try {
     controller->removeFromCoordCurveList();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnAddCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnRemoveCoord3D_clicked() {
+  try {
+    controller->removeFromCoordObject3DList();
   } catch (...) {
 
   }
@@ -206,20 +224,28 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_centralize(){
   }
 }
 
-//! Connected to signal "clicked" of element "btnRotateLeft".
-extern "C" G_MODULE_EXPORT void on_btnRotateLeft_clicked(){
+//! Connected to signal "clicked" of element "rotateX".
+extern "C" G_MODULE_EXPORT void on_btnRotateX_clicked(){
   try {
-    controller->changeWindow(11);
+    controller->updateWindowAngle(11);
   } catch (...) {
 
   }
 }
 
-
-//! Connected to signal "clicked" of element "btnRotateRight".
-extern "C" G_MODULE_EXPORT void on_btnRotateRight_clicked(){
+//! Connected to signal "clicked" of element "rotateY".
+extern "C" G_MODULE_EXPORT void on_btnRotateY_clicked(){
   try {
-    controller->changeWindow(12);
+    controller->updateWindowAngle(12);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "rotateZ".
+extern "C" G_MODULE_EXPORT void on_btnRotateZ_clicked(){
+  try {
+    controller->updateWindowAngle(13);
   } catch (...) {
 
   }
@@ -301,6 +327,60 @@ extern "C" G_MODULE_EXPORT void on_checkbtnFillPolygon_clicked(){
 extern "C" G_MODULE_EXPORT void on_checkbtnSpline_clicked(){
   try {
     controller->updateCheckBtnSpline();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_scaleValues_change_value(){
+  try {
+    controller->updateCOP();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_parallelProjection_clicked(){
+  try {
+    controller->updateProjectionState(1);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_perspectiveProjection_clicked(){
+  try {
+    controller->updateProjectionState(0);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_objRotateX_clicked(){
+  try {
+    controller->updateObjRotateBtnState(1);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_objRotateY_clicked(){
+  try {
+    controller->updateObjRotateBtnState(2);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_objRotateZ_clicked(){
+  try {
+    controller->updateObjRotateBtnState(3);
   } catch (...) {
 
   }

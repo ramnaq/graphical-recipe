@@ -6,7 +6,6 @@
 #include "coordinate.hpp"
 #include "enum.hpp"
 
-
 using namespace std;
 
 /*! The generic type of an graphical object (point, line, polygon, etc) */
@@ -15,27 +14,15 @@ class GraphicObject {
 protected:
 	string name;
 	Type type;
-	vector<Coordinate*> coordinateList;
-	vector<Coordinate*> windowPoints;
-	double cx, cy;
-	bool visible;
+	double cx, cy, cz;
 
 public:
-	GraphicObject(string name,  Type type, vector<Coordinate*> &coordinateList) {
+	GraphicObject(string name,  Type type) {
 		this->name = name;
 		this->type = type;
-		this->coordinateList = coordinateList;
-		this->visible = true;
-		this->windowPoints = {};
-		computeGeometricCenter();
 	}
 
-	~GraphicObject() {
-		vector<Coordinate*>::iterator it;
-		for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
-			delete *it;
-		}
-	}
+	~GraphicObject() {}
 
 	string getObjectName() {
 		return this->name;
@@ -45,43 +32,12 @@ public:
 		return this->type;
 	}
 
-	bool isVisible() {
-		return this->visible;
-	}
-
-	void setVisibility(bool updateVisibility) {
-		this->visible = updateVisibility;
-	}
-
-	vector<Coordinate*> getCoordinates() {
-		computeGeometricCenter();
-		return coordinateList;
-	}
-
-	vector<Coordinate*> getWindowPoints() {
-		return windowPoints;
-	}
-
-	void updateWindowPoints(vector<Coordinate*> newPoints) {
-		this->windowPoints = newPoints;
-	}
-
-
 	Coordinate getGeometricCenter() {
-		return Coordinate(cx, cy);
+		computeGeometricCenter();
+		return Coordinate(cx, cy, cz);
 	}
 
-	void computeGeometricCenter() {
-		cx = 0;
-		cy = 0;
-		vector<Coordinate*>::iterator it;
-		for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
-			cx += (*it)->getX();
-			cy += (*it)->getY();
-		}
-		cx = cx / coordinateList.size();
-		cy = cy / coordinateList.size();
-	}
+	virtual void computeGeometricCenter()=0;
 };
 
 #endif
