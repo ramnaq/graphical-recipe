@@ -86,6 +86,7 @@ public:
           if (pointsForCurve.size() < 4) {
             throw std::runtime_error("Cannot create a curve without at least 4 points!");
           }
+
           if (view.isCheckBtnSplineChecked()) {
             obj = new BSpline(name, pointsForCurve, view.getDelta());
           } else {
