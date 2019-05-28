@@ -12,18 +12,23 @@ using namespace std;
 /*! The generic type of an graphical object (point, line, polygon, etc) */
 
 class GraphicObject {
-private:
+protected:
 	string name;
 	Type type;
 	vector<Coordinate*> coordinateList;
+	vector<Coordinate*> windowPoints;
 	double cx, cy;
+	bool visible;
+
 public:
 	GraphicObject(string name,  Type type, vector<Coordinate*> &coordinateList) {
 		this->name = name;
 		this->type = type;
 		this->coordinateList = coordinateList;
+		this->visible = true;
+		this->windowPoints = {};
 		computeGeometricCenter();
-  }
+	}
 
 	~GraphicObject() {
 		vector<Coordinate*>::iterator it;
@@ -40,10 +45,27 @@ public:
 		return this->type;
 	}
 
+	bool isVisible() {
+		return this->visible;
+	}
+
+	void setVisibility(bool updateVisibility) {
+		this->visible = updateVisibility;
+	}
+
 	vector<Coordinate*> getCoordinates() {
 		computeGeometricCenter();
 		return coordinateList;
 	}
+
+	vector<Coordinate*> getWindowPoints() {
+		return windowPoints;
+	}
+
+	void updateWindowPoints(vector<Coordinate*> newPoints) {
+		this->windowPoints = newPoints;
+	}
+
 
 	Coordinate getGeometricCenter() {
 		return Coordinate(cx, cy);

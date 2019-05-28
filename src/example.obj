@@ -1,0 +1,19 @@
+# square vertices
+v 10 10
+v 10 100
+v 100 100
+v 100 10
+# triangle vertices
+v 150 150
+v 150 200
+v 200 200
+# square face
+f 1 2 3 4
+# triangle face
+f 5 6 7
+v -100 100
+v 100 5
+v 0 0
+# line and point at origin
+f 1 2
+f 3

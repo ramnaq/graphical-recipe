@@ -1,15 +1,19 @@
-#include <gtk/gtk.h>
-#include <string>
-
-#include "drawer.hpp"
-#include "viewport.hpp"
-#include "window.hpp"
-#include <stdio.h>
-
 #ifndef VIEW_HPP
 #define VIEW_HPP
 
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <string>
+
+#include "drawer.hpp"
+#include "logger.hpp"
+#include "scn.hpp"
+#include "viewport.hpp"
+#include "window.hpp"
+
 using namespace std;
+
+#define VIEWPORT_MARGIN 20
 
 class View {
 
@@ -20,6 +24,7 @@ private:
   GtkWidget *addObjectWindow;
   GtkWidget *editObjectWindow;
   GtkWidget *drawAreaViewPort;
+  GtkWidget *gtkTextView;
 
   /*! Entries for parameters of GraphicalObjects to be futher created */
   GtkEntry *entryPointX;
@@ -30,6 +35,8 @@ private:
   GtkEntry *entryLineY2;
   GtkEntry *entryPolygonX;
   GtkEntry *entryPolygonY;
+  GtkEntry *entryCurveX;
+  GtkEntry *entryCurveY;
   GtkEntry *entryTranslationX;
   GtkEntry *entryTranslationY;
   GtkEntry *entryScalingX;
@@ -39,9 +46,13 @@ private:
   GtkEntry *entryAngle;
   GtkEntry *entryRotationX;
   GtkEntry *entryRotationY;
+  GtkEntry *entryObjWorldFile;
+  GtkEntry *entryAngleRotateWindow;
+  GtkEntry *entryDelta;
 
   GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
   GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
+  GtkListBox *listCoordCurve;   //!< shows the coordinates added when creating a curve
 
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
   GtkNotebook *notebookObjectOperations;
@@ -49,12 +60,19 @@ private:
   Drawer* drawer;
   Window* window;
   ViewPort* viewPort;
+  Scn* scn;
+  Logger* logger;
 
   int rotationRadioButtonState;
+  int clippingRadioButtonState;
+  bool checkFillButtonState;
+  bool checkIsSplineState;
 
 public:
   View() {
     drawer = new Drawer();
+    scn = new Scn();
+    logger = new Logger();
   }
 
   //! Startup the user interface: initiates GTK, creates all graphical elements and runs gtk_main();
@@ -68,6 +86,8 @@ public:
     addObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowInserirCoord"));
     editObjectWindow = GTK_WIDGET(gtk_builder_get_object(builder, "windowEditObject"));
     drawAreaViewPort = GTK_WIDGET(gtk_builder_get_object(builder, "drawAreaViewPort"));
+    gtkTextView = GTK_WIDGET(gtk_builder_get_object(builder, "textView"));
+    logger->setTextView(gtkTextView);
 
     entryPointX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointX"));
     entryPointY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPointY"));
@@ -78,6 +98,8 @@ public:
     entryLineY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entryLineY1"));
     entryPolygonX = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonX"));
     entryPolygonY = GTK_ENTRY(gtk_builder_get_object(builder, "entryPolygonY"));
+    entryCurveX = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveX"));
+    entryCurveY = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurveY"));
     entryStep = GTK_ENTRY(gtk_builder_get_object(builder, "inputStep"));
     entryTranslationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationX"));
     entryTranslationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslationY"));
@@ -86,14 +108,21 @@ public:
     entryAngle = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngle"));
     entryRotationX = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationX"));
     entryRotationY = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotationY"));
+    entryObjWorldFile = GTK_ENTRY(gtk_builder_get_object(builder, "entryObjWorldFile"));
+    entryAngleRotateWindow = GTK_ENTRY(gtk_builder_get_object(builder, "entryAngleRotateWindow"));
+    entryDelta = GTK_ENTRY(gtk_builder_get_object(builder, "entryDelta"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
+    listCoordCurve = GTK_LIST_BOX(gtk_builder_get_object(builder, "listboxCurveCoords"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
     notebookObjectOperations = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjectOperations"));
 
     rotationRadioButtonState = 1;
+    clippingRadioButtonState = 1;
+    checkFillButtonState = false;
+    checkIsSplineState = false;
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -109,23 +138,23 @@ public:
    * 'drawAreaViewPort' GtkWidget.
    */
   void initializeWindowViewPort() {
+    double xMin = 0;
+    double yMin = 0;
     double xMax = (double) gtk_widget_get_allocated_width(drawAreaViewPort);
     double yMax = (double) gtk_widget_get_allocated_height(drawAreaViewPort);
-    window = new Window(1, 1, xMax, yMax);
-    viewPort = new ViewPort(xMax, yMax, window);
-  }
 
-  void clear_surface() {
-    drawer->clear_surface();
-    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
-  }
+    Coordinate* coordMin = new Coordinate(xMin+VIEWPORT_MARGIN, yMin+VIEWPORT_MARGIN);
+    Coordinate* coordMax = new Coordinate(xMax-VIEWPORT_MARGIN, yMax-VIEWPORT_MARGIN);
+    vector<Coordinate*> vpCoord = {coordMin, coordMax};
 
-  void create_surface(GtkWidget *widget) {
-    drawer->create_surface(widget);
-  }
+    Coordinate* wCoordMin = new Coordinate(-xMax/2, -yMax/2);
+    Coordinate* wCoordMax = new Coordinate(xMax/2, yMax/2);
+    vector<Coordinate*> windowCoord = {wCoordMin, wCoordMax};
 
-  void draw(cairo_t *cr) {
-    drawer->draw(cr);
+    window = new Window(windowCoord);
+    viewPort = new ViewPort(vpCoord, window);
+
+    drawViewPortArea();
   }
 
   void openAddObjectWindow() {
@@ -136,29 +165,50 @@ public:
     gtk_widget_show(editObjectWindow);
   }
 
+  void create_surface(GtkWidget *widget) {
+    drawer->create_surface(widget);
+  }
+
+  void draw(cairo_t *cr) {
+    drawer->draw(cr);
+  }
+
+  void drawViewPortArea() {
+    drawer->drawViewPortArea(getViewPortCoord().back(), VIEWPORT_MARGIN);
+  }
+
   void drawNewPoint(GraphicObject* obj) {
-    transform(obj);
     drawer->drawPoint(obj->getCoordinates().front());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
   void drawNewLine(GraphicObject* obj) {
-    transform(obj);
-	Coordinate* c1 = obj->getCoordinates().front();
-	Coordinate* c2 = obj->getCoordinates().back();
-    drawer->drawLine(c1, c2);
+    drawer->drawLine(obj->getCoordinates().front(), obj->getCoordinates().back());
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
-  void drawNewPolygon(GraphicObject* obj) {
-    transform(obj);
-    vector<Coordinate*> polygonPoints = obj->getCoordinates();
-    vector<Coordinate*>::iterator it;
-	for(it = polygonPoints.begin(); it != polygonPoints.end()-1; it++) {
-        drawer->drawLine(*it, *(std::next(it,1)));
-	}
-	drawer->drawLine(polygonPoints.back(), polygonPoints.front());
+  void drawNewPolygon(GraphicObject* obj, bool fill) {
+    vector<Coordinate*> polygonPoints = obj->getWindowPoints();
+    drawer->drawPolygon(polygonPoints, fill);
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCoordinates(listCoordPolygon);
+    clearPolygonCoordEntries();
+  }
+
+  void drawNewCurve(GraphicObject* obj) {
+    vector<Coordinate*> points = obj->getWindowPoints(); //TODO getWindowPoints();
+    drawer->drawCurve(points);
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+    removeAllCoordinates(listCoordCurve);
+    clearCurveCoordEntries();
+  }
+
+  //! Draws a Polygon and properly clears elements in the "New Polygon window"
+  /*!
+   * @param obj The object to be drawn.
+   */
+  void newPolygon(GraphicObject* obj, bool fill) {
+    drawNewPolygon(obj, fill);
   }
 
   void insertIntoListBox(GraphicObject& obj, string tipo) {
@@ -169,73 +219,101 @@ public:
     gtk_widget_show_all((GtkWidget*) objectsListBox);
   }
 
-  //! Removes the selected element in GtkListBox
-  /*!
-   * @return The index of the removed element
-   */
-  int removeSelectedObject() {
-    GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
-    int index = gtk_list_box_row_get_index(row);
+  void insertCoordList(GtkListBox* list, double x, double y) {
+    string coordX = to_string(x);
+    string coordY = to_string(y);
 
-    gtk_container_remove((GtkContainer*) objectsListBox, (GtkWidget*) row);
-    return index;
-  }
-
-  void insertCoordPolygonList() {
-    string coordX = gtk_entry_get_text(entryPolygonX);
-    string coordY = gtk_entry_get_text(entryPolygonY);
     string name = "Coordenada: (" + coordX + " , " + coordY + ")";
 
     GtkWidget* row = gtk_list_box_row_new();
     GtkWidget* label = gtk_label_new(name.c_str());
 
-    gtk_container_add((GtkContainer*) listCoordPolygon, label);
-    gtk_widget_show_all((GtkWidget*) listCoordPolygon);
+    gtk_container_add((GtkContainer*) list, label);
+    gtk_widget_show_all((GtkWidget*) list);
   }
 
-  int removeFromCoordPolygonList() {
-    GtkListBoxRow* row = gtk_list_box_get_selected_row(listCoordPolygon);
-    gtk_container_remove((GtkContainer*) listCoordPolygon, (GtkWidget*) row);
-    return getCurrentObjectIndex();
+  //! Removes the selected element in GtkListBox
+  /*!
+   * @return The index of the removed element
+   */
+  int removeFromList(GtkListBox* list) {
+    GtkListBoxRow* row = gtk_list_box_get_selected_row(list);
+    int index = -1;
+    if (row == NULL) {
+      string errorType = (list == objectsListBox) ? "Nenhum objeto selecionado!\n" : "Nenhuma coordenada selecionada!\n";
+      logger->logError(errorType);
+    } else {
+      index = gtk_list_box_row_get_index(row);
+      gtk_container_remove((GtkContainer*) list, (GtkWidget*) row);
+    }
+    return index;
   }
 
-  void updateRadioButtonState(int newState) {
+  void removeAllCoordinates(GtkListBox* listCoord) {
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(listCoord));
+    for(iter = children; iter != NULL; iter = g_list_next(iter))
+      gtk_widget_destroy(GTK_WIDGET(iter->data));
+    g_list_free(children);
+  }
+
+  void updateRadioBtnState(int newState) {
     rotationRadioButtonState = newState;
   }
 
-  void updateWindow(double step, int isZoomIn) {
-    switch (isZoomIn) {
-      case 0: {
+  void updateClippingRadioBtnState(int newState) {
+    clippingRadioButtonState = newState;
+  }
+
+  void updateCheckBtnState () {
+    checkFillButtonState = !checkFillButtonState;
+  }
+
+  void updateCheckBtnSpline() {
+    checkIsSplineState = !checkIsSplineState;
+  }
+
+  void updateWindow(double step, int op) {
+    switch (op) {
+      case 0:
         this->window->zoomIn(step);
         break;
-      } case 1: {
+      case 1:
         this->window->zoomOut(step);
         break;
-      } case 2: {
-        this->window->goRight(step);
+      case 2:
+        this->window->goRight(step/100);
         break;
-      } case 3: {
-        this->window->goLeft(step);
+      case 3:
+        this->window->goLeft(step/100);
         break;
-      } case 4: {
-        this->window->goUp(step);
+      case 4:
+        this->window->goUp(step/100);
         break;
-      } case 5: {
-        this->window->goDown(step);
+      case 5:
+        this->window->goDown(step/100);
         break;
-      } case 6: {
-        this->window->goUpLeft(step);
+      case 6:
+        this->window->goUpLeft(step/100);
         break;
-      } case 7: {
-        this->window->goUpRight(step);
+      case 7:
+        this->window->goUpRight(step/100);
         break;
-      } case 8: {
-        this->window->goDownLeft(step);
+      case 8:
+        this->window->goDownLeft(step/100);
         break;
-      } case 9: {
-        this->window->goDownRight(step);
+      case 9:
+        this->window->goDownRight(step/100);
         break;
-      }
+      case 10:
+        this->window->goCenter();
+        break;
+      case 11:
+        this->window->setAngle(-step);
+        break;
+      case 12:
+        this->window->setAngle(step);
+        break;
     }
   }
 
@@ -246,26 +324,79 @@ public:
    */
   void transform(GraphicObject* object) {
     switch (object->getType()) {
-      case POINT: {
-        viewPort->transformation(object->getCoordinates().front());
+      case POINT:
+      case LINE:
+        this->worldToViewPort(object->getCoordinates());
         break;
-      }
-      case LINE: {
-        viewPort->transformation(object->getCoordinates().front());
-        viewPort->transformation(object->getCoordinates().back());
+      case POLYGON:
+      case CURVE:
+        this->worldToViewPort(object->getWindowPoints());
         break;
-      }
-      case POLYGON: {
-        vector<Coordinate*> polygonPoints = object->getCoordinates();
-		vector<Coordinate*>::iterator it;
-        for(it = polygonPoints.begin(); it != polygonPoints.end(); it++) {
-            viewPort->transformation(*it);
-		}
-        break;
-      }
     }
   }
 
+  void worldToViewPort(vector<Coordinate*> points) {
+    vector<Coordinate*>::iterator it;
+    for(it = points.begin(); it != points.end(); it++) {
+      viewPort->transformation(*it);
+    }
+  }
+
+  string chooseFile() {
+    string fileName;
+    GtkWidget *dialog;
+    GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+    gint res;
+
+    dialog = gtk_file_chooser_dialog_new("Open File",
+        GTK_WINDOW (gtkWindow),
+        action,
+        "_Cancel",
+        GTK_RESPONSE_CANCEL,
+        "_Open",
+        GTK_RESPONSE_ACCEPT,
+        NULL);
+
+    res = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (res == GTK_RESPONSE_ACCEPT) {
+      GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+      fileName = gtk_file_chooser_get_filename(chooser);
+    }
+
+    gtk_widget_destroy(dialog);
+    return fileName;
+  }
+
+  void transformSCN(GraphicObject* elem, Coordinate* geometriCenter, Coordinate* factor, double angle) {
+    scn->transformation(elem, geometriCenter, factor, angle);
+  }
+
+  void logWarning(string wrn) {
+    logger->logWarning(wrn);
+  }
+
+  void logError(string err) {
+    logger->logError(err);
+  }
+
+  void clear_surface() {
+    drawer->clear_surface();
+    gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
+  }
+
+  void clearSaveWorldFile() {
+  	gtk_entry_set_text(entryObjWorldFile, "");
+  }
+
+  void clearPolygonCoordEntries() {
+    gtk_entry_set_text(entryPolygonX, "");
+    gtk_entry_set_text(entryPolygonY, "");
+  }
+
+  void clearCurveCoordEntries() {
+    gtk_entry_set_text(entryCurveX, "");
+    gtk_entry_set_text(entryCurveY, "");
+  }
 
   ///
   /// Get methods
@@ -303,6 +434,14 @@ public:
     return stod(gtk_entry_get_text(entryPolygonY));
   }
 
+  double getEntryCurveX() {
+    return stod(gtk_entry_get_text(entryCurveX));
+  }
+
+  double getEntryCurveY() {
+    return stod(gtk_entry_get_text(entryCurveY));
+  }
+
   double getEntryTranslationX() {
     return stod(gtk_entry_get_text(entryTranslationX));
   }
@@ -327,12 +466,20 @@ public:
     return stod(gtk_entry_get_text(entryRotationY));
   }
 
+  double getAngleRotateWindow() {
+    return stod(gtk_entry_get_text(entryAngleRotateWindow));
+  }
+
   double getStep() {
     return stod(gtk_entry_get_text(entryStep));
   }
 
   double getAngle() {
     return stod(gtk_entry_get_text(entryAngle));
+  }
+
+  double getDelta() {
+    return stod(gtk_entry_get_text(entryDelta));
   }
 
   string getObjectName() {
@@ -349,11 +496,51 @@ public:
 
   int getCurrentObjectIndex() {
     GtkListBoxRow* row = gtk_list_box_get_selected_row(objectsListBox);
-    return gtk_list_box_row_get_index(row);
+    if (row == NULL) {
+      return -1;
+    } else {
+      return gtk_list_box_row_get_index(row);
+    }
   }
 
   int getRotationRadioButtonState() {
     return rotationRadioButtonState;
+  }
+
+  int getLineClippingAlgorithm() {
+    return clippingRadioButtonState;
+  }
+
+  bool getCheckBtnState () {
+    return checkFillButtonState;
+  }
+
+  bool isCheckBtnSplineChecked() {
+    return checkIsSplineState;
+  }
+
+  Window* getWindow() {
+    return window;
+  }
+
+  string getFileToSaveWorld() {
+    return gtk_entry_get_text(entryObjWorldFile);
+  }
+
+  vector<Coordinate*> getViewPortCoord() {
+    return viewPort->getCoordinates();
+  }
+
+  GtkListBox* getListCoordCurve() {
+    return listCoordCurve;
+  }
+
+  GtkListBox* getListCoordPolygon() {
+    return listCoordPolygon;
+  }
+
+  GtkListBox* getListObj() {
+    return objectsListBox;
   }
 
 };

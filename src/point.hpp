@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#include "graphicObject.hpp"
 
 /*! Structures a representation and behavior of a "line segment" */
 

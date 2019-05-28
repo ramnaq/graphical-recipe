@@ -51,6 +51,15 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_addCoordinate() {
   }
 }
 
+//! Connected to signal "clicked" of element "btnAddCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnAddCoordinate_curve() {
+  try {
+    controller->addNewPointForCurve();
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnRemoveObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   try {
@@ -60,10 +69,30 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   }
 }
 
+//! Connected to signal "clicked" of element "btnAddObjFile".
+extern "C" G_MODULE_EXPORT void on_btnCreateFromFile_clicked() {
+  controller->createObjectsFromFile();
+}
+
+
+//! Connected to signal "clicked" of element "btnSaveWorld".
+extern "C" G_MODULE_EXPORT void on_btnSaveWorld_clicked() {
+  controller->saveWorldToFile();
+}
+
 //! Connected to signal "clicked" of element "btnRemoveCoordinate".
 extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_clicked() {
   try {
     controller->removeFromCoordPolygonList();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnRemoveCoordCurve".
+extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_curve() {
+  try {
+    controller->removeFromCoordCurveList();
   } catch (...) {
 
   }
@@ -168,6 +197,34 @@ extern "C" G_MODULE_EXPORT void on_btn_clicked_downRight(){
   }
 }
 
+//! Connected to signal "clicked" of element "btnCentralize".
+extern "C" G_MODULE_EXPORT void on_btn_clicked_centralize(){
+  try {
+    controller->changeWindow(10);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnRotateLeft".
+extern "C" G_MODULE_EXPORT void on_btnRotateLeft_clicked(){
+  try {
+    controller->changeWindow(11);
+  } catch (...) {
+
+  }
+}
+
+
+//! Connected to signal "clicked" of element "btnRotateRight".
+extern "C" G_MODULE_EXPORT void on_btnRotateRight_clicked(){
+  try {
+    controller->changeWindow(12);
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnEditObject".
 extern "C" G_MODULE_EXPORT void on_btnEditObject_clicked(){
   try {
@@ -189,7 +246,7 @@ extern "C" G_MODULE_EXPORT void on_btnConfirmEditObject_clicked(){
 //! Connected to signal "clicked" of element "radiobtnOrigin".
 extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
   try {
-    controller->updateRadioButtonState(1);
+    controller->updateRadioBtnState(1);
   } catch (...) {
 
   }
@@ -198,7 +255,7 @@ extern "C" G_MODULE_EXPORT void on_radiobtnOrigin_clicked(){
 //! Connected to signal "clicked" of element "radiobtnCenter".
 extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
   try {
-    controller->updateRadioButtonState(2);
+    controller->updateRadioBtnState(2);
   } catch (...) {
 
   }
@@ -207,7 +264,43 @@ extern "C" G_MODULE_EXPORT void on_radiobtnCenter_clicked(){
 //! Connected to signal "clicked" of element "radiobtnPoint".
 extern "C" G_MODULE_EXPORT void on_radiobtnPoint_clicked(){
   try {
-    controller->updateRadioButtonState(3);
+    controller->updateRadioBtnState(3);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "radiobtnCS".
+extern "C" G_MODULE_EXPORT void on_radiobtnCS_clicked(){
+  try {
+    controller->updateClippingRadioBtnState(1);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "radiobtnLB".
+extern "C" G_MODULE_EXPORT void on_radiobtnLB_clicked(){
+  try {
+    controller->updateClippingRadioBtnState(2);
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnFillPolygon".
+extern "C" G_MODULE_EXPORT void on_checkbtnFillPolygon_clicked(){
+  try {
+    controller->updateCheckBtnState();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSpline".
+extern "C" G_MODULE_EXPORT void on_checkbtnSpline_clicked(){
+  try {
+    controller->updateCheckBtnSpline();
   } catch (...) {
 
   }

@@ -3,23 +3,24 @@
 
 #include "window.hpp"
 
-
 class ViewPort {
   private:
     Window *window;
-    Coordinate* coordMin;
-    Coordinate* coordMax;
+    vector<Coordinate*> vpCoord;
 
   public:
-    ViewPort (double x, double y, Window *window) {
-      this->coordMin = new Coordinate(1, 1);
-      this->coordMax = new Coordinate(x, y);
+    ViewPort (vector<Coordinate*> vpCoord, Window *window) {
+      this->vpCoord = vpCoord;
       this->window = window;
     }
 
     ~ViewPort () {
-      delete this->coordMin;
-      delete this->coordMax;
+      delete this->vpCoord.front();
+      delete this->vpCoord.back();
+    }
+
+    vector<Coordinate*> getCoordinates () {
+      return vpCoord;
     }
 
 	//! The viewport (coordinates system) transformation
@@ -27,23 +28,24 @@ class ViewPort {
 	 * Transforms coord into a Coordinate referred to the viewport.
 	 * @param coord The window coordinate to be transformed into a viewport coordinate.
 	 */
-  	void transformation(Coordinate* coord) {
-      double xwMax = window->getCoordMax()->getX();
-      double ywMax = window->getCoordMax()->getY();
-      double xwMin = window->getCoordMin()->getX();
-      double ywMin = window->getCoordMin()->getY();
+   void transformation(Coordinate *coord) {
+      // Normalized coordinate system
+      double xnsMax = 1;
+      double ynsMax = 1;
+      double xnsMin = -1;
+      double ynsMin = -1;
 
-      double xvpMax = coordMax->getX();
-      double yvpMax = coordMax->getY();
-      double xvpMin = coordMin->getX();
-      double yvpMin = coordMin->getY();
+      double xvpMax = vpCoord.back()->getX();
+      double yvpMax = vpCoord.back()->getY();
+      double xvpMin = vpCoord.front()->getX();
+      double yvpMin = vpCoord.front()->getY();
 
-      double x = ((coord->getX() - xwMin) / (xwMax - xwMin)) * (xvpMax - xvpMin);
-	  double y = (1 - (coord->getY() - ywMin) / (ywMax - ywMin)) * (yvpMax - yvpMin);
+      double x = (( (coord->getXns() - xnsMin) / (xnsMax - xnsMin) ) * (xvpMax - xvpMin)) + xvpMin;
+      double y = ((1 - (coord->getYns() - ynsMin)/ (ynsMax - ynsMin) ) * (yvpMax - yvpMin)) + yvpMin;
 
-	  coord->setXvp(x);
+      coord->setXvp(x);
       coord->setYvp(y);
-  	}
+    }
 };
 
 #endif
