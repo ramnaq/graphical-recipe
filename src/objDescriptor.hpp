@@ -9,6 +9,9 @@
 #include "line.hpp"
 #include "polygon.hpp"
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+
 class ObjDescriptor {
   public:
     void write(ListaEnc<GraphicObject*>* objs, string fileName) {
@@ -20,9 +23,9 @@ class ObjDescriptor {
         for (int c = 0; c < coordinates.size(); ++c) {
           Coordinate* coord = coordinates[c];
           outfile << "v "
-			<< coord->getX() << " "
-			<< coord->getY() << " "
-			<< coord->getZ() << '\n';
+            << coord->getX() << " "
+            << coord->getY() << " "
+            << coord->getZ() << '\n';
         }
 
         /* graphic element face */
@@ -37,6 +40,57 @@ class ObjDescriptor {
       outfile.close();
     }
 
+    vector<GraphicObject*> read(string fileName) {
+      std::string inputfile = fileName;
+      tinyobj::attrib_t attrib;
+      std::vector<tinyobj::shape_t> shapes_tiny;
+      std::vector<tinyobj::material_t> materials;
+
+      vector<GraphicObject*> objects;
+
+      std::string err;
+      bool ret = tinyobj::LoadObj(
+      &attrib, &shapes_tiny, &materials, &err, inputfile.c_str());
+
+      // `err` may contain warning message.
+      if (!err.empty()) {
+        std::cerr << err << std::endl;
+      }
+
+      if (!ret) {
+        return objects;
+      }
+
+      // Loop over shapes
+      for (size_t s = 0; s < shapes_tiny.size(); s++) {
+        const std::string shape_name = shapes_tiny[s].name;
+
+        // Loop over faces(polygon)
+        size_t index_offset = 0;
+        for (size_t f = 0; f < shapes_tiny[s].mesh.num_face_vertices.size(); ++f) {
+          int fv = shapes_tiny[s].mesh.num_face_vertices[f];
+
+          std::vector<Coordinate*> points;
+
+          // Loop over vertices in the face.
+          for (size_t v = 0; v < fv; v++) {
+            // access to vertex
+            tinyobj::index_t idx = shapes_tiny[s].mesh.indices[index_offset + v];
+            tinyobj::real_t vx = attrib.vertices[3*idx.vertex_index+0];
+            tinyobj::real_t vy = attrib.vertices[3*idx.vertex_index+1];
+            tinyobj::real_t vz = attrib.vertices[3*idx.vertex_index+2];
+
+            points.push_back(new Coordinate(vx, vy, vz));
+          }
+
+            objects.push_back(new Polygon("POLYGON", points, false));
+            index_offset += fv;
+        }
+      }
+      return objects;
+    }
+
+    /*
     vector<GraphicObject*> read(string fileName) {
       vector<GraphicObject*> objects;
 
@@ -75,6 +129,7 @@ class ObjDescriptor {
 
       return objects;
     }
+    */
 
     GraphicObject* instantiateGraphicObject(vector<int> indexes,
 		vector<Coordinate*> vertices) {
