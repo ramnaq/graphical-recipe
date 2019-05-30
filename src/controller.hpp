@@ -153,6 +153,10 @@ public:
         view.insertIntoListBox(*gobj, "POLIGONO");
         pointsForPolygon.clear();
         break;
+     case OBJECT3D:
+        view.insertIntoListBox(*gobj, "OBJ_3D");
+        segmentsForObject3D.clear();
+        break;
     }
   }
 

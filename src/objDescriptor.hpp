@@ -8,6 +8,8 @@
 #include "point.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
+#include "segment.hpp"
+#include "object3D.hpp"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -46,7 +48,7 @@ class ObjDescriptor {
       std::vector<tinyobj::shape_t> shapes_tiny;
       std::vector<tinyobj::material_t> materials;
 
-      vector<GraphicObject*> objects;
+      vector<Segment*> objectSegments;
 
       std::string err;
       bool ret = tinyobj::LoadObj(
@@ -58,36 +60,52 @@ class ObjDescriptor {
       }
 
       if (!ret) {
-        return objects;
+        return {};
       }
 
       // Loop over shapes
       for (size_t s = 0; s < shapes_tiny.size(); s++) {
         const std::string shape_name = shapes_tiny[s].name;
+        vector<Segment*> facesSegments;
 
         // Loop over faces(polygon)
         size_t index_offset = 0;
         for (size_t f = 0; f < shapes_tiny[s].mesh.num_face_vertices.size(); ++f) {
           int fv = shapes_tiny[s].mesh.num_face_vertices[f];
 
-          std::vector<Coordinate*> points;
+          std::vector<Segment*> segments;
 
           // Loop over vertices in the face.
-          for (size_t v = 0; v < fv; v++) {
+          for (size_t v = 0; v < fv-1; v++) {
             // access to vertex
             tinyobj::index_t idx = shapes_tiny[s].mesh.indices[index_offset + v];
             tinyobj::real_t vx = attrib.vertices[3*idx.vertex_index+0];
             tinyobj::real_t vy = attrib.vertices[3*idx.vertex_index+1];
             tinyobj::real_t vz = attrib.vertices[3*idx.vertex_index+2];
 
-            points.push_back(new Coordinate(vx, vy, vz));
+            int aux = v + 1;
+            tinyobj::index_t idx2 = shapes_tiny[s].mesh.indices[index_offset + aux];
+            tinyobj::real_t vx2 = attrib.vertices[3*idx2.vertex_index+0];
+            tinyobj::real_t vy2 = attrib.vertices[3*idx2.vertex_index+1];
+            tinyobj::real_t vz2 = attrib.vertices[3*idx2.vertex_index+2];
+
+            Coordinate* c1 = new Coordinate(vx, vy, vz);
+            Coordinate* c2 = new Coordinate(vx2, vy2, vz2);
+            segments.push_back(new Segment(c1, c2));
           }
 
-            objects.push_back(new Polygon("POLYGON", points, false));
-            index_offset += fv;
+
+          facesSegments.insert(
+              facesSegments.end(), segments.begin(), segments.end());
+          index_offset += fv;
         }
+
+        objectSegments.insert(
+            objectSegments.end(), facesSegments.begin(), facesSegments.end());
       }
-      return objects;
+      vector<GraphicObject*> objs;
+      objs.push_back(new Object3D("", objectSegments));
+      return objs;
     }
 
     /*
