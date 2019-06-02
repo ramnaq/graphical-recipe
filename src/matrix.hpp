@@ -114,8 +114,8 @@ public:
 
   static std::vector<std::vector<double> > rotationXVectorToMatrix(double angle) {
    return {{1,    0      ,     0      , 0},
-           {0, cos(angle), -sin(angle), 0},
-           {0, sin(angle),  cos(angle), 0},
+           {0, cos(angle), sin(angle), 0},
+           {0, -sin(angle),  cos(angle), 0},
            {0,    0      ,     0      , 1}};
   }
 

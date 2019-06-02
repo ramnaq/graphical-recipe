@@ -94,7 +94,7 @@ public:
       Matrix coord(Matrix::coordinate3DToMatrix(*it));
 
       Matrix rotatedObject = rotationMatrix * coord;
-
+      //cout << coord.getMatrix()[0][0] << " " << coord.getMatrix()[1][0] << " " << coord.getMatrix()[2][0] << " --> " << rotatedObject.getMatrix()[0][0] << " " << rotatedObject.getMatrix()[1][0] << " " << rotatedObject.getMatrix()[2][0] << endl;
       (*it)->setXop(rotatedObject.getMatrix()[0][0]);
       (*it)->setYop(rotatedObject.getMatrix()[1][0]);
       (*it)->setZop(rotatedObject.getMatrix()[2][0]);

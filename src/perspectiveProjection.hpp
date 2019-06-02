@@ -4,6 +4,8 @@
 #include "matrix.hpp"
 #include "window.hpp"
 
+#include <iostream>
+
 /*! Transform world coordinates to normalized system coordinates. */
 
 class Perspective {
@@ -36,8 +38,11 @@ public:
     cop->setZop(resultante.getMatrix()[2][0]);
 
     // VPR
+    Coordinate negGeo(-geo->getX(), -geo->getY(), -geo->getZ());
+    Matrix translation2(Matrix::translation3DVectorToMatrix(&negGeo));
+
     Matrix coordGeo(Matrix::coordinate3DToMatrix(geo));
-    Matrix resultante2 = translation * coordGeo;
+    Matrix resultante2 = translation * translation2 * coordGeo;
     geo->setXop(resultante2.getMatrix()[0][0]);
     geo->setYop(resultante2.getMatrix()[1][0]);
     geo->setZop(resultante2.getMatrix()[2][0]);
@@ -53,20 +58,21 @@ public:
     this->angleY = (x == 0 || z == 0) ? 0 : (atan(x/z)*M_PI)/180;
   }
 
-  void transformation(vector<Coordinate*> coord, Coordinate* cop) {
+  void transformation(vector<Coordinate*> coord, Coordinate* vrp, Coordinate* cop) {
     // 3 - Rotacione o mundo em torno de X e Y de forma a alinhar VPN com o eixo Z
-    Coordinate negCoord(-cop->getX(), -cop->getY(), -cop->getZ());
+    Coordinate negCoord(-vrp->getX(), -vrp->getY(), -vrp->getZ());
+    Coordinate negCop(-cop->getX(), -cop->getY(), -cop->getZ());
 
+    Matrix copDistance = Matrix::translation3DVectorToMatrix(&negCop);
+    Matrix rotx  = Matrix::rotationXVectorToMatrix(-this->angleX);
+    Matrix roty  = Matrix::rotationYVectorToMatrix(-this->angleY);
     Matrix trans = Matrix::translation3DVectorToMatrix(&negCoord);
-    Matrix rotx  = Matrix::rotationXVectorToMatrix(this->angleX);
-    Matrix roty  = Matrix::rotationYVectorToMatrix(this->angleY);
 
-    Matrix transform = trans * rotx * roty;
+    Matrix transform = trans * rotx * roty * copDistance;
 
     vector<Coordinate*>::iterator it;
     for(it = coord.begin(); it != coord.end(); it++) {
         Matrix coord(Matrix::coordinate3DToMatrixOp((*it)));
-
         Matrix translatedObject = transform * coord;
 
         (*it)->setXop(translatedObject.getMatrix()[0][0]);
@@ -75,6 +81,7 @@ public:
 
         // Compute intersection
         Coordinate x = intersection(*it, cop->getZ());
+        //cout << coord.getMatrix()[0][0] << " " << coord.getMatrix()[1][0] << " " << coord.getMatrix()[2][0] << " ---> " << x.getX() << " " << x.getY() << " "<< x.getZ() << endl;
         (*it)->setXop(x.getX());
         (*it)->setYop(x.getY());
         (*it)->setZop(x.getZ());
