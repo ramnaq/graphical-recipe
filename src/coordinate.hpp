@@ -37,6 +37,15 @@ public:
     this->z = z;
   }
 
+  double get(const int axis) {
+    switch(axis) {
+      case 0: return this->getX();
+      case 1: return this->getY();
+      case 2: return this->getZ();
+      default: return 3.14159265;
+    }
+  }
+
   double getX() const {
     return this->x;
   }

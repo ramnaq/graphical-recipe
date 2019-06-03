@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "bezierCurve.hpp"
+#include "bezierSurface.hpp"
 #include "bspline.hpp"
 #include "clipping.hpp"
 #include "displayFile.hpp"
@@ -26,6 +27,7 @@ private:
   Clipping clipping;
   vector<Coordinate*> pointsForPolygon;
   vector<Coordinate*> pointsForCurve;
+  vector<vector<Coordinate*>> pointsForSurface;
   vector<Segment*> segmentsForObject3D;
   Coordinate cop = Coordinate(0, 0, -100);
 
@@ -105,15 +107,39 @@ public:
         break;
       }
       case OBJECT3D: {
-          obj = new Object3D(name, segmentsForObject3D);
-          objType = "OBJETO 3D";
+        obj = new Object3D(name, segmentsForObject3D);
+        objType = "OBJETO 3D";
 
-          segmentsForObject3D.clear();
-          view.clearObjet3DEntry();
+        segmentsForObject3D.clear();
+        view.clearObjet3DEntry();
+        break;
+      }
+      case SURFACE: {
+        try {
+          if (pointsForSurface.size() < 4) {
+            throw std::runtime_error(
+                "Cannot create a surface without at least 16 points!");
+          }
+
+          if (view.isCheckBtnSplineSurfaceChecked()) {
+            //obj = new SplineSurface(name, pointsForSurface, view.getDelta());
+          } else {
+            printf("Create surface\n");
+            obj = new BezierSurface(name, pointsForSurface);
+          }
+          objType = "SUPERFICIE";
+
+          pointsForSurface.clear();
+          view.clearSurfaceEntry();
+        } catch(const std::runtime_error& e) {
+          std::cout << "[ERROR] " << e.what() << std::endl;
+          view.logError("Pontos insuficientes para criação de Superfície.\n");
+        }
         break;
       }
     }
 
+    printf("Add surface to display\n");
     display.insert(obj);
     view.insertIntoListBox(*obj, objType);
     updateDrawScreen();
@@ -264,6 +290,14 @@ public:
     }
   }
 
+  void removeFromCoordSurfaceList() {
+    int index = view.removeFromList(view.getListCoordSurface());
+
+    if (index > -1) {
+      pointsForSurface.erase(pointsForSurface.begin() + index);
+    }
+  }
+
   void removeFromCoordObject3DList() {
     int index = view.removeFromList(view.getListSegment());
 
@@ -287,7 +321,7 @@ public:
   }
 
   /*!
-   * Gets (x, y) from view to create a new Coordinate and then add it
+   * Gets (x, y, z) from view to create a new Coordinate, to further add it
    * to a Curve which is being created.
    */
   void addNewPointForCurve() {
@@ -298,6 +332,62 @@ public:
 
     pointsForCurve.push_back(c);
     view.insertCoordList(view.getListCoordCurve(), x, y, z);
+  }
+
+  /*!
+   * Gets (x, y, z) from view to create a new Coordinate, to further add it
+   * to a Surface which is being created.
+   */
+  void addNewPointForSurface() {
+    //double x = view.getEntrySurfaceX();
+    //double y = view.getEntrySurfaceY();
+    //double z = view.getEntrySurfaceZ();
+    //Coordinate* c = new Coordinate(x, y, z);
+
+    //pointsForSurface.push_back(c);
+    //view.insertCoordList(view.getListCoordSurface(), x, y, z);
+    Coordinate* c1 = new Coordinate(0,0,0);
+    Coordinate* c2 = new Coordinate(0,3,4);
+    Coordinate* c3 = new Coordinate(0,6,3);
+    Coordinate* c4 = new Coordinate(0,10,0);
+    vector<Coordinate*> v1;
+    v1.push_back(c1);
+    v1.push_back(c2);
+    v1.push_back(c3);
+    v1.push_back(c4);
+    Coordinate* c5 = new Coordinate(3,2.5,2);
+    Coordinate* c6 = new Coordinate(2,6,5);
+    Coordinate* c7 = new Coordinate(3,8,5);
+    Coordinate* c8 = new Coordinate(4,0,2);
+    vector<Coordinate*> v2;
+    v2.push_back(c5);
+    v2.push_back(c6);
+    v2.push_back(c7);
+    v2.push_back(c8);
+    Coordinate* c9 = new Coordinate(6,3,2);
+    Coordinate* c10 = new Coordinate(8,6,5);
+    Coordinate* c11 = new Coordinate(7,10,4.5);
+    Coordinate* c12 = new Coordinate(6,0,2.5);
+    vector<Coordinate*> v3;
+    v3.push_back(c9);
+    v3.push_back(c10);
+    v3.push_back(c11);
+    v3.push_back(c12);
+    Coordinate* c13 = new Coordinate(10,0,0);
+    Coordinate* c14 = new Coordinate(11,3,4);
+    Coordinate* c15 = new Coordinate(11,6,3);
+    Coordinate* c16 = new Coordinate(10,9,0);
+    vector<Coordinate*> v4;
+    v4.push_back(c13);
+    v4.push_back(c14);
+    v4.push_back(c15);
+    v4.push_back(c16);
+
+    pointsForSurface.push_back(v1);
+    pointsForSurface.push_back(v2);
+    pointsForSurface.push_back(v3);
+    pointsForSurface.push_back(v4);
+    printf("Created points\n");
   }
 
   void addNewSegmentForObject3D() {
@@ -339,9 +429,21 @@ public:
       Coordinate geoCenter = element->getGeometricCenter();
 
       if (element->getType() != OBJECT3D) {
-        ObjectTransformation::cameraRotation(static_cast<GraphicObject2D*>(element)->getCoordinates(), &geoCenter, angleX, angleY, angleZ);
+        ObjectTransformation::cameraRotation(
+            static_cast<GraphicObject2D*>(element)->getCoordinates(),
+            &geoCenter,
+            angleX,
+            angleY,
+            angleZ
+        );
       } else {
-        ObjectTransformation::cameraRotation(static_cast<Object3D*>(element)->getAllCoord(), &geoCenter, angleX, angleY, angleZ);
+        ObjectTransformation::cameraRotation(
+            static_cast<Object3D*>(element)->getAllCoord(),
+            &geoCenter,
+            angleX,
+            angleY,
+            angleZ
+        );
       }
   }
 
@@ -363,6 +465,10 @@ public:
 
   void updateCheckBtnSpline() {
     view.updateCheckBtnSpline();
+  }
+
+  void updateCheckBtnSplineSurface() {
+    view.updateCheckBtnSplineSurface();
   }
 
   void updateProjectionState(int newState) {
@@ -449,6 +555,14 @@ public:
 
           view.transform(obj3D);
           view.drawNewObject3D(obj3D);
+          break;
+        }
+        case SURFACE: {
+          printf("Prepare to draw surface\n");
+          Surface* surface = static_cast<Surface*>(element);
+
+          view.transform(surface);
+          view.drawNewSurface(surface);
           break;
         }
       }

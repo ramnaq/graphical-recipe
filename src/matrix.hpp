@@ -69,6 +69,15 @@ public:
     };
   }
 
+  static const vector<vector<double>> t_vectort(const double tee) {
+    return {
+      {tee * tee * tee},
+      {tee * tee},
+      {tee},
+      {1}
+    };
+  }
+
   static const vector<vector<double>> mbs() {
     double factor = (double) 1/6;
     return {{-1*factor,   3*factor, -3*factor, 1*factor},
@@ -103,6 +112,22 @@ public:
             {v[1]->getZ()},
             {v[2]->getZ()},
             {v[3]->getZ()}};
+  }
+
+  static const vector<vector<double>> g(const int i, const int j,
+                  const vector<vector<Coordinate*>> &v, const int axis) {
+    vector<vector<double>> m = {
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0}
+    };
+    for (int k = i; k <= i + 3; ++k) {
+      for (int l = i; l <= i + 3; ++l) {
+        m[k][l] = v[k][l]->get(axis);
+      }
+    }
+    return m;
   }
 
   static std::vector<std::vector<double> > translation3DVectorToMatrix(Coordinate* coord) {
@@ -166,6 +191,25 @@ public:
            { cx,  d , 0, 0},
            {  0,  0 , 1, 0},
            {  0,  0 , 0, 1}};
+  }
+
+  static void transpose(Matrix& matr) {
+    Matrix result({
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    });
+    for (int i = 0; i<4; i++) {
+      for (int j=0; j<4; j++) {
+        result.getMatrix()[i][j] = matr.getMatrix()[j][i];
+      }
+    }
+    for (int i = 0; i<4; i++) {
+      for (int j=0; j<4; j++) {
+        matr.getMatrix()[i][j] = result.getMatrix()[i][j];
+      }
+    }
   }
 
   Matrix operator* (Matrix& obj) {

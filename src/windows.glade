@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -15,6 +15,9 @@
     <property name="window_position">center</property>
     <signal name="configure-event" handler="on_mainWindow_configure_event" swapped="no"/>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="boxMainWindow">
         <property name="visible">True</property>
@@ -252,8 +255,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -267,8 +268,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -282,8 +281,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -297,8 +294,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -312,8 +307,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -327,8 +320,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">0</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -342,8 +333,6 @@
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -357,8 +346,6 @@
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -372,8 +359,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                               </object>
@@ -925,6 +910,9 @@
     <property name="title" translatable="yes">Transformações de objetos</property>
     <property name="window_position">center</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box12">
         <property name="visible">True</property>
@@ -1594,6 +1582,9 @@
     <property name="title" translatable="yes">Adicionar novo objeto</property>
     <property name="window_position">center</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -2872,6 +2863,240 @@
               </object>
               <packing>
                 <property name="position">4</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="boxSurface">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkFrame" id="frameCoordPolygon3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkAlignment" id="alignment21">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <object class="GtkBox" id="box41">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <child>
+                              <object class="GtkLabel" id="labelSurfaceX">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">X:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entrySurfaceX">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="padding">6</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="labelSurfaceY">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Y:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entrySurfaceY">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="padding">6</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="labelSurfaceZ">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Z:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entrySurfaceZ">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="padding">6</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="labelCoordPolygon3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="listaCoordPolygon2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow6">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <child>
+                          <object class="GtkViewport" id="viewport6">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkListBox" id="coordSurfaceListBox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="labelListaPolygon2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Pontos de controle</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="padding">6</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box42">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkBox" id="box43">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="btnAddCoordSurface">
+                            <property name="label" translatable="yes">Adicionar Coordenada</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <signal name="clicked" handler="on_btnAddCoordSurface_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="btnRemoveCoordSurface">
+                        <property name="label" translatable="yes">Remover Coordenada</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="on_btnRemoveCoordSurface_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkbtnSplineSurface">
+                        <property name="label" translatable="yes">Spline</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="clicked" handler="on_checkbtnSplineSurface_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">5</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Superfície</property>
+              </object>
+              <packing>
+                <property name="position">5</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

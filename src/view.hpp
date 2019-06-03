@@ -66,10 +66,14 @@ private:
   GtkEntry *entry3DX2;
   GtkEntry *entry3DY2;
   GtkEntry *entry3DZ2;
+  GtkEntry *entrySurfaceX;
+  GtkEntry *entrySurfaceY;
+  GtkEntry *entrySurfaceZ;
 
-  GtkListBox *objectsListBox;    //!< shows the name of the objects drawn
-  GtkListBox *listCoordPolygon;  //!< shows the coordinates added when creating a polygon
-  GtkListBox *listCoordCurve;   //!< shows the coordinates added when creating a curve
+  GtkListBox *objectsListBox;      //!< shows the name of the objects drawn
+  GtkListBox *listCoordPolygon;    //!< shows the coordinates added when creating a polygon
+  GtkListBox *listCoordCurve;      //!< shows the coordinates added when creating a curve
+  GtkListBox *listCoordSurface;    //!< shows the coordinates added when creating a surface
   GtkListBox *listSegment;
 
   GtkNotebook *notebookObjects;  //!< GtkNotebook to create different graphical objects (e.g Points, Polygons)
@@ -92,6 +96,7 @@ private:
   int objRotateRadioButtonState;
   bool checkFillButtonState;
   bool checkIsSplineState;
+  bool checkIsSplineSurfaceState;
 
 public:
   View() {
@@ -152,10 +157,14 @@ public:
     entry3DX2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DX2"));
     entry3DY2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DY2"));
     entry3DZ2 = GTK_ENTRY(gtk_builder_get_object(builder, "entry3DZ2"));
+    entrySurfaceX = GTK_ENTRY(gtk_builder_get_object(builder, "entrySurfaceX"));
+    entrySurfaceY = GTK_ENTRY(gtk_builder_get_object(builder, "entrySurfaceY"));
+    entrySurfaceZ = GTK_ENTRY(gtk_builder_get_object(builder, "entrySurfaceZ"));
 
     objectsListBox = GTK_LIST_BOX(gtk_builder_get_object(builder, "listaObjetos"));
     listCoordPolygon = GTK_LIST_BOX(gtk_builder_get_object(builder, "listbox2"));
     listCoordCurve = GTK_LIST_BOX(gtk_builder_get_object(builder, "listboxCurveCoords"));
+    listCoordSurface = GTK_LIST_BOX(gtk_builder_get_object(builder, "coordSurfaceListBox"));
     listSegment = GTK_LIST_BOX(gtk_builder_get_object(builder, "listSegment"));
 
     notebookObjects = GTK_NOTEBOOK(gtk_builder_get_object(GTK_BUILDER(builder), "notebookObjects"));
@@ -170,6 +179,7 @@ public:
     objRotateRadioButtonState = 1;
     checkFillButtonState = false;
     checkIsSplineState = false;
+    checkIsSplineSurfaceState = false;
 
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(G_OBJECT(builder));
@@ -248,6 +258,14 @@ public:
     gtk_widget_queue_draw((GtkWidget*) drawAreaViewPort);
   }
 
+  void drawNewSurface(Surface* obj) {
+    vector<Curve*> curves = obj->getCurves();
+    vector<Curve*>::iterator curve;
+    for(curve = curves.begin(); curve != curves.end(); curve++) {
+      drawNewCurve(*curve);
+    }
+  }
+
   void drawNewObject3D(Object3D* obj) {
     vector<Segment*> segments = static_cast<Object3D*>(obj)->getSegmentList();
     vector<Segment*>::iterator segment;
@@ -268,6 +286,11 @@ public:
   void clearCurveEntry() {
     removeAllCoordinates(listCoordCurve);
     clearCoordEntries(entryCurveX, entryCurveY, entryCurveZ);
+  }
+
+  void clearSurfaceEntry() {
+    removeAllCoordinates(listCoordSurface);
+    clearCoordEntries(entrySurfaceX, entrySurfaceY, entrySurfaceZ);
   }
 
   void clearObjet3DEntry() {
@@ -336,7 +359,9 @@ public:
     int index = -1;
 
     if (row == NULL) {
-      string errorType = (list == objectsListBox) ? "Nenhum objeto selecionado!\n" : "Nenhuma coordenada selecionada!\n";
+      string errorType = (list == objectsListBox) ?
+			  "Nenhum objeto selecionado!\n"
+			  : "Nenhuma coordenada selecionada!\n";
       logger->logError(errorType);
     } else {
       index = gtk_list_box_row_get_index(row);
@@ -377,6 +402,10 @@ public:
 
   void updateCheckBtnSpline() {
     checkIsSplineState = !checkIsSplineState;
+  }
+
+  void updateCheckBtnSplineSurface() {
+    checkIsSplineSurfaceState = !checkIsSplineSurfaceState;
   }
 
   void updateWindow(double step, int op) {
@@ -447,6 +476,9 @@ public:
         break;
       case OBJECT3D:
         this->worldToViewPort(static_cast<Object3D*>(object)->getAllCoord());
+        break;
+      case SURFACE:
+        this->worldToViewPort(static_cast<Surface*>(object)->getAllCoord());
         break;
     }
   }
@@ -636,6 +668,18 @@ public:
     return stod(gtk_entry_get_text(entryCurveZ));
   }
 
+  double getEntrySurfaceX() {
+    return stod(gtk_entry_get_text(entrySurfaceX));
+  }
+
+  double getEntrySurfaceY() {
+    return stod(gtk_entry_get_text(entrySurfaceY));
+  }
+
+  double getEntrySurfaceZ() {
+    return stod(gtk_entry_get_text(entrySurfaceZ));
+  }
+
   double getEntryTranslationX() {
     return stod(gtk_entry_get_text(entryTranslationX));
   }
@@ -753,6 +797,10 @@ public:
     return checkIsSplineState;
   }
 
+  bool isCheckBtnSplineSurfaceChecked() {
+    return checkIsSplineSurfaceState;
+  }
+
   int getProjectionBtnState() {
     return projectionRadioButtonState;
   }
@@ -779,6 +827,10 @@ public:
 
   GtkListBox* getListCoordPolygon() {
     return listCoordPolygon;
+  }
+
+  GtkListBox* getListCoordSurface() {
+    return listCoordSurface;
   }
 
   GtkListBox* getListObj() {
