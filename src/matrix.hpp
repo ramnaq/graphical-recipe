@@ -105,6 +105,22 @@ public:
             {v[3]->getZ()}};
   }
 
+  static const vector<vector<double>> g(const int i, const int j,
+                  const vector<vector<Coordinate*>> &v, const int axis) {
+    vector<vector<double>> m = {
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0},
+            {0,0,0,0}
+    };
+    for (int k = i; k <= i + 3; ++k) {
+      for (int l = i; l <= i + 3; ++l) {
+        m[k][l] = v[k][l].get(axis);
+      }
+    }
+    return m;
+  }
+
   static std::vector<std::vector<double> > translation3DVectorToMatrix(Coordinate* coord) {
    return {{1, 0,  0, coord->getX()},
            {0, 1,  0, coord->getY()},
@@ -166,6 +182,25 @@ public:
            { cx,  d , 0, 0},
            {  0,  0 , 1, 0},
            {  0,  0 , 0, 1}};
+  }
+
+  static void transpose(Matrix& matr) {
+    Matrix result = new Matrix({
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0},
+        {0,0,0,0}
+    });
+    for (int i = 0; i<4; i++) {
+      for (int j=0; j<4; j++) {
+        result[i][j] = matr[j][i];
+      }
+    }
+    for (int i = 0; i<4; i++) {
+      for (int j=0; j<4; j++) {
+        matr[i][j] = result[i][j];
+      }
+    }
   }
 
   Matrix operator* (Matrix& obj) {

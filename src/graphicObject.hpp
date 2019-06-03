@@ -17,6 +17,8 @@ protected:
 	double cx, cy, cz;
 
 public:
+  GraphicObject(string name_) : name(name_) {}
+
 	GraphicObject(string name,  Type type) {
 		this->name = name;
 		this->type = type;

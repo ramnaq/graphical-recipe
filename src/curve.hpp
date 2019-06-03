@@ -13,18 +13,18 @@ protected:
   bool visibility;
 
 public:
-	Curve(string name,  Type type, vector<Coordinate*> &coordinateList) :
-    GraphicObject2D(name, type, coordinateList) {
-			this->windowPoints = {};
-      this->visibility = true;
-	}
+  Curve(string name,  Type type, vector<Coordinate*> &coordinateList) :
+      GraphicObject2D(name, type, coordinateList) {
+	this->windowPoints = {};
+    this->visibility = true;
+  }
 
-	~Curve() {
-		vector<Coordinate*>::iterator it;
-		for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
-			delete *it;
-		}
-	}
+  ~Curve() {
+    vector<Coordinate*>::iterator it;
+    for(it = coordinateList.begin(); it != coordinateList.end(); it++) {
+	  delete *it;
+    }
+  }
 
   void setVisibility(bool updateVisibility) {
     this->visibility = updateVisibility;
