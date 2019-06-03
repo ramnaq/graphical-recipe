@@ -506,7 +506,8 @@ public:
     w1t->setXop(w1t->getX()); w1t->setYop(w1t->getY()); w1t->setZop(w1t->getZ());
     w2t->setXop(w2t->getX()); w2t->setYop(w2t->getY()); w2t->setZop(w2t->getZ());
 
-    pers->transformation(window->getCoordinates(), cop);
+    Coordinate xa = window->getGeometricCenter();
+    pers->transformation(window->getCoordinates(), &xa , cop);
   }
 
   void transformProjection(GraphicObject* obj, Coordinate* cop) {
@@ -526,10 +527,11 @@ public:
   }
 
   void transformPerspective(GraphicObject* elem, Coordinate* cop) {
+    Coordinate xa = window->getGeometricCenter();
     if (elem->getType() != OBJECT3D) {
-      pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), cop);
+      pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &xa, cop);
     } else {
-      pers->transformation(static_cast<Object3D*>(elem)->getAllCoord(), cop);
+      pers->transformation(static_cast<Object3D*>(elem)->getAllCoord(), &xa, cop);
     }
   }
 

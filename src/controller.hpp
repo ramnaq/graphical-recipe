@@ -27,7 +27,7 @@ private:
   vector<Coordinate*> pointsForPolygon;
   vector<Coordinate*> pointsForCurve;
   vector<Segment*> segmentsForObject3D;
-  Coordinate cop = Coordinate(0, 0, 100);
+  Coordinate cop = Coordinate(0, 0, -100);
 
 public:
   Controller() {
@@ -301,77 +301,19 @@ public:
   }
 
   void addNewSegmentForObject3D() {
-    // double x1 = view.getEntry3DX1();
-    // double y1 = view.getEntry3DY1();
-    // double z1 = view.getEntry3DZ1();
-    // double x2 = view.getEntry3DX2();
-    // double y2 = view.getEntry3DY2();
-    // double z2 = view.getEntry3DZ2();
-    //
-    // Coordinate* a = new Coordinate(x1, y1, z1);
-    // Coordinate* b = new Coordinate(x2, y2, z2);
-    // Segment* s = new Segment(a, b);
+    double x1 = view.getEntry3DX1();
+    double y1 = view.getEntry3DY1();
+    double z1 = view.getEntry3DZ1();
+    double x2 = view.getEntry3DX2();
+    double y2 = view.getEntry3DY2();
+    double z2 = view.getEntry3DZ2();
 
-    Coordinate* a = new Coordinate(0, 0, -0);
-    Coordinate* a1 = new Coordinate(0, 0, -0);
-    Coordinate* a2 = new Coordinate(0, 0, -0);
-
-    Coordinate* b = new Coordinate(0, 100, -0);
-    Coordinate* b1 = new Coordinate(0, 100, -0);
-    Coordinate* b2 = new Coordinate(0, 100, -0);
-
-    Coordinate* c = new Coordinate(100, 100, -0);
-    Coordinate* c1 = new Coordinate(100, 100, -0);
-    Coordinate* c2 = new Coordinate(100, 100, -0);
-
-    Coordinate* d = new Coordinate(100, 0, -0);
-    Coordinate* d1 = new Coordinate(100, 0, -0);
-    Coordinate* d2 = new Coordinate(100, 0, -0);
-
-    Coordinate* e = new Coordinate(0, 0, -100);
-    Coordinate* e1 = new Coordinate(0, 0, -100);
-    Coordinate* e2 = new Coordinate(0, 0, -100);
-
-    Coordinate* f = new Coordinate(100, 0, -100);
-    Coordinate* f1 = new Coordinate(100, 0, -100);
-    Coordinate* f2 = new Coordinate(100, 0, -100);
-
-    Coordinate* g = new Coordinate(0, 100, -100);
-    Coordinate* g1 = new Coordinate(0, 100, -100);
-    Coordinate* g2 = new Coordinate(0, 100, -100);
-
-    Coordinate* h = new Coordinate(100, 100, -100);
-    Coordinate* h1 = new Coordinate(100, 100, -100);
-    Coordinate* h2 = new Coordinate(100, 100, -100);
-
+    Coordinate* a = new Coordinate(x1, y1, z1);
+    Coordinate* b = new Coordinate(x2, y2, z2);
     Segment* s = new Segment(a, b);
-    Segment* s1 = new Segment(a1, d1);
-    Segment* s2 = new Segment(a2, e);
-    Segment* s3 = new Segment(g, b1);
-    Segment* s4 = new Segment(g1, h1);
-    Segment* s5 = new Segment(g2, e1);
-    Segment* s6 = new Segment(c, b2);
-    Segment* s7 = new Segment(c1, d2);
-    Segment* s8 = new Segment(c2, h2);
-    Segment* s9 = new Segment(f, h);
-    Segment* s10 = new Segment(f1, d);
-    Segment* s11 = new Segment(f2, e2);
 
     segmentsForObject3D.push_back(s);
-    segmentsForObject3D.push_back(s1);
-    segmentsForObject3D.push_back(s2);
-    segmentsForObject3D.push_back(s3);
-    segmentsForObject3D.push_back(s4);
-    segmentsForObject3D.push_back(s5);
-    segmentsForObject3D.push_back(s6);
-    segmentsForObject3D.push_back(s7);
-    segmentsForObject3D.push_back(s8);
-    segmentsForObject3D.push_back(s9);
-    segmentsForObject3D.push_back(s10);
-    segmentsForObject3D.push_back(s11);
-
-
-    //view.insertCoordList(view.getListSegment(), x1, y1, z1, x2, y2, z2);
+    view.insertCoordList(view.getListSegment(), x1, y1, z1, x2, y2, z2);
   }
 
   //! Changes the visualization window (of type Window) according the op code.
@@ -429,9 +371,7 @@ public:
   }
 
   void updateCOP() {
-    double newValue = view.getNewCOP();
-
-    cop.setZ(100 - newValue);
+    cop.setZ(-view.getNewCOP());
     updateDrawScreen();
   }
 
