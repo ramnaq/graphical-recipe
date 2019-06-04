@@ -346,37 +346,43 @@ public:
 
     //pointsForSurface.push_back(c);
     //view.insertCoordList(view.getListCoordSurface(), x, y, z);
+    /*
     Coordinate* c1 = new Coordinate(0,0,0);
-    Coordinate* c2 = new Coordinate(0,3,4);
-    Coordinate* c3 = new Coordinate(0,6,3);
-    Coordinate* c4 = new Coordinate(0,10,0);
+    Coordinate* c2 = new Coordinate(0,30,40);
+    Coordinate* c3 = new Coordinate(0,60,30);
+    Coordinate* c4 = new Coordinate(0,100,0);
+    */
+    Coordinate* c1 = new Coordinate(100,100,10);
+    Coordinate* c2 = new Coordinate(200,400,10);
+    Coordinate* c3 = new Coordinate(300,100,10);
+    Coordinate* c4 = new Coordinate(400,400,10);
     vector<Coordinate*> v1;
     v1.push_back(c1);
     v1.push_back(c2);
     v1.push_back(c3);
     v1.push_back(c4);
-    Coordinate* c5 = new Coordinate(3,2.5,2);
-    Coordinate* c6 = new Coordinate(2,6,5);
-    Coordinate* c7 = new Coordinate(3,8,5);
-    Coordinate* c8 = new Coordinate(4,0,2);
+    Coordinate* c5 = new Coordinate(30,25,20);
+    Coordinate* c6 = new Coordinate(20,60,50);
+    Coordinate* c7 = new Coordinate(30,80,50);
+    Coordinate* c8 = new Coordinate(40,0,20);
     vector<Coordinate*> v2;
     v2.push_back(c5);
     v2.push_back(c6);
     v2.push_back(c7);
     v2.push_back(c8);
-    Coordinate* c9 = new Coordinate(6,3,2);
-    Coordinate* c10 = new Coordinate(8,6,5);
-    Coordinate* c11 = new Coordinate(7,10,4.5);
-    Coordinate* c12 = new Coordinate(6,0,2.5);
+    Coordinate* c9 = new Coordinate(60,30,20);
+    Coordinate* c10 = new Coordinate(80,60,50);
+    Coordinate* c11 = new Coordinate(70,100,45);
+    Coordinate* c12 = new Coordinate(60,0,25);
     vector<Coordinate*> v3;
     v3.push_back(c9);
     v3.push_back(c10);
     v3.push_back(c11);
     v3.push_back(c12);
-    Coordinate* c13 = new Coordinate(10,0,0);
-    Coordinate* c14 = new Coordinate(11,3,4);
-    Coordinate* c15 = new Coordinate(11,6,3);
-    Coordinate* c16 = new Coordinate(10,9,0);
+    Coordinate* c13 = new Coordinate(100,0,1);
+    Coordinate* c14 = new Coordinate(110,30,40);
+    Coordinate* c15 = new Coordinate(110,60,30);
+    Coordinate* c16 = new Coordinate(100,90,1);
     vector<Coordinate*> v4;
     v4.push_back(c13);
     v4.push_back(c14);
@@ -387,7 +393,6 @@ public:
     pointsForSurface.push_back(v2);
     pointsForSurface.push_back(v3);
     pointsForSurface.push_back(v4);
-    printf("Created points\n");
   }
 
   void addNewSegmentForObject3D() {
@@ -560,9 +565,18 @@ public:
         case SURFACE: {
           printf("Prepare to draw surface\n");
           Surface* surface = static_cast<Surface*>(element);
+          vector<Curve*> curves = surface->getCurves();
+          vector<Curve*>::iterator c;
+          //for(c = curves.begin(); c != curves.end(); ++c) {
+          for(int i = 0; i < 2; ++i) {
+              Curve* curve = curves[i];
+              clipping.curveClipping(curve);
+              view.transform(curve);
+              view.drawNewCurve(curve);
+          }
 
-          view.transform(surface);
-          view.drawNewSurface(surface);
+          //view.transform(surface);
+          //view.drawNewSurface(surface);
           break;
         }
       }

@@ -9,6 +9,7 @@ public:
       Surface(name) {
     this->t = 0.05;
     this->blending_function(v);
+    computeGeometricCenter();
   }
 
 private:
@@ -18,17 +19,15 @@ private:
     Matrix mb = Matrix::mb();
     for (int i = 0; i < v.size() - 1; i += 3) {
       for (int j = 0; j < v[i].size() - 1; j += 3) {
-        // Matrix
         Matrix x_matrix = Matrix::g(i, j, v, 0);
         Matrix y_matrix = Matrix::g(i, j, v, 1);
         Matrix z_matrix = Matrix::g(i, j, v, 2);
 
-        // S
         for (double temp_s = t; temp_s <= 1; temp_s += t) {
           Matrix s_vec({Matrix::t_vector(temp_s)});
           Matrix s_mb = s_vec * mb;
           vector<Coordinate*> bCoords;
-          // T
+
           for (double temp_t = t; temp_t <= 1; temp_t += t) {
             Matrix t_vec(Matrix::t_vectort(temp_t));
             Matrix t_mb = mb * t_vec;
@@ -50,7 +49,7 @@ private:
           Matrix s_vec({Matrix::t_vector(temp_s)});
           Matrix s_mb = s_vec * mb;
           vector<Coordinate*> bCoords;
-          // T
+
           for (double temp_t = t; temp_t <= 1; temp_t += t) {
             Matrix t_vec(Matrix::t_vectort(temp_t));
             Matrix t_mb = mb * t_vec;
