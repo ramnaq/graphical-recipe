@@ -69,6 +69,15 @@ extern "C" G_MODULE_EXPORT void on_btnAddCoord3D_clicked() {
   }
 }
 
+//! Connected to signal "clicked" of element "btnAddCoordSurface".
+extern "C" G_MODULE_EXPORT void on_btnAddCoordSurface_clicked() {
+  try {
+    controller->addNewPointForSurface();
+  } catch (...) {
+
+  }
+}
+
 //! Connected to signal "clicked" of element "btnRemoveObject".
 extern "C" G_MODULE_EXPORT void on_btn_clicked_remove_object() {
   try {
@@ -102,6 +111,15 @@ extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_clicked() {
 extern "C" G_MODULE_EXPORT void on_btnRemoveCoordinate_curve() {
   try {
     controller->removeFromCoordCurveList();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "btnRemoveCoordSurface".
+extern "C" G_MODULE_EXPORT void on_btnRemoveCoordSurface_clicked() {
+  try {
+    controller->removeFromCoordSurfaceList();
   } catch (...) {
 
   }
@@ -327,6 +345,15 @@ extern "C" G_MODULE_EXPORT void on_checkbtnFillPolygon_clicked(){
 extern "C" G_MODULE_EXPORT void on_checkbtnSpline_clicked(){
   try {
     controller->updateCheckBtnSpline();
+  } catch (...) {
+
+  }
+}
+
+//! Connected to signal "clicked" of element "checkbtnSplineSurface".
+extern "C" G_MODULE_EXPORT void on_checkbtnSplineSurface_clicked(){
+  try {
+    controller->updateCheckBtnSplineSurface();
   } catch (...) {
 
   }

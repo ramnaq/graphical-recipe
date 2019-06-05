@@ -69,6 +69,15 @@ public:
     };
   }
 
+  static const vector<vector<double>> t_vectort(const double tee) {
+    return {
+      {tee * tee * tee},
+      {tee * tee},
+      {tee},
+      {1}
+    };
+  }
+
   static const vector<vector<double>> mbs() {
     double factor = (double) 1/6;
     return {{-1*factor,   3*factor, -3*factor, 1*factor},
@@ -115,7 +124,7 @@ public:
     };
     for (int k = i; k <= i + 3; ++k) {
       for (int l = i; l <= i + 3; ++l) {
-        m[k][l] = v[k][l].get(axis);
+        m[k][l] = v[k][l]->get(axis);
       }
     }
     return m;
@@ -185,7 +194,7 @@ public:
   }
 
   static void transpose(Matrix& matr) {
-    Matrix result = new Matrix({
+    Matrix result({
         {0,0,0,0},
         {0,0,0,0},
         {0,0,0,0},
@@ -193,12 +202,12 @@ public:
     });
     for (int i = 0; i<4; i++) {
       for (int j=0; j<4; j++) {
-        result[i][j] = matr[j][i];
+        result.getMatrix()[i][j] = matr.getMatrix()[j][i];
       }
     }
     for (int i = 0; i<4; i++) {
       for (int j=0; j<4; j++) {
-        matr[i][j] = result[i][j];
+        matr.getMatrix()[i][j] = result.getMatrix()[i][j];
       }
     }
   }

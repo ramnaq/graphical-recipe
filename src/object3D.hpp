@@ -22,7 +22,7 @@ private:
   }
 
 public:
-  Object3D(string name) : GraphicObject(name) {}
+  Object3D(string name) : GraphicObject(name, OBJECT3D) {}
 
 	Object3D(string name, vector<Segment*> &segmentList) :
 		GraphicObject(name, OBJECT3D) {
