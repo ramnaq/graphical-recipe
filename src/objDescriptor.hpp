@@ -82,7 +82,6 @@ class ObjDescriptor {
             tinyobj::real_t vx = attrib.vertices[3*idx.vertex_index+0];
             tinyobj::real_t vy = attrib.vertices[3*idx.vertex_index+1];
             tinyobj::real_t vz = attrib.vertices[3*idx.vertex_index+2];
-			printf("x:%d, y:%d, z:%d\n", vx, vy, vz);
 
             int aux = v + 1;
             tinyobj::index_t idx2 = shapes_tiny[s].mesh.indices[index_offset + aux];
