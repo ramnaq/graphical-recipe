@@ -13,9 +13,14 @@ protected:
   bool visibility;
 
 public:
+  Curve(string name) : GraphicObject2D(name, CURVE) {
+    this->windowPoints = {};
+    this->visibility = true;
+  }
+
   Curve(string name,  Type type, vector<Coordinate*> &coordinateList) :
       GraphicObject2D(name, type, coordinateList) {
-	this->windowPoints = {};
+    this->windowPoints = {};
     this->visibility = true;
   }
 
@@ -36,6 +41,10 @@ public:
 
   vector<Coordinate*> getWindowPoints() {
     return windowPoints;
+  }
+
+  void addCoordinate(Coordinate* c) {
+    this->coordinateList.push_back(c);
   }
 
   void updateWindowPoints(vector<Coordinate*> newPoints) {

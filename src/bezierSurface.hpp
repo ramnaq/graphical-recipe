@@ -26,7 +26,7 @@ private:
         for (double temp_s = t; temp_s <= 1; temp_s += t) {
           Matrix s_vec({Matrix::t_vector(temp_s)});
           Matrix s_mb = s_vec * mb;
-          vector<Coordinate*> bCoords;
+          BezierCurve* c = new BezierCurve("B_CURVE");
 
           for (double temp_t = t; temp_t <= 1; temp_t += t) {
             Matrix t_vec(Matrix::t_vectort(temp_t));
@@ -36,9 +36,9 @@ private:
             const double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
             const double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
 
-            bCoords.push_back(new Coordinate(x, y, z));
+            c->addCoordinate(new Coordinate(x, y, z));
           }
-          this->curves.push_back(new BezierCurve("B_CURVE", bCoords));
+          this->curves.push_back(c);
         }
 
         Matrix::transpose(x_matrix);
@@ -48,7 +48,7 @@ private:
         for (double temp_s = t; temp_s <= 1; temp_s += t) {
           Matrix s_vec({Matrix::t_vector(temp_s)});
           Matrix s_mb = s_vec * mb;
-          vector<Coordinate*> bCoords;
+          BezierCurve* c = new BezierCurve("B_CURVE");
 
           for (double temp_t = t; temp_t <= 1; temp_t += t) {
             Matrix t_vec(Matrix::t_vectort(temp_t));
@@ -58,9 +58,9 @@ private:
             const double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
             const double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
 
-            bCoords.push_back(new Coordinate(x, y, z));
+            c->addCoordinate(new Coordinate(x, y, z));
           }
-          this->curves.push_back(new BezierCurve("B_CURVE", bCoords));
+          this->curves.push_back(c);
         }
       }
     }

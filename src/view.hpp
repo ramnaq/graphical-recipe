@@ -478,7 +478,11 @@ public:
         this->worldToViewPort(static_cast<Object3D*>(object)->getAllCoord());
         break;
       case SURFACE:
-        this->worldToViewPort(static_cast<Surface*>(object)->getAllCoord());
+        vector<Curve*> curves = static_cast<Surface*>(object)->getCurves();
+        vector<Curve*>::iterator curve;
+        for (curve = curves.begin(); curve != curves.end(); curve++) {
+          this->worldToViewPort(static_cast<Curve*>(*curve)->getWindowPoints());
+        }
         break;
     }
   }
@@ -552,7 +556,15 @@ public:
 
   void transformOPP(GraphicObject* elem, Coordinate* vrp) {
     if (elem->getType() != OBJECT3D) {
-      opp->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), vrp);
+      opp->transformation(
+                  static_cast<GraphicObject2D*>(elem)->getCoordinates(), vrp);
+    } else if (elem->getType() == SURFACE){
+      vector<Curve*> curves = static_cast<Surface*>(elem)->getCurves();
+      vector<Curve*>::iterator curve;
+      for (curve = curves.begin(); curve != curves.end(); curve++) {
+        opp->transformation(
+                  static_cast<GraphicObject2D*>(*curve)->getCoordinates(), vrp);
+      }
     } else {
       opp->transformation(static_cast<Object3D*>(elem)->getAllCoord(), vrp);
     }
@@ -561,7 +573,15 @@ public:
   void transformPerspective(GraphicObject* elem, Coordinate* cop) {
     Coordinate xa = window->getGeometricCenter();
     if (elem->getType() != OBJECT3D) {
-      pers->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &xa, cop);
+      pers->transformation(
+              static_cast<GraphicObject2D*>(elem)->getCoordinates(), &xa, cop);
+    } else if (elem->getType() == SURFACE){
+      vector<Curve*> curves = static_cast<Surface*>(elem)->getCurves();
+      vector<Curve*>::iterator curve;
+      for (curve = curves.begin(); curve != curves.end(); curve++) {
+        pers->transformation(
+              static_cast<GraphicObject2D*>(*curve)->getCoordinates(), &xa, cop);
+      }
     } else {
       pers->transformation(static_cast<Object3D*>(elem)->getAllCoord(), &xa, cop);
     }
@@ -575,7 +595,19 @@ public:
     Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
 
     if (elem->getType() != OBJECT3D) {
-      scn->transformation(static_cast<GraphicObject2D*>(elem)->getCoordinates(), &geometriCenter, &scalingFactor);
+      scn->transformation(
+                      static_cast<GraphicObject2D*>(elem)->getCoordinates(),
+                      &geometriCenter,
+                      &scalingFactor);
+    } else if (elem->getType() == SURFACE){
+      vector<Curve*> curves = static_cast<Surface*>(elem)->getCurves();
+      vector<Curve*>::iterator curve;
+      for (curve = curves.begin(); curve != curves.end(); curve++) {
+        scn->transformation(
+                        static_cast<GraphicObject2D*>(*curve)->getCoordinates(),
+                        &geometriCenter,
+                        &scalingFactor);
+      }
     } else {
       scn->transformation(static_cast<Object3D*>(elem)->getAllCoord(), &geometriCenter, &scalingFactor);
     }

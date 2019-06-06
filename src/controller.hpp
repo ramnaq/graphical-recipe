@@ -124,7 +124,6 @@ public:
           if (view.isCheckBtnSplineSurfaceChecked()) {
             //obj = new SplineSurface(name, pointsForSurface, view.getDelta());
           } else {
-            printf("Create surface\n");
             obj = new BezierSurface(name, pointsForSurface);
           }
           objType = "SUPERFICIE";
@@ -139,7 +138,6 @@ public:
       }
     }
 
-    printf("Add surface to display\n");
     display.insert(obj);
     view.insertIntoListBox(*obj, objType);
     updateDrawScreen();
@@ -441,6 +439,18 @@ public:
             angleY,
             angleZ
         );
+      } else if (element->getType() == SURFACE) {
+        vector<Curve*> curves = static_cast<Surface*>(element)->getCurves();
+        vector<Curve*>::iterator curve;
+        for (curve = curves.begin(); curve != curves.end(); curve++) {
+          ObjectTransformation::cameraRotation(
+              static_cast<GraphicObject2D*>(*curve)->getCoordinates(),
+              &geoCenter,
+              angleX,
+              angleY,
+              angleZ
+          );
+        }
       } else {
         ObjectTransformation::cameraRotation(
             static_cast<Object3D*>(element)->getAllCoord(),
@@ -563,20 +573,15 @@ public:
           break;
         }
         case SURFACE: {
-          printf("Prepare to draw surface\n");
           Surface* surface = static_cast<Surface*>(element);
           vector<Curve*> curves = surface->getCurves();
           vector<Curve*>::iterator c;
-          //for(c = curves.begin(); c != curves.end(); ++c) {
-          for(int i = 0; i < 2; ++i) {
-              Curve* curve = curves[i];
-              clipping.curveClipping(curve);
-              view.transform(curve);
-              view.drawNewCurve(curve);
+          for(c = curves.begin(); c != curves.end(); ++c) {
+              clipping.curveClipping(*c);
+              view.transform(*c);
+              view.drawNewCurve(*c);
           }
 
-          //view.transform(surface);
-          //view.drawNewSurface(surface);
           break;
         }
       }
