@@ -47,6 +47,10 @@ public:
     this->coordinateList.push_back(c);
   }
 
+  void updateCoordinateList(vector<Coordinate*> v) {
+    this->coordinateList = v;
+  }
+
   void updateWindowPoints(vector<Coordinate*> newPoints) {
     this->windowPoints = newPoints;
   }

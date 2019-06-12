@@ -23,6 +23,10 @@ public:
     return matrix;
   }
 
+  vector<vector<double>>* getMatrixRef() {
+    return &matrix;
+  }
+
   static std::vector<std::vector<double> > coordinateToMatrix(Coordinate* coord) {
    return {{coord->getX()},
            {coord->getY()},
@@ -75,6 +79,30 @@ public:
       {tee * tee},
       {tee},
       {1}
+    };
+  }
+
+  static const vector<vector<double>> t_matrix(const double tee) {
+    const double t1 = tee;
+    const double t2 = tee * tee;
+    const double t3 = tee * tee * tee;
+    return {
+      {   0,    0,  0, 1},
+      {  t3,   t2, t1, 0},
+      {6*t3, 2*t2,  0, 0},
+      {6*t3,    0,  0, 0}
+    };
+  }
+
+  static const vector<vector<double>> t_matrixt(const double tee) {
+    const double t1 = tee;
+    const double t2 = tee * tee;
+    const double t3 = tee * tee * tee;
+    return {
+      {0, t3, 6*t3, 6*t3},
+      {0, t2, 2*t2,    0},
+      {0, t1,    0,    0},
+      {1,  0,    0,    0}
     };
   }
 

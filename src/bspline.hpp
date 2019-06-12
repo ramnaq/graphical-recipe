@@ -6,6 +6,8 @@
 
 class BSpline : public Curve {
 public:
+  BSpline(string name) : Curve(name) {}
+
   BSpline(string name, vector<Coordinate*> &coordinateList, double delta)
     : Curve(name, CURVE, coordinateList) {
         this->create_points(coordinateList, delta);
@@ -24,7 +26,7 @@ protected:
     Matrix mbs = Matrix::mbs();
     Matrix e = Matrix::e(delta, delta2, delta3);
 
-    for (int i = 0; i <= points.size()-4; i++ ) {
+    for (int i = 0; i <= points.size()-4; i++) {
       vector<Coordinate*> control_points = {points[i], points[i+1], points[i+2], points[i+3]};
       Matrix gx = Matrix::gx(control_points);
       Matrix gy = Matrix::gy(control_points);

@@ -7,6 +7,7 @@
 #include "bezierCurve.hpp"
 #include "bezierSurface.hpp"
 #include "bspline.hpp"
+#include "bsplineSurface.hpp"
 #include "clipping.hpp"
 #include "displayFile.hpp"
 #include "enum.hpp"
@@ -45,7 +46,7 @@ public:
   //! Creates an instance of a Graphical Object and asks 'view' to draw it.
   /*!
    * Uses information from 'view' to create Coordinates, instantiate a type of
-   * GraphicObject and then sends this instance to 'view' to be drawn.
+   * GraphicObject and then sends this instance to 'view' to be drawn).
    */
   void createObject() {
     int currentPage = view.getCurrentPage();
@@ -124,7 +125,8 @@ public:
           if (view.isCheckBtnSplineSurfaceChecked()) {
             //obj = new SplineSurface(name, pointsForSurface, view.getDelta());
           } else {
-            obj = new BezierSurface(name, pointsForSurface);
+            //obj = new BezierSurface(name, pointsForSurface);
+            obj = new BSplineSurface(name, pointsForSurface);
           }
           objType = "SUPERFICIE";
 
