@@ -32,9 +32,9 @@ private:
             Matrix t_vec(Matrix::t_vectort(temp_t));
             Matrix t_mb = mb * t_vec;
 
-            const double x = (s_mb * x_matrix * t_mb).getMatrix()[0][0];
-            const double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
-            const double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
+            double x = (s_mb * x_matrix * t_mb).getMatrix()[0][0];
+            double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
+            double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
 
             c->addCoordinate(new Coordinate(x, y, z));
           }
@@ -54,14 +54,15 @@ private:
             Matrix t_vec(Matrix::t_vectort(temp_t));
             Matrix t_mb = mb * t_vec;
 
-            const double x = (s_mb * x_matrix * t_mb).getMatrix()[0][0];
-            const double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
-            const double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
+            double x = (s_mb * x_matrix * t_mb).getMatrix()[0][0];
+            double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
+            double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
 
             c->addCoordinate(new Coordinate(x, y, z));
           }
           this->curves.push_back(c);
         }
+
       }
     }
   }

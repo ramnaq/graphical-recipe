@@ -23,10 +23,9 @@ public:
     return matrix;
   }
 
-  vector<vector<double>>* getMatrixRef() {
+  vector<vector<double> >* getMatrixRef() {
     return &matrix;
   }
-
   static std::vector<std::vector<double> > coordinateToMatrix(Coordinate* coord) {
    return {{coord->getX()},
            {coord->getY()},
@@ -205,6 +204,7 @@ public:
            {    0        , coord->getY(),      0       , 0},
            {    0        ,       0      , coord->getZ(), 0},
            {    0        ,       0      ,      0       , 1}};
+        printf("transpose \n");
   }
 
   static std::vector<std::vector<double> > genericRotationAlpha(double cy, double cz, double d) {
@@ -230,12 +230,12 @@ public:
     });
     for (int i = 0; i<4; i++) {
       for (int j=0; j<4; j++) {
-        result.getMatrix()[i][j] = matr.getMatrix()[j][i];
+        result.getMatrixRef()->at(i)[j] = matr.getMatrixRef()->at(j)[i];
       }
     }
     for (int i = 0; i<4; i++) {
       for (int j=0; j<4; j++) {
-        matr.getMatrix()[i][j] = result.getMatrix()[i][j];
+        matr.getMatrixRef()->at(i)[j] = result.getMatrixRef()->at(i)[j];
       }
     }
   }
