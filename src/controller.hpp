@@ -123,10 +123,9 @@ public:
           }
 
           if (view.isCheckBtnSplineSurfaceChecked()) {
-            //obj = new SplineSurface(name, pointsForSurface, view.getDelta());
-          } else {
-            //obj = new BezierSurface(name, pointsForSurface);
             obj = new BSplineSurface(name, pointsForSurface);
+          } else {
+            obj = new BezierSurface(name, pointsForSurface);
           }
           objType = "SUPERFICIE";
 
