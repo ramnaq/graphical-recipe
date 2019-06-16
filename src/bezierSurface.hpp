@@ -9,11 +9,21 @@ public:
       Surface(name) {
     this->t = 0.05;
     this->blending_function(v);
+    setAllCoordinates();
     computeGeometricCenter();
   }
 
 private:
   double t;
+
+  void setAllCoordinates() {
+    for (int curve = 0; curve < curves.size(); curve++) {
+      vector<Coordinate*> curveCoords = curves[curve]->getCoordinates();
+      for (int coord = 0; coord < curveCoords.size(); coord++) {
+        addCoordinate(curveCoords[coord]);
+      }
+    }
+  }
 
   void blending_function(vector<vector<Coordinate*>> &v) {
     Matrix mb = Matrix::mb();

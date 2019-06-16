@@ -69,6 +69,16 @@ public:
     this->cz = this->cz / qtdCoord;
   }
 
+  void addCoordinate(Coordinate* c) {
+    int size = allCoord.size();
+    if (size % 2 == 1) {
+      // the last Coordinate in allCoord now can form a Segment
+      segmentList.push_back(new Segment(allCoord[size-1], c));
+    }
+
+    allCoord.push_back(c);
+  }
+
 };
 
 #endif

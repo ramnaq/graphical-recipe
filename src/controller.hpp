@@ -7,7 +7,7 @@
 #include "bezierCurve.hpp"
 #include "bezierSurface.hpp"
 #include "bspline.hpp"
-#include "bsplineSurface.hpp"
+//#include "bsplineSurface.hpp"
 #include "clipping.hpp"
 #include "displayFile.hpp"
 #include "enum.hpp"
@@ -123,7 +123,7 @@ public:
           }
 
           if (view.isCheckBtnSplineSurfaceChecked()) {
-            obj = new BSplineSurface(name, pointsForSurface);
+            //obj = new BSplineSurface(name, pointsForSurface);
           } else {
             obj = new BezierSurface(name, pointsForSurface);
           }
@@ -198,13 +198,7 @@ public:
       case TRANSLATION: {
         Coordinate translationVector(view.getEntryTranslationX(), view.getEntryTranslationY(), view.getEntryTranslationZ());
 
-        if (obj->getType() == SURFACE) {
-          vector<Curve*> curves = static_cast<Surface*>(obj)->getCurves();
-          vector<Curve*>::iterator curve;
-          for (curve = curves.begin(); curve != curves.end(); curve++) {
-            ObjectTransformation::translation(static_cast<GraphicObject2D*>(*curve)->getCoordinates(), &translationVector);
-          }
-        } else if (obj->getType() != OBJECT3D) {
+        if (obj->getType() != OBJECT3D && obj->getType() != SURFACE) {
           ObjectTransformation::translation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), &translationVector);
         } else {
           ObjectTransformation::translation(static_cast<Object3D*>(obj)->getAllCoord(), &translationVector);
@@ -215,14 +209,7 @@ public:
         Coordinate scalingVector(view.getEntryScalingX(), view.getEntryScalingY(), view.getEntryScalingZ());
         Coordinate objCenter = obj->getGeometricCenter();
 
-        if (obj->getType() == SURFACE) {
-          vector<Curve*> curves = static_cast<Surface*>(obj)->getCurves();
-          vector<Curve*>::iterator curve;
-          for (curve = curves.begin(); curve != curves.end(); curve++) {
-            objCenter = (*curve)->getGeometricCenter();
-            ObjectTransformation::scaling(static_cast<GraphicObject2D*>(*curve)->getCoordinates(), &objCenter, &scalingVector);
-          }
-        } else if (obj->getType() != OBJECT3D) {
+        if (obj->getType() != OBJECT3D && obj->getType() != SURFACE) {
           ObjectTransformation::scaling(static_cast<GraphicObject2D*>(obj)->getCoordinates(), &objCenter, &scalingVector);
         } else {
           ObjectTransformation::scaling(static_cast<Object3D*>(obj)->getAllCoord(), &objCenter, &scalingVector);
@@ -244,17 +231,7 @@ public:
           reference = new Coordinate(view.getEntryRotationX(), view.getEntryRotationY(), view.getEntryRotationZ());
         }
 
-        if (obj->getType() == SURFACE) {
-          vector<Curve*> curves = static_cast<Surface*>(obj)->getCurves();
-          vector<Curve*>::iterator curve;
-          for (curve = curves.begin(); curve != curves.end(); curve++) {
-            if (radioBtnChosen == 2) {
-              Coordinate tmp = (*curve)->getGeometricCenter();
-              reference = new Coordinate(tmp.getX(), tmp.getY(), tmp.getZ());
-            }
-            ObjectTransformation::rotation(static_cast<GraphicObject2D*>(*curve)->getCoordinates(), angle, reference, whichAxis);
-          }
-        } else if (obj->getType() != OBJECT3D) {
+        if (obj->getType() != OBJECT3D && obj->getType() != SURFACE) {
           ObjectTransformation::rotation(static_cast<GraphicObject2D*>(obj)->getCoordinates(), angle, reference, whichAxis);
         } else {
           ObjectTransformation::rotation(static_cast<Object3D*>(obj)->getAllCoord(), angle, reference, whichAxis);
@@ -455,13 +432,7 @@ public:
 
       Coordinate geoCenter = element->getGeometricCenter();
 
-      if (element->getType() == SURFACE) {
-        vector<Curve*> curves = static_cast<Surface*>(element)->getCurves();
-        vector<Curve*>::iterator curve;
-        for (curve = curves.begin(); curve != curves.end(); curve++) {
-          rotateCamera(*curve);
-        }
-      } else if (element->getType() != OBJECT3D) {
+      if (element->getType() != OBJECT3D && element->getType() != SURFACE) {
         ObjectTransformation::cameraRotation(
             static_cast<GraphicObject2D*>(element)->getCoordinates(),
             &geoCenter,
@@ -588,6 +559,7 @@ public:
 
           view.transform(obj3D);
           view.drawNewObject3D(obj3D);
+
           break;
         }
         case SURFACE: {

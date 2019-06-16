@@ -555,13 +555,7 @@ public:
   }
 
   void transformOPP(GraphicObject* elem, Coordinate* vrp) {
-    if (elem->getType() == SURFACE){
-      vector<Curve*> curves = static_cast<Surface*>(elem)->getCurves();
-      vector<Curve*>::iterator curve;
-      for (curve = curves.begin(); curve != curves.end(); curve++) {
-        transformOPP(*curve, vrp);
-      }
-    } else if (elem->getType() != OBJECT3D) {
+    if (elem->getType() != OBJECT3D && elem->getType() != SURFACE) {
       opp->transformation(
                   static_cast<GraphicObject2D*>(elem)->getCoordinates(), vrp);
     } else {
@@ -571,13 +565,7 @@ public:
 
   void transformPerspective(GraphicObject* elem, Coordinate* cop) {
     Coordinate xa = window->getGeometricCenter();
-    if (elem->getType() == SURFACE){
-      vector<Curve*> curves = static_cast<Surface*>(elem)->getCurves();
-      vector<Curve*>::iterator curve;
-      for (curve = curves.begin(); curve != curves.end(); curve++) {
-        transformPerspective(*curve, cop);
-      }
-    } else if (elem->getType() != OBJECT3D) {
+    if (elem->getType() != OBJECT3D && elem->getType() != SURFACE) {
       pers->transformation(
               static_cast<GraphicObject2D*>(elem)->getCoordinates(), &xa, cop);
     } else {
@@ -592,13 +580,7 @@ public:
     Coordinate geometriCenter = window->getGeometricCenter();
     Coordinate scalingFactor(1/windowCoord->getXop(), 1/windowCoord->getYop());
 
-    if (elem->getType() == SURFACE){
-      vector<Curve*> curves = static_cast<Surface*>(elem)->getCurves();
-      vector<Curve*>::iterator curve;
-      for (curve = curves.begin(); curve != curves.end(); curve++) {
-        transformSCN(*curve);
-      }
-    } else if (elem->getType() != OBJECT3D) {
+    if (elem->getType() != OBJECT3D && elem->getType() != SURFACE) {
       scn->transformation(
                       static_cast<GraphicObject2D*>(elem)->getCoordinates(),
                       &geometriCenter,
