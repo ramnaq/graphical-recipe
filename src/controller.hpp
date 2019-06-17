@@ -7,7 +7,7 @@
 #include "bezierCurve.hpp"
 #include "bezierSurface.hpp"
 #include "bspline.hpp"
-//#include "bsplineSurface.hpp"
+#include "bsplineSurface.hpp"
 #include "clipping.hpp"
 #include "displayFile.hpp"
 #include "enum.hpp"
@@ -123,7 +123,7 @@ public:
           }
 
           if (view.isCheckBtnSplineSurfaceChecked()) {
-            //obj = new BSplineSurface(name, pointsForSurface);
+            obj = new BSplineSurface(name, pointsForSurface);
           } else {
             obj = new BezierSurface(name, pointsForSurface);
           }

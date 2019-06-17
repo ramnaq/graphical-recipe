@@ -30,6 +30,16 @@ public:
   vector<Curve*> getCurves() {
     return this->curves;
   }
+
+  void setAllCoordinates() {
+    for (int curve = 0; curve < curves.size(); curve++) {
+      vector<Coordinate*> curveCoords = curves[curve]->getCoordinates();
+      for (int coord = 0; coord < curveCoords.size(); coord++) {
+        addCoordinate(curveCoords[coord]);
+      }
+    }
+  }
+
 };
 
 #endif  //!< SURFACE_HPP

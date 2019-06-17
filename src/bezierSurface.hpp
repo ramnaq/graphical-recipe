@@ -7,7 +7,7 @@ class BezierSurface : public Surface {
 public:
   BezierSurface(string name, vector<vector<Coordinate*>> &v) :
       Surface(name) {
-    this->t = 0.05;
+    this->t = 0.02;
     this->blending_function(v);
     setAllCoordinates();
     computeGeometricCenter();
@@ -15,15 +15,6 @@ public:
 
 private:
   double t;
-
-  void setAllCoordinates() {
-    for (int curve = 0; curve < curves.size(); curve++) {
-      vector<Coordinate*> curveCoords = curves[curve]->getCoordinates();
-      for (int coord = 0; coord < curveCoords.size(); coord++) {
-        addCoordinate(curveCoords[coord]);
-      }
-    }
-  }
 
   void blending_function(vector<vector<Coordinate*>> &v) {
     Matrix mb = Matrix::mb();
