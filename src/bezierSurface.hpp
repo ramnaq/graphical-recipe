@@ -7,9 +7,8 @@ class BezierSurface : public Surface {
 public:
   BezierSurface(string name, vector<vector<Coordinate*>> &v) :
       Surface(name) {
-    this->t = 0.02;
+    this->t = 0.05;
     this->blending_function(v);
-    setAllCoordinates();
     computeGeometricCenter();
   }
 
@@ -37,7 +36,9 @@ private:
             double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
             double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
 
-            c->addCoordinate(new Coordinate(x, y, z));
+            Coordinate* coord = new Coordinate(x, y, z);
+            c->addCoordinate(coord);
+            addCoordinate(coord);
           }
           this->curves.push_back(c);
         }
@@ -59,7 +60,9 @@ private:
             double y = (s_mb * y_matrix * t_mb).getMatrix()[0][0];
             double z = (s_mb * z_matrix * t_mb).getMatrix()[0][0];
 
-            c->addCoordinate(new Coordinate(x, y, z));
+            Coordinate* coord = new Coordinate(x, y, z);
+            c->addCoordinate(coord);
+            addCoordinate(coord);
           }
           this->curves.push_back(c);
         }
