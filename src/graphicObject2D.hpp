@@ -12,6 +12,8 @@ protected:
 	vector<Coordinate*> coordinateList;
 
 public:
+  GraphicObject2D(string name, Type type) : GraphicObject(name, type) {}
+
 	GraphicObject2D(string name,  Type type, vector<Coordinate*> &coordinateList) :
     GraphicObject(name, type) {
 		this->coordinateList = coordinateList;

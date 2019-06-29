@@ -6,6 +6,8 @@
 
 class BezierCurve : public Curve {
 public:
+  BezierCurve(string name) : Curve(name) {}
+
   BezierCurve(string name, vector<Coordinate*> &coordinateList)
     : Curve(name, CURVE, coordinateList) {
         this->t = 0.05;
