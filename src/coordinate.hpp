@@ -7,15 +7,20 @@ class Coordinate {
 private:
   double x;   /*! World coordinates. */
   double y;
+  double z;
+  double xop; /*! Orthogonal projection coordinates. */
+  double yop;
+  double zop;
   double xvp; /*! ViewPort coordinates. */
   double yvp;
   double xns; /*! Window coordinates. */
   double yns;
 
 public:
-  Coordinate(double x, double y) {
+  Coordinate(double x, double y, double z = 1) {
     this->x = x;
     this->y = y;
+    this->z = z;
   }
 
   ~Coordinate() {}
@@ -28,12 +33,53 @@ public:
     this->y = y;
   }
 
+  void setZ(double z) {
+    this->z = z;
+  }
+
+  double get(const int axis) {
+    switch(axis) {
+      case 0: return this->getX();
+      case 1: return this->getY();
+      case 2: return this->getZ();
+      default: return 3.14159265;
+    }
+  }
+
   double getX() const {
     return this->x;
   }
 
   double getY() const {
     return this->y;
+  }
+
+  double getZ() const {
+    return this->z;
+  }
+
+  double getXop() const {
+    return this->xop;
+  }
+
+  double getYop() const {
+    return this->yop;
+  }
+
+  double getZop() const {
+    return this->zop;
+  }
+
+  void setXop(double xop) {
+    this->xop = xop;
+  }
+
+  void setYop(double yop) {
+    this->yop = yop;
+  }
+
+  void setZop(double zop) {
+    this->zop = zop;
   }
 
   void setXvp(double x) {

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <bitset>
 
+#include "curve.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
 
@@ -41,38 +42,20 @@ public:
     delete this->wCoord.back();
   }
 
-  void pointClipping(GraphicObject* point) {
-    Coordinate* pc = point->getCoordinates().front();
-
-    if (pc->getXns() < wCoord.front()->getX() || pc->getXns() > wCoord.back()->getX())
-      point->setVisibility(false);
-    else if (pc->getYns() < wCoord.front()->getY() || pc->getYns() > wCoord.back()->getY())
-      point->setVisibility(false);
+  bool pointClipping(Coordinate* pointCoord) {
+    if (pointCoord->getXns() < wCoord.front()->getX() || pointCoord->getXns() > wCoord.back()->getX())
+      return false;
+    else if (pointCoord->getYns() < wCoord.front()->getY() || pointCoord->getYns() > wCoord.back()->getY())
+      return false;
     else
-      point->setVisibility(true);
+      return true;
   }
 
-  void lineClipping(GraphicObject* line, int chosenAlgorithm) {
-    if (chosenAlgorithm == 1)
-      cohenSutherland(line);
-    else
-      liangBarsky(line);
-  }
-
-  void polygonClipping(GraphicObject* polygon) {
-    polygon->updateWindowPoints(polygon->getCoordinates());
-    vector<Coordinate> clp = this->clp;
-    for (int i = 0; i < clp.size(); i++) {
-      int k = (i + 1) % clp.size();
-      Coordinate c1(clp[i]), c2(clp[k]);
-      clip(static_cast<Polygon&>(*polygon), c1, c2);
-    }
-  }
-
-  void curveClipping(GraphicObject* curve) {
+  void curveClipping(Curve* curve) {
     curve->updateWindowPoints(curve->getCoordinates());
     vector<Coordinate*> points = curve->getWindowPoints();
     vector<Coordinate*> newPoints = {};
+
     for (int i = 0; i < points.size() - 1; ++i) {
       Coordinate* c1 = points[i];
       Coordinate* c2 = points[i+1];
@@ -81,7 +64,7 @@ public:
       Coordinate* c2_copy = Coordinate::newWindowCoordinate(c2->getXns(), c2->getYns());
 
       vector<Coordinate*> l = {c1_copy, c2_copy};
-      bool result = cohenSutherland(new Line("", l));
+      bool result = cohenSutherland(l);
       if (result) {
         newPoints.push_back(c1_copy);
         if (!equalPoints(*c2, *c2_copy)) {
@@ -95,6 +78,17 @@ public:
 
   bool equalPoints(Coordinate& c1, Coordinate& c2) {
 	   return (c1.getXns() == c2.getXns()) && (c1.getYns() == c2.getYns());
+  }
+
+  void polygonClipping(Polygon* polygon) {
+    polygon->updateWindowPoints(polygon->getCoordinates());
+    vector<Coordinate> clp = this->clp;
+
+    for (int i = 0; i < clp.size(); i++) {
+      int k = (i + 1) % clp.size();
+      Coordinate c1(clp[i]), c2(clp[k]);
+      clip(static_cast<Polygon&>(*polygon), c1, c2);
+    }
   }
 
   //! Clips each edge of polygon over the window edge c1c2
@@ -140,8 +134,8 @@ public:
 
         /* When only second point is outside the window */
   	  } else if (a_pos >= 0  && b_pos < 0) {
-  		/* Only point of intersection with edge is added */
-  		new_points.push_back(intersection(c1, c2, a, b));
+    		/* Only point of intersection with edge is added */
+    		new_points.push_back(intersection(c1, c2, a, b));
 
   		/* When both points are outside */
   	  } else {
@@ -195,9 +189,16 @@ public:
     return Coordinate::newWindowCoordinate(x, y);
   }
 
-  bool cohenSutherland(GraphicObject* line) {
-    Coordinate* coordMin = line->getCoordinates().front();
-    Coordinate* coordMax = line->getCoordinates().back();
+  bool lineClipping(vector<Coordinate*> lineCoord, int chosenAlgorithm) {
+    if (chosenAlgorithm == 1)
+      return cohenSutherland(lineCoord);
+    else
+      return liangBarsky(lineCoord);
+  }
+
+  bool cohenSutherland(vector<Coordinate*> lineCoord) {
+    Coordinate* coordMin = lineCoord.front();
+    Coordinate* coordMax = lineCoord.back();
 
     bitset<4> rgMin = generateRegionCode(coordMin);
     bitset<4> rgMax = generateRegionCode(coordMax);
@@ -205,14 +206,10 @@ public:
     int op = verify(rgMin, rgMax);
     switch (op) {
       case IN:
-        line->setVisibility(true);
         return true;
       case OUT:
-        line->setVisibility(false);
         return false;
       default:
-        line->setVisibility(true);
-
         // Coefficient
         double m = (coordMax->getYns() - coordMin->getYns())
                         / (coordMax->getXns() - coordMin->getXns());
@@ -230,10 +227,9 @@ public:
 
           int op = verify(rgMin, rgMax);
           if (op == BOTHOUT) {
-            line->setVisibility(false);
             return false;
           } else {
-            line->setVisibility(true);
+            return true;
           }
         }
         return true;
@@ -311,9 +307,9 @@ public:
     }
   }
 
-  void liangBarsky(GraphicObject* line) {
-    Coordinate* coordMin = line->getCoordinates().front();
-    Coordinate* coordMax = line->getCoordinates().back();
+  bool liangBarsky(vector<Coordinate*> lineCoord) {
+    Coordinate* coordMin = lineCoord.front();
+    Coordinate* coordMax = lineCoord.back();
 
     double x0 = coordMin->getXns();
     double y0 = coordMin->getYns();
@@ -333,8 +329,7 @@ public:
 
     /* line parallel to and out of the view */
     if ((p[0] == 0 && q[0] < 0) || (p[2] == 0 && q[2] < 0)) {
-      line->setVisibility(false);
-      return;
+      return false;
     }
 
     if (p[0] != 0) {
@@ -364,8 +359,7 @@ public:
     double rn1 = *std::min_element(std::begin(positiveArr), std::end(positiveArr));
 
     if (rn0 > rn1) {
-      line->setVisibility(false);
-      return;
+      return false;
     }
 
     coordMin->setXns(x0 + p[1]*rn0);
@@ -373,7 +367,8 @@ public:
 
     coordMax->setXns(x0 + p[1]*rn1);
     coordMax->setYns(y0 + p[3]*rn1);
-    line->setVisibility(true);
+
+    return true;
   }
 
 };

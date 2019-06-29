@@ -6,16 +6,21 @@
  * The graphical world moves (horizontally, vertically, diagonally) and the window
  * shows a limited area of it.
  */
-class Window: public GraphicObject{
+class Window: public GraphicObject2D {
 private:
-  double angle;
   Coordinate const *defaultCoordMin;
   Coordinate const *defaultCoordMax;
-  
+  double angleX;
+  double angleY;
+  double angleZ;
+
 public:
   Window(vector<Coordinate*> &windowCoordinates) :
-    GraphicObject("Window", WINDOW, windowCoordinates) {
-    this->angle = 0;
+    GraphicObject2D("Window", WINDOW, windowCoordinates) {
+
+    this->angleX = 0;
+    this->angleY = 0;
+    this->angleZ = 0;
 
     Coordinate* coordMin = windowCoordinates.front();
     Coordinate* coordMax = windowCoordinates.back();
@@ -28,12 +33,28 @@ public:
     delete this->defaultCoordMin;
   }
 
-  double getAngle() {
-    return this->angle;
+  void setAngleX(int newAngle) {
+    this->angleX += newAngle;
   }
 
-  void setAngle(double angle) {
-    this->angle += angle;
+  void setAngleY(int newAngle) {
+    this->angleY += newAngle;
+  }
+
+  void setAngleZ(int newAngle) {
+    this->angleZ += newAngle;
+  }
+
+  double getAngleX() {
+    return this->angleX;
+  }
+
+  double getAngleY() {
+    return this->angleY;
+  }
+
+  double getAngleZ() {
+    return this->angleZ;
   }
 
   void zoomIn(double passo) {
@@ -137,7 +158,9 @@ public:
     coordMax->setX(defaultCoordMax->getX());
     coordMax->setY(defaultCoordMax->getY());
 
-    this->angle = 0;
+    this->angleX = 0;
+    this->angleY = 0;
+    this->angleZ = 0;
   }
 
   //! Checks if 'step' for a zoom-in ist within the limits.
@@ -152,6 +175,21 @@ public:
     double newXMin = getCoordinates().front()->getX() + step;
     double newXMax = getCoordinates().back()->getX() - step;
     return (newXMin < newXMax);
+  }
+
+  void computePersGeometricCenter() {
+    cx = 0;
+    cy = 0;
+    cz = 0;
+    vector<Coordinate*>::iterator it;
+    for(it = this->coordinateList.begin(); it != this->coordinateList.end(); it++) {
+      cx += (*it)->getXop();
+      cy += (*it)->getYop();
+      cz += (*it)->getZop();
+    }
+    cx = cx / this->coordinateList.size();
+    cy = cy / this->coordinateList.size();
+    cz = cz / this->coordinateList.size();
   }
 
 };
