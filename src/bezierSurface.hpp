@@ -7,8 +7,11 @@ class BezierSurface : public Surface {
 public:
   BezierSurface(string name, vector<vector<Coordinate*>> &v) :
       Surface(name) {
-    this->t = 0.05;
+    this->t = 0.03;
     this->blending_function(v);
+    if (this->getAllCoord().size() % 2 == 1) {
+        addCoordinate(this->getAllCoord()[this->getAllCoord().size()-2]);
+    }
     computeGeometricCenter();
   }
 
@@ -28,7 +31,7 @@ private:
           Matrix s_mb = s_vec * mb;
           BezierCurve* c = new BezierCurve("B_CURVE");
 
-          for (double temp_t = t; temp_t <= 1; temp_t += t) {
+          for (double temp_t = t; temp_t <= 1+t; temp_t += t) {
             Matrix t_vec(Matrix::t_vectort(temp_t));
             Matrix t_mb = mb * t_vec;
 
@@ -52,7 +55,7 @@ private:
           Matrix s_mb = s_vec * mb;
           BezierCurve* c = new BezierCurve("B_CURVE");
 
-          for (double temp_t = t; temp_t <= 1; temp_t += t) {
+          for (double temp_t = t; temp_t <= 1+t; temp_t += t) {
             Matrix t_vec(Matrix::t_vectort(temp_t));
             Matrix t_mb = mb * t_vec;
 

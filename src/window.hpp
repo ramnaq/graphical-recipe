@@ -58,6 +58,7 @@ public:
   }
 
   void zoomIn(double passo) {
+    if (not validZoomStep(passo)) throw -1;
     Coordinate* coordMin = getCoordinates().front();
     Coordinate* coordMax = getCoordinates().back();
 

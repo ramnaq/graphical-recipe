@@ -411,8 +411,12 @@ public:
   void updateWindow(double step, int op) {
     switch (op) {
       case 0:
-        this->window->zoomIn(step);
-        break;
+        try {
+          this->window->zoomIn(step);
+        } catch (int e) {
+          printf("Ops! Zoom além do limite permitido.\n");
+        }
+          break;
       case 1:
         this->window->zoomOut(step);
         break;

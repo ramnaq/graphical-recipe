@@ -8,7 +8,7 @@ class BSplineSurface : public Surface {
 public:
   BSplineSurface(string name, vector<vector<Coordinate*>> &v) :
       Surface(name) {
-    this->t = 0.05;
+    this->t = 0.03;
     this->blending_function(v);
     setAllCoordinates();
     computeGeometricCenter();
